@@ -1,0 +1,969 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script id="dpal" src="https://www.redhat.com/dtm.js" type="text/javascript"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-39485370-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-39485370-1');
+    </script>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>OptaPlanner - Java Reflection, but much faster</title>
+    <meta content="What is the fastest way to read a getter from a Java class without knowing the class at compilation time? Java frameworks often do this. A lot. And it can directly influence their performance. So ..." name="description">
+    <meta content="metaheuristic, heuristic, constraint satisfaction, constraint programming, operations research, NP-complete, NP-hard, optimization, planning, scheduling, java, open source, software, library, solver, tabu search, simulated annealing, pareto" name="keywords">
+    <link href="https://www.optaplanner.org/blog/2018/01/09/JavaReflectionButMuchFaster.html" rel="canonical">
+
+    <meta content="Java Reflection, but much faster" property="og:title">
+    <meta content="What is the fastest way to read a getter from a Java class without knowing the class at compilation time? Java frameworks often do this. A lot. And it can directly influence their performance. So ..." property="og:description">
+    <meta content="https://www.optaplanner.org/blog/2018/01/09/JavaReflectionButMuchFaster.html" property="og:url">
+    <meta content="OptaPlanner" property="og:site_name">
+    <meta content="article" property="og:type">
+    <meta content="https://www.optaplanner.org/blog/2018/01/09/reflectionButFasterUseCase.png" property="og:image">
+    <meta content="summary" name="twitter:card">
+    <meta content="@OptaPlanner" name="twitter:site">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+          integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css"
+          integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/styles/default.min.css"
+          integrity="sha256-CGf39SzxAmEe09Ojoh16/2xTRNleX9wBZcEXVnNqwSM=" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../../../website/optaplannerWebsite.css">
+    <link href="../../../../favicon.ico" rel="shortcut icon">
+</head>
+
+<body>
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light border-bottom shadow">
+    <div class="container">
+        <a class="navbar-brand" href="../../../../">
+            <img alt="OptaPlanner logo" src="../../../../headerFooter/optaPlannerLogo200px.png">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="../../../../download/download.html">Download</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarLearn" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Learn
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarLearn">
+                        <li><a class="dropdown-item" href="../../../../learn/documentation.html">Documentation</a></li>
+                        <li><a class="dropdown-item" href="../../../../learn/video.html">Videos</a></li>
+                        <li><a class="dropdown-item" href="../../../../learn/slides.html">Slides</a></li>
+                        <li><a class="dropdown-item" href="../../../../learn/training.html">Training</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="../../../../learn/useCases/index.html">Use cases</a></li>
+                        <li><a class="dropdown-item" href="../../../../compatibility/index.html">Compatibility</a></li>
+                        <li><a class="dropdown-item" href="../../../../learn/testimonialsAndCaseStudies.html">Testimonials and case studies</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="../../../../community/getHelp.html">Get help</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../../../blog/">Blog</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../../../code/sourceCode.html">Source</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../../../community/team.html">Team</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../../../product/services.html">Services</a></li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="p-2"><a aria-label="Star OptaPlanner on GitHub" class="github-button" data-show-count="true" href="https://github.com/kiegroup/optaplanner">Star</a></li>
+                <li class="p-1"><a href="https://twitter.com/OptaPlanner" target="_blank" title="Follow OptaPlanner on Twitter"><img alt="T" src="../../../../headerFooter/twitterLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.linkedin.com/showcase/optaplanner" target="_blank" title="Follow OptaPlanner on LinkedIn"><img alt="L" src="../../../../headerFooter/linkedInLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.facebook.com/OptaPlanner" target="_blank" title="Follow OptaPlanner on Facebook"><img alt="F" src="../../../../headerFooter/facebookLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.youtube.com/channel/UCcpkOKpujFlM67D2h0RdaeQ" target="_blank" title="OptaPlanner YouTube channel"><img alt="YT" src="../../../../headerFooter/youtubeLogo.png" style="height: 16px"></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="body-without-header-footer">
+        <div class="forkMeOnGithub">
+            <a href="https://github.com/kiegroup/optaplanner">
+                <img alt="Fork me on GitHub" src="../../../../headerFooter/forkMeOnGithub.png">
+            </a>
+        </div>
+        <div class="container py-4">
+    <div class="row">
+        <div class="col-md-9">
+    <div class="post">
+        <h1 class="title border-bottom">Java Reflection, but much faster</h1>
+        <div class="mb-4">
+            <span class="float-end mb-2">Tue 9 January 2018</span>
+    <div class="card bg-light" style="width: 320px;">
+        <div class="row gx-2">
+            <div class="col-auto">
+                <img class="rounded m-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=64&d=mm" width="64" height="64" alt="Avatar Geoffrey De Smet"/>
+            </div>
+            <div class="col">
+                <div class="card-body p-0 me-1">
+                    <h5 class="card-title my-1">Geoffrey De Smet</h5>
+                    <hr class="m-0"/>
+                    <span class="float-end mx-1">
+                            <a href="https://twitter.com/GeoffreyDeSmet"><img src="../../../../headerFooter/twitterLogo.png" alt="Twitter"/></a>
+                            <a href="https://www.linkedin.com/in/ge0ffrey"><img src="../../../../headerFooter/linkedInLogo.png" alt="LinkedIn"/></a>
+                            <a href="https://github.com/ge0ffrey"><img src="../../../../headerFooter/gitHubLogo.png" alt="GitHub"/></a>
+                    </span>
+                    <p class="small mb-1">OptaPlanner lead</p>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+        <div>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>What is the fastest way to read a getter from a Java class without knowing the class at compilation time?
+Java frameworks often do this. A lot. And it can directly influence their performance.
+So let&#8217;s benchmark different approaches, such as reflection, method handles and code generation.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_use_case">The use case</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Presume we have a simple <code>Person</code> class with a name and an address:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class Person {
+   ...
+
+   public String getName() {...}
+   public Address getAddress() {...}
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and we want to use frameworks such as:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://x-stream.github.io/">XStream</a>, JAXB or <a href="https://github.com/FasterXML/jackson">Jackson</a> to serialize instances to XML or JSON.</p>
+</li>
+<li>
+<p><a href="http://hibernate.org/">JPA/Hibernate</a> to store persons in a database.</p>
+</li>
+<li>
+<p><a href="https://www.optaplanner.org/">OptaPlanner</a> to assign addresses (in case they&#8217;re tourists or homeless).</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="reflectionButFasterUseCase.png" alt="reflectionButFasterUseCase">
+</div>
+</div>
+<div class="paragraph">
+<p><em>None of these frameworks know the <code>Person</code> class.</em> So they can&#8217;t simply call <code>person.getName()</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">   // Framework code
+   public Object executeGetter(Object object) {
+      // Compilation error: class Person is unknown to the framework
+      return ((Person) object).getName();
+   }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Instead, the code uses reflection, method handles or code generation.</p>
+</div>
+<div class="paragraph">
+<p>But <em>such code is called an awful lot</em>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>If you insert 1000 different persons in a database, JPA/Hibernate probably calls such code 2000 times:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>1000 calls to <code>Person.getName()</code></p>
+</li>
+<li>
+<p>another 1000 calls to <code>Person.getAddress()</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Similarly, if you write 1000 different persons to XML or JSON, there are likely 2000 calls by XStream, JAXB or Jackson.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Obviously, when such code is called x times per second, <strong>its performance matters</strong>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_benchmarks">The benchmarks</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Using JMH, I ran a set of micro benchmarks using OpenJDK 1.8.0_111 on Linux
+on a 64-bit 8-core Intel i7-4790 desktop with 32GB RAM.
+The JMH benchmark ran with 3 forks, 5 warmup iterations of 1 second and 20 measurement iterations of 1 second.
+All warmup costs are gone: increasing the length of an iteration to 5 seconds has little or no impact on the numbers reported here.</p>
+</div>
+<div class="paragraph">
+<p>The source code of <a href="https://github.com/ge0ffrey/ge0ffrey-presentations/blob/master/code/fasterreflection/fasterreflection-client/src/main/java/be/ge0ffrey/presentations/fasterreflection/client/FasterReflectionClientBenchmark.java">that benchmark</a>
+is in <a href="https://github.com/ge0ffrey/ge0ffrey-presentations/tree/master/code/fasterreflection">this GitHub repository</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_tldr_results">The TL;DR results</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Java Reflection is slow.</strong> (*)</p>
+</li>
+<li>
+<p><strong>Java MethodHandles are slow too.</strong> (*)</p>
+</li>
+<li>
+<p><strong>Generated code with <code>javax.tools.JavaCompiler</code> is fast.</strong> (*)</p>
+</li>
+<li>
+<p><strong>LambdaMetafactory is pretty fast.</strong> (*)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>(*) On the use cases I benchmarked with the workload I used. Your mileage may vary.</p>
+</div>
+<div class="paragraph">
+<p>So the devil is in the details.
+Let&#8217;s go through the implementations,
+to confirm I applied typical magical tricks (such as <code>setAccessible(true)</code>).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementations">Implementations</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_direct_access_baseline">Direct access (baseline)</h3>
+<div class="paragraph">
+<p>I&#8217;ve used a normal <code>person.getName()</code> call as the baseline:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public final class MyAccessor {
+
+    public Object executeGetter(Object object) {
+        return ((Person) object).getName();
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This takes about 2.6 nanoseconds per operation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-txt hljs" data-lang="txt">Benchmark           Mode  Cnt  Score   Error  Units
+===================================================
+DirectAccess        avgt   60  2.590 ± 0.014  ns/op</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Direct access is naturally the fastest approach at runtime, with no bootstrap cost.
+But it imports <code>Person</code> at compilation time, so it&#8217;s unusable by every framework.</strong></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_reflection">Reflection</h3>
+<div class="paragraph">
+<p>The obvious way for a framework read that getter at runtime, without knowing it in advance,
+is through Java Reflection:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public final class MyAccessor {
+
+    private final Method getterMethod;
+
+    public MyAccessor() {
+        getterMethod = Person.class.getMethod("getName");
+        // Skip Java language access checking during executeGetter()
+        getterMethod.setAccessible(true);
+    }
+
+    public Object executeGetter(Object bean) {
+        return getterMethod.invoke(bean);
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Adding <code>setAccessible(true)</code> call makes these reflection calls faster,
+but even then it takes 5.5 nanoseconds per call.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-txt hljs" data-lang="txt">Benchmark           Mode  Cnt  Score   Error  Units
+===================================================
+DirectAccess        avgt   60  2.590 ± 0.014  ns/op
+Reflection          avgt   60  5.275 ± 0.053  ns/op</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Reflection is 104% slower than direct access (so about twice as slow).</strong>
+It also takes longer to warm up.</p>
+</div>
+<div class="paragraph">
+<p>This wasn&#8217;t a big surprise to me,
+because when I profile (using sampling) an artificially simple
+<a href="https://www.optaplanner.org/learn/useCases/vehicleRoutingProblem.html">Traveling Salesman Problem</a>
+with 980 cities in <a href="https://www.optaplanner.org/">OptaPlanner</a>,
+the reflection cost sticks out like a sore thumb:</p>
+</div>
+<div class="imageblock thumbnail">
+<div class="content">
+<a class="image" href="reflectionTspIncrementalCalculationSamplingProfiler.png"><img src="reflectionTspIncrementalCalculationSamplingProfiler.png" alt="reflectionTspIncrementalCalculationSamplingProfiler"></a>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_methodhandles">MethodHandles</h3>
+<div class="paragraph">
+<p>MethodHandle was introduced in Java 7 to support <em>invokedynamic</em> instructions.
+According to the Javadoc, it&#8217;s <em>a typed, directly executable reference to an underlying method.</em>
+Sounds fast, right?</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public final class MyAccessor {
+
+    private final MethodHandle getterMethodHandle;
+
+    public MyAccessor() {
+        MethodHandles.Lookup lookup = MethodHandles.lookup();
+        // findVirtual() matches signature of Person.getName()
+        getterMethodHandle = lookup.findVirtual(Person.class, "getName", MethodType.methodType(String.class))
+            // asType() matches signature of MyAccessor.executeGetter()
+            .asType(MethodType.methodType(Object.class, Object.class));
+    }
+
+    public Object executeGetter(Object bean) {
+        return getterMethodHandle.invokeExact(bean);
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Well unfortunately, <strong>MethodHandle is even slower than reflection</strong> in OpenJDK 8.
+It takes 6.1 nanoseconds per operation, so 136% slower than direct access.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-txt hljs" data-lang="txt">Benchmark           Mode  Cnt  Score   Error  Units
+===================================================
+DirectAccess        avgt   60  2.590 ± 0.014  ns/op
+Reflection          avgt   60  5.275 ± 0.053  ns/op
+MethodHandle        avgt   60  6.100 ± 0.079  ns/op</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Using <code>lookup.unreflectGetter(Field)</code> instead of <code>lookup.findVirtual(&#8230;&#8203;)</code> has no notable difference.
+I do hope that MethodHandle will become as fast as direct access in future Java versions.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_static_methodhandles_update_on_2018_01_11">Static MethodHandles (update on 2018-01-11)</h3>
+<div class="paragraph">
+<p>I also ran a benchmark with MethodHandle in a static field.
+The JVM can do more magic with static fields, <a href="https://shipilev.net/jvm-anatomy-park/17-trust-nonstatic-final-fields/">as explained by Aleksey Shipilёv</a>.
+Aleksey and John O&#8217;Hara correctly pointed out that the original benchmark didn&#8217;t use static fields correctly,
+so I fixed that. Here are the amended results:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-txt hljs" data-lang="txt">Benchmark           Mode  Cnt  Score   Error  Units
+===================================================
+DirectAccess        avgt   60  2.590 ± 0.014  ns/op
+MethodHandle        avgt   60  6.100 ± 0.079  ns/op
+StaticMethodHandle  avgt   60  2.635 ± 0.027  ns/op</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Yes, <strong>a static MethodHandle is as fast as direct access, but it&#8217;s still useless</strong>, unless we want to write code like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public final class MyAccessors {
+
+    private static final MethodHandle handle1; // Person.getName()
+    private static final MethodHandle handle2; // Person.getAge()
+    private static final MethodHandle handle3; // Company.getName()
+    private static final MethodHandle handle4; // Company.getAddress()
+    private static final MethodHandle handle5; // ...
+    private static final MethodHandle handle6;
+    private static final MethodHandle handle7;
+    private static final MethodHandle handle8;
+    private static final MethodHandle handle9;
+    ...
+    private static final MethodHandle handle1000;
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If our framework deals with a domain class hierarchy with 4 getters, it would fill up the first 4 fields.
+However, if it deals with 100 domain classes with 20 getters each, totaling 2000 getters,
+it will crash due to a lack of static fields.</p>
+</div>
+<div class="paragraph">
+<p>Besides, if I wrote code like this, even first year students would come tell me that <em>I am doing it wrong</em>.
+Static fields shouldn&#8217;t be used for instance variables.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_generated_code_with_javax_tools_javacompiler">Generated code with javax.tools.JavaCompiler</h3>
+<div class="paragraph">
+<p>In Java, it&#8217;s possible to compile and run generated Java code at runtime.
+So with the <code>javax.tools.JavaCompiler</code> API, we can generate the direct access code at runtime:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public abstract class MyAccessor {
+
+    // Just a gist of the code, the full source code is linked in a previous section
+    public static MyAccessor generate() {
+        final String String fullClassName = "x.y.generated.MyAccessorPerson$getName";
+        final String source = "package x.y.generated;\n"
+                + "public final class MyAccessorPerson$getName extends MyAccessor {\n"
+                + "    public Object executeGetter(Object bean) {\n"
+                + "        return ((Person) object).getName();\n"
+                + "    }\n"
+                + "}";
+        JavaFileObject fileObject = new ...(fullClassName, source);
+
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        ClassLoader classLoader = ...;
+        JavaFileManager javaFileManager = new ...(..., classLoader)
+        CompilationTask task = compiler.getTask(..., javaFileManager, ..., singletonList(fileObject));
+        boolean success = task.call();
+        ...
+        Class compiledClass = classLoader.loadClass(fullClassName);
+        return compiledClass.newInstance();
+    }
+
+    // Implemented by the generated subclass
+    public abstract Object executeGetter(Object object);
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The full source code is much longer and available in <a href="https://github.com/ge0ffrey/ge0ffrey-presentations/tree/master/code/fasterreflection">this GitHub repository</a>.
+For more information on how to use <code>javax.tools.JavaCompiler</code>,
+take a look at <a href="http://www.informit.com/articles/article.aspx?p=2027052&amp;seqNum=2">page 2 of this article</a>
+or <a href="https://www.ibm.com/developerworks/library/j-jcomp/index.html">this article</a>.
+In Java 8, it requires the <code>tools.jar</code> on the classpath, which is there automatically in a JDK installation.
+In Java 9, it requires the module <code>java.compiler</code> in the modulepath.
+Also, proper care needs to be taken that it doesn&#8217;t generate a <code>classlist.mf</code> file in the working directory
+and that it uses the correct <code>ClassLoader</code>.</p>
+</div>
+<div class="paragraph">
+<p>Besides <code>javax.tools.JavaCompiler</code>, similar approaches can use ASM or CGLIB,
+but those infer maven dependencies and might have different performance results.</p>
+</div>
+<div class="paragraph">
+<p>In any case, <strong>the generated code is as fast as direct access</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-txt hljs" data-lang="txt">Benchmark           Mode  Cnt  Score   Error  Units
+===================================================
+DirectAccess        avgt   60  2.590 ± 0.014  ns/op
+JavaCompiler        avgt   60  2.726 ± 0.026  ns/op</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>So when I ran that
+<a href="https://www.optaplanner.org/learn/useCases/vehicleRoutingProblem.html">Traveling Salesman Problem</a>
+again in <a href="https://www.optaplanner.org/">OptaPlanner</a>,
+this time using code generation to access planning variables, <em>the score calculation speed was 18% faster overall</em>.
+And the profiling (using sampling) looks much better too:</p>
+</div>
+<div class="imageblock thumbnail">
+<div class="content">
+<a class="image" href="codeGenerationTspIncrementalCalculationSamplingProfiler.png"><img src="codeGenerationTspIncrementalCalculationSamplingProfiler.png" alt="codeGenerationTspIncrementalCalculationSamplingProfiler"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that in normal use cases, that performance gain will hardly be detectable,
+due to massive CPU needs of a realistically complex score calculation&#8230;&#8203;</p>
+</div>
+<div class="paragraph">
+<p>One downside of code generation at runtime is that it infers a noticeable bootstrap cost (as discussed later),
+especially if the generated code isn&#8217;t compiled in bulk.
+So I am still hoping that some day MethodHandles will get as fast as direct access,
+just to avoid that bootstrap cost and the dependency pain.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_lambdametafactory_update_on_2018_01_11">LambdaMetafactory (update on 2018-01-11)</h3>
+<div class="paragraph">
+<p>On Reddit, I received an eloquent suggestion to use <code>LambdaMetafactory</code>:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="lambdaMetafactoryRedditResponse.png" alt="lambdaMetafactoryRedditResponse">
+</div>
+</div>
+<div class="paragraph">
+<p>Getting <code>LambdaMetafactory</code> to work on a non-static method turned out to be challenging
+(due to lack of documentation and StackOverflow questions), but it does work:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public final class MyAccessor {
+
+    private final Function getterFunction;
+
+    public MyAccessor() {
+        MethodHandles.Lookup lookup = MethodHandles.lookup();
+        CallSite site = LambdaMetafactory.metafactory(lookup,
+                "apply",
+                MethodType.methodType(Function.class),
+                MethodType.methodType(Object.class, Object.class),
+                lookup.findVirtual(Person.class, "getName", MethodType.methodType(String.class)),
+                MethodType.methodType(String.class, Person.class));
+        getterFunction = (Function) site.getTarget().invokeExact();
+    }
+
+    public Object executeGetter(Object bean) {
+        return getterFunction.apply(bean);
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And it looks good: <strong>LambdaMetafactory is almost as fast as direct access.</strong>
+It&#8217;s only 33% slower than direct access, so much better than reflection.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-txt hljs" data-lang="txt">Benchmark           Mode  Cnt  Score   Error  Units
+===================================================
+DirectAccess        avgt   60  2.590 ± 0.014  ns/op
+Reflection          avgt   60  5.275 ± 0.053  ns/op
+LambdaMetafactory   avgt   60  3.453 ± 0.034  ns/op</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When I ran that
+<a href="https://www.optaplanner.org/learn/useCases/vehicleRoutingProblem.html">Traveling Salesman Problem</a>
+again in <a href="https://www.optaplanner.org/">OptaPlanner</a>,
+this time using LambdaMetafactory to access planning variables, <em>the score calculation speed was 9% faster overall</em>.
+However, the profiling (using sampling) still shows a lot of <code>executeGetter()</code> time, but less than with reflection.</p>
+</div>
+<div class="paragraph">
+<p>The metaspace cost seems to be about 2kb per lambda in a non-scientific measurement
+and it gets garbage collected normally.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_bootstrap_cost_update_on_2018_01_25">Bootstrap cost (update on 2018-01-25)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The runtime cost matters most, as it&#8217;s not uncommon to retrieve a getter on thousands of instances per second.
+However, the bootstrap cost matters too,
+because we need to create a <code>MyAccessor</code> for every getter in the domain hierarchy that we want to reflect over,
+such as <code>Person.getName()</code>, <code>Person.getAddress()</code>, <code>Address.getStreet()</code>, <code>Address.getCity()</code>, &#8230;&#8203;</p>
+</div>
+<div class="paragraph">
+<p>Reflection and MethodHandle have a neglectable bootstrap cost.
+For LambdaMetafactory it is still acceptable: my machine creates about 25k accessors per second.
+But for JavaCompiler it is not: my machine creates only about 200 accessors per second.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-txt hljs" data-lang="txt">Benchmark                    Mode  Cnt        Score        Error  Units
+=======================================================================
+Reflection Bootstrap         avgt   60      268.510 ±     25.271  ns/op //    0.3µs/op
+MethodHandle Bootstrap       avgt   60     1519.177 ±     46.644  ns/op //    1.5µs/op
+JavaCompiler Bootstrap       avgt   60  4814526.314 ± 503770.574  ns/op // 4814.5µs/op
+LambdaMetafactory Bootstrap  avgt   60    38904.287 ±   1330.080  ns/op //   39.9µs/op</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This benchmark does not do caching or bulk complication.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_conclusion">Conclusion</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this investigation, reflection and (usable) MethodHandles are twice as slow as direct access in OpenJDK 8.
+Generated code is as fast as direct access, but it&#8217;s a pain.
+LambdaMetafactory is almost as fast as direct access.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-txt hljs" data-lang="txt">Benchmark           Mode  Cnt  Score   Error  Units
+===================================================
+DirectAccess        avgt   60  2.590 ± 0.014  ns/op
+Reflection          avgt   60  5.275 ± 0.053  ns/op // 104% slower
+MethodHandle        avgt   60  6.100 ± 0.079  ns/op // 136% slower
+StaticMethodHandle  avgt   60  2.635 ± 0.027  ns/op //   2% slower
+JavaCompiler        avgt   60  2.726 ± 0.026  ns/op //   5% slower
+LambdaMetafactory   avgt   60  3.453 ± 0.034  ns/op //  33% slower</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Your mileage may vary.</p>
+</div>
+</div>
+</div>        </div>
+        <hr class="mb-1"/>
+        <div class="mb-4">
+            <div class="float-end">
+                <a href="https://www.optaplanner.org/blog/2018/01/09/JavaReflectionButMuchFaster.html"><span class="badge bg-dark">Permalink</span></a>
+            </div>
+            <div class="tags">
+                <i class="fas fa-tag"></i>&nbsp;tagged as
+                    <a href="../../../../blog/tags/coding.html"><span class="badge bg-info">coding</span></a>
+                    <a href="../../../../blog/tags/benchmark.html"><span class="badge bg-info">benchmark</span></a>
+            </div>
+        </div>
+    </div>
+    <div class="comments">
+        <h2>Comments</h2>
+        <a class="btn btn-secondary mb-4" href="https://groups.google.com/g/optaplanner-dev">Visit our forum to comment</a>
+    </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-2 mb-4">
+                <div class="text-center">
+                    <a href="../../../../blog/news.atom">
+                        <img class="me-1" alt="Atom" src="../../../../headerFooter/atomFeedIcon.png">News feed
+                    </a>
+                    <div class="small">
+                        <span>Don’t want to miss a single blog post?</span>
+                        <br>
+                        <span>Follow us on</span>
+                    </div>
+                    <ul class="list-inline mb-2">
+                        <li class="list-inline-item"><a href="https://twitter.com/OptaPlanner" target="_blank" title="News stream via Twitter"><img alt="T" src="../../../../headerFooter/twitterLogo.png"></a></li>
+                        <li class="list-inline-item"><a href="https://www.linkedin.com/showcase/optaplanner" target="_blank" title="News stream via LinkedIn"><img alt="L" src="../../../../headerFooter/linkedInLogo.png"></a></li>
+                        <li class="list-inline-item"><a href="https://www.facebook.com/OptaPlanner" target="_blank" title="News stream via Facebook"><img alt="F" src="../../../../headerFooter/facebookLogo.png"></a></li>
+                    </ul>
+                    <a href="../../../../blog/index.html">Blog archive</a>
+                </div>
+            </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest release</div>
+        <div class="card-body">
+            <ul class="list-unstyled mb-0">
+                <li>
+                    <div class="title">
+                        <a href="../../../../download/releaseNotes/releaseNotes8.html">
+                            8.25.0.Final released
+                        </a>
+                    </div>
+                    <div class="small">
+                        Tue 26 July 2022
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Upcoming events</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <div class="title">
+                                    <a href="https://devoxx.be">Devoxx Belgium</a>
+                            </div>
+                            <span>
+                                Antwerp, Belgium - Mon 10 October 2022
+                            </span>
+                        </li>
+                <div class="small float-end">
+                    <a href="https://github.com/kiegroup/optaplanner-website/blob/main/optaplanner-website-root/data/events.yml">Add event</a>
+                    /
+                    <a href="../../../../community/eventsArchive.html">Archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest blog posts</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2022/06/09/RunOptaPlannerWorkloadOnOpenShift.html">Run OptaPlanner workloads on OpenShift, part I.</a>
+                        </div>
+                        <div class="small">Thu 9 June 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2022/05/26/optaplanner-deprecates-score-drl.html">OptaPlanner deprecates score DRL</a>
+                        </div>
+                        <div class="small">Thu 26 May 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/c950743f532471ac34022e92193563c3?s=20&d=mm"/>
+        <span class="align-middle">Lukáš Petrovický</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2022/03/07/Real-time+planning+meets+the+SolverManager.html">Real-time planning meets SolverManager</a>
+                        </div>
+                        <div class="small">Mon 7 March 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2021/10/26/DocsTurnOverANewLeaf.html">OptaPlanner documentation turns over a new leaf</a>
+                        </div>
+                        <div class="small">Tue 26 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2021/10/14/OrderPickingQuickstart.html">Order picking optimization in warehouses and supermarkets with OptaPlanner</a>
+                        </div>
+                        <div class="small">Thu 14 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/4a8c787544c0b40bc033f631dc2256c2?s=20&d=mm"/>
+        <span class="align-middle">Walter Medvedeo</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2021/10/12/MonitorTheSolver.html">Monitor OptaPlanner solvers through Micrometer</a>
+                        </div>
+                        <div class="small">Tue 12 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/16f228a9f340e2a2ca5b42485a17bc3d?s=20&d=mm"/>
+        <span class="align-middle">Christopher Chianelli</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2021/10/05/ANewAIConstraintSolverForPythonOptaPy.html">A new AI constraint solver for Python: OptaPy</a>
+                        </div>
+                        <div class="small">Tue 5 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/16f228a9f340e2a2ca5b42485a17bc3d?s=20&d=mm"/>
+        <span class="align-middle">Christopher Chianelli</span>
+    </span>
+                    </li>
+                <div class="small float-end">
+                    <a href="../../../../blog/index.html">Blog archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest videos</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="kFoaf696VpA" data-video-title="Host your OptaPlanner app on OpenShift (Kubernetes)">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Host your OptaPlanner app on OpenShift (Kubernetes)</span>
+                        </a>
+                        <div class="small">Mon 7 February 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="bIvt9z-zVHo" data-video-title="OptaPlanner - A fast, easy-to-use, open source AI constraint solver for software developers">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">OptaPlanner - A fast, easy-to-use, open source AI constraint solver for software developers</span>
+                        </a>
+                        <div class="small">Mon 31 January 2022</div>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="784Au4PjTzg" data-video-title="Order picking planning with OptaPlanner">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Order picking planning with OptaPlanner</span>
+                        </a>
+                        <div class="small">Fri 31 December 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/54cd5de3bdaf21a942e8d9d5fe95f647?s=20&d=mm"/>
+        <span class="align-middle">Anna Dupliak</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="HVDPxebpSvg" data-video-title="AI lesson scheduling on Quarkus with OptaPlanner">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">AI lesson scheduling on Quarkus with OptaPlanner</span>
+                        </a>
+                        <div class="small">Thu 18 November 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="dqTrjkVxoPI" data-video-title="Maintenance scheduling">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Maintenance scheduling</span>
+                        </a>
+                        <div class="small">Fri 12 November 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="-RSZbMT_alo" data-video-title="Optimized order picking in warehouses and supermarkets">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Optimized order picking in warehouses and supermarkets</span>
+                        </a>
+                        <div class="small">Tue 26 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/4a8c787544c0b40bc033f631dc2256c2?s=20&d=mm"/>
+        <span class="align-middle">Walter Medvedeo</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="-7ips_GMFmo" data-video-title="A modern OO/FP constraint solver">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">A modern OO/FP constraint solver</span>
+                        </a>
+                        <div class="small">Tue 14 September 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                <div class="small float-end">
+                    <a href="https://www.youtube.com/channel/UCcpkOKpujFlM67D2h0RdaeQ">Video archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+        </div>
+    </div>
+        </div>
+    </div>
+<footer class="py-4 bg-black text-white-50">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <p class="small">OptaPlanner is open.
+                    All dependencies of this project are available under the
+                    <a class="link-light" href="../../../../code/license.html">Apache Software License 2.0</a>
+                    or a compatible license.
+                    OptaPlanner is <a class="link-light" href="../../../../community/branding.html">trademarked</a>.
+                </p>
+                <p class="small">
+                    This <a class="link-light" href="../../../../website/websiteInfo.html">website</a>
+                    was built with <a class="link-light" href="https://jbake.org">JBake</a> and is open source.
+                </p>
+            </div>
+            <div class="col-md-4">
+                <h4>Community</h4>
+                <ul class="ps-2 list-unstyled">
+                    <li><a class="link-light" href="../../../../blog/">Blog</a></li>
+                    <li><a class="link-light" href="../../../../community/getHelp.html">Get Help</a></li>
+                    <li><a class="link-light" href="../../../../community/team.html">Team</a></li>
+                    <li><a class="link-light" href="../../../../community/governance.html">Governance</a></li>
+                    <li><a class="link-light" href="../../../../community/research.html">Academic research</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h4>Code</h4>
+                <ul class="ps-2 list-unstyled">
+                    <li><a class="link-light" href="../../../../code/sourceCode.html">Build from source</a></li>
+                    <li><a class="link-light" href="https://issues.redhat.com/projects/PLANNER">Issue tracker</a></li>
+                    <li><a class="link-light" href="../../../../download/releaseNotes/">Release notes</a></li>
+                    <li><a class="link-light" href="../../../../download/upgradeRecipe/">Upgrade recipes</a></li>
+                    <li><a class="link-light" href="../../../../community/branding.html">Logo and branding</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="d-flex justify-content-evenly align-items-center">
+            <div>
+                <i class="fab fa-creative-commons"></i><i class="fab fa-creative-commons-by"></i>
+                <a class="link-light link-underlined" href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC by 3.0</a> |
+                <a class="link-light link-underlined" href="https://www.redhat.com/en/about/privacy-policy">Privacy Policy</a>
+            </div>
+            <div>
+                <span class="me-2 text-white">Sponsored by</span>
+                <a href="https://www.redhat.com/" target="_blank"><img style="width: 6rem" src="https://www.redhat.com/profiles/rh/themes/redhatdotcom/img/logo.svg" alt="Red Hat"></a>
+            </div>
+        </div>
+    </div>
+</footer>
+    <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="ratio ratio-16x9" id="player-container">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"
+            integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/highlight.min.js"
+            integrity="sha256-mfS2sXKEV8eehy39UH7+7BwaoUaIe2TuLO2DXS+c2mI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/asciidoc.min.js"
+            integrity="sha256-gnB2LPAmHPkrj3czfog5GdIu4aByzcKeTUzC2agNMzM=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/properties.min.js"
+            integrity="sha256-1XSLaVD2dn/eCICDUx1DYprsC4UAEa4weDLYY/458wU=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/gradle.min.js"
+            integrity="sha256-B5HtfGpeJKLSEsoqtAdi6sSJ05K49CTGHZbrBiJ9CwE=" crossorigin="anonymous"></script>
+    <script src="../../../../website/optaplannerWebsite.js"></script>
+    <script>
+        // Ruby syntax highlighting works pretty well for DRL source code.
+        hljs.registerAliases(["drl"], { languageName: "ruby"});
+        hljs.highlightAll();
+    </script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script type="text/javascript">
+      if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+        _satellite.pageBottom();
+      }
+    </script>
+</body>
+</html>
+
+

@@ -1,0 +1,732 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script id="dpal" src="https://www.redhat.com/dtm.js" type="text/javascript"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-39485370-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-39485370-1');
+    </script>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>OptaPlanner - Mechanic scheduling (part 3) - Simulation and load testing</title>
+    <meta content="The goals of the RH Summit 2019 Keynote Demo was showing multiple Red Hat products working together on OpenShift, demonstrating how OptaPlanner can schedule mechanics repair machines in an ..." name="description">
+    <meta content="metaheuristic, heuristic, constraint satisfaction, constraint programming, operations research, NP-complete, NP-hard, optimization, planning, scheduling, java, open source, software, library, solver, tabu search, simulated annealing, pareto" name="keywords">
+    <link href="https://www.optaplanner.org/blog/2019/05/09/RHSummit2019Part3.html" rel="canonical">
+
+    <meta content="Mechanic scheduling (part 3) - Simulation and load testing" property="og:title">
+    <meta content="The goals of the RH Summit 2019 Keynote Demo was showing multiple Red Hat products working together on OpenShift, demonstrating how OptaPlanner can schedule mechanics repair machines in an ..." property="og:description">
+    <meta content="https://www.optaplanner.org/blog/2019/05/09/RHSummit2019Part3.html" property="og:url">
+    <meta content="OptaPlanner" property="og:site_name">
+    <meta content="article" property="og:type">
+    <meta content="https://www.optaplanner.org/blog/2019/05/09/RHSummit2019OptaPlanner2MechanicsDance.gif" property="og:image">
+    <meta content="summary" name="twitter:card">
+    <meta content="@OptaPlanner" name="twitter:site">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+          integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css"
+          integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/styles/default.min.css"
+          integrity="sha256-CGf39SzxAmEe09Ojoh16/2xTRNleX9wBZcEXVnNqwSM=" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../../../website/optaplannerWebsite.css">
+    <link href="../../../../favicon.ico" rel="shortcut icon">
+</head>
+
+<body>
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light border-bottom shadow">
+    <div class="container">
+        <a class="navbar-brand" href="../../../../">
+            <img alt="OptaPlanner logo" src="../../../../headerFooter/optaPlannerLogo200px.png">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="../../../../download/download.html">Download</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarLearn" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Learn
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarLearn">
+                        <li><a class="dropdown-item" href="../../../../learn/documentation.html">Documentation</a></li>
+                        <li><a class="dropdown-item" href="../../../../learn/video.html">Videos</a></li>
+                        <li><a class="dropdown-item" href="../../../../learn/slides.html">Slides</a></li>
+                        <li><a class="dropdown-item" href="../../../../learn/training.html">Training</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="../../../../learn/useCases/index.html">Use cases</a></li>
+                        <li><a class="dropdown-item" href="../../../../compatibility/index.html">Compatibility</a></li>
+                        <li><a class="dropdown-item" href="../../../../learn/testimonialsAndCaseStudies.html">Testimonials and case studies</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="../../../../community/getHelp.html">Get help</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../../../blog/">Blog</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../../../code/sourceCode.html">Source</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../../../community/team.html">Team</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../../../product/services.html">Services</a></li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="p-2"><a aria-label="Star OptaPlanner on GitHub" class="github-button" data-show-count="true" href="https://github.com/kiegroup/optaplanner">Star</a></li>
+                <li class="p-1"><a href="https://twitter.com/OptaPlanner" target="_blank" title="Follow OptaPlanner on Twitter"><img alt="T" src="../../../../headerFooter/twitterLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.linkedin.com/showcase/optaplanner" target="_blank" title="Follow OptaPlanner on LinkedIn"><img alt="L" src="../../../../headerFooter/linkedInLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.facebook.com/OptaPlanner" target="_blank" title="Follow OptaPlanner on Facebook"><img alt="F" src="../../../../headerFooter/facebookLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.youtube.com/channel/UCcpkOKpujFlM67D2h0RdaeQ" target="_blank" title="OptaPlanner YouTube channel"><img alt="YT" src="../../../../headerFooter/youtubeLogo.png" style="height: 16px"></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="body-without-header-footer">
+        <div class="forkMeOnGithub">
+            <a href="https://github.com/kiegroup/optaplanner">
+                <img alt="Fork me on GitHub" src="../../../../headerFooter/forkMeOnGithub.png">
+            </a>
+        </div>
+        <div class="container py-4">
+    <div class="row">
+        <div class="col-md-9">
+    <div class="post">
+        <h1 class="title border-bottom">Mechanic scheduling (part 3) - Simulation and load testing</h1>
+        <div class="mb-4">
+            <span class="float-end mb-2">Thu 9 May 2019</span>
+    <div class="card bg-light" style="width: 320px;">
+        <div class="row gx-2">
+            <div class="col-auto">
+                <img class="rounded m-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=64&d=mm" width="64" height="64" alt="Avatar Radovan Synek"/>
+            </div>
+            <div class="col">
+                <div class="card-body p-0 me-1">
+                    <h5 class="card-title my-1">Radovan Synek</h5>
+                    <hr class="m-0"/>
+                    <span class="float-end mx-1">
+                            <a href="https://github.com/rsynek"><img src="../../../../headerFooter/gitHubLogo.png" alt="GitHub"/></a>
+                    </span>
+                    <p class="small mb-1">OptaPlanner developer</p>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+        <div>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The goals of the RH Summit 2019 Keynote Demo was showing multiple Red Hat products working together on OpenShift,
+demonstrating how OptaPlanner can schedule mechanics repair machines in an assembly line, with the audience sensing
+machine damage by shaking their smartphones.
+And of course, not to fail in front of several thousands of people.</p>
+</div>
+<div class="paragraph">
+<p>To learn more about the Summit Keynote Demo, <a href="https://www.optaplanner.org/blog/2019/05/09/RHSummit2019Part1.html">read Geoffrey&#8217;s article</a>.
+Also, to find out more about the architecture and the integration with other technologies,
+<a href="https://www.optaplanner.org/blog/2019/05/09/RHSummit2019Part2.html">read Musa&#8217;s article</a>.</p>
+</div>
+<div class="paragraph">
+<p>The application is running and working. But how are players going to enjoy it? Is the game going to be boring,
+as no machine will ever get close to being broken? Or is it going to be the opposite - will players break all
+the machines in just a few seconds?</p>
+</div>
+<div class="paragraph">
+<p>Actually, if too many players connect, will the entire platform fall apart?</p>
+</div>
+<div class="paragraph">
+<p>The answer to all these questions is: <em>measure, don&#8217;t guess!</em></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_simulations">Simulations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>How much damage can a single mechanic handle? And how much can two mechanics handle? In this section, we are going
+to run simulations to find that out.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="assemblyLine.png" alt="assemblyLine">
+</div>
+</div>
+<div class="paragraph">
+<p>Each machine has its location and there are different distances between individual machines, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>A-&gt;B is 665.08 px
+
+B-&gt;C is 235.82 px
+
+C-&gt;J is 2486.04 px</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Fixing all the machines takes 62 seconds (10 * 2 seconds for fixing each machine plus a travelling time between
+them using the shortest path).</p>
+</div>
+<div class="sect2">
+<h3 id="_uniform_distribution">Uniform distribution</h3>
+<div class="paragraph">
+<p>Uniform distribution means hitting every machine with the same amount of damage, which is proportional to the total
+damage and number of machines.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">damagePerSecond = totalDamagePerSecond / numberOfMachines;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See how a single mechanic behaves under the uniform damage distribution:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="shortestPath.png" alt="shortestPath">
+</div>
+</div>
+<div class="paragraph">
+<p>The mechanic starts running in a loop over time.
+With two mechanics this happens too and they start dancing:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="RHSummit2019OptaPlanner2MechanicsDance.gif" alt="RHSummit2019OptaPlanner2MechanicsDance">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_life_does_not_know_such_a_thing_as_a_uniform_distribution">Life does not know such a thing as a uniform distribution</h3>
+<div class="paragraph">
+<p>A pessimist is just a realist provided with more accurate information.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s start with the worst-case scenario. Distance between machines C-J is the longest one, so we&#8217;re going to assume
+that these two machines are hit double the damage than any other machines. Mechanics are going to have quite a busy day,
+running from one side of the factory to the other one.</p>
+</div>
+<div class="paragraph">
+<p>For any machine other than C or J:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">damagePerSecond = totalDamagePerSecond / (numberOfMachines + 2);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For machines C and J:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">damagePerSecond = 2 * totalDamagePerSecond / (numberOfMachines + 2);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note: as the goal is to deal double damage to machines C and J, these machines have to be counted into number of machines
+twice. As a result, the total damage per second is split into 12 equal parts, from which C and J receive 4 parts
+and remaining 8 machines get one part each.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="uniform_2_mech_16_damage.png" alt="uniform 2 mech 16 damage">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="cj_2_mech_16_damage.png" alt="cj 2 mech 16 damage">
+</div>
+</div>
+<div class="paragraph">
+<p>That&#8217;s a difference!</p>
+</div>
+<div class="paragraph">
+<p>On the other hand, there is no need to be pessimistic every day. Normal (Gaussian) distribution represents “reality” better.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">damagePerSecondBase = totalDamagePerSecond / numberOfMachines;
+deviation = random.nextGaussian() * damagePerSecondBase / 2;
+damagePerSecond = damagePerSecondBase + deviation;
+
+if (damagePerSecond &lt; 0) {
+   damagePerSecond = 0;
+} else if (damagePerSecond &gt; damagePerSecondBase * 2) {
+   damagePerSecond = damagePerSecondBase * 2;
+}</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="uniform_2_mech_16_damage.png" alt="uniform 2 mech 16 damage">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="gauss_2_mech_16_damage.png" alt="gauss 2 mech 16 damage">
+</div>
+</div>
+<div class="paragraph">
+<p>Again, machines can get easily broken with normal (Gaussian) distribution, although 16% damage per second under uniform
+distribution was perfectly possible to fix by just two mechanics.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s now find where the limits are with the normal (Gaussian) distribution.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="gauss_1_mech_8_damage.png" alt="gauss 1 mech 8 damage">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="gauss_1_mech_10_damage.png" alt="gauss 1 mech 10 damage">
+</div>
+</div>
+<div class="paragraph">
+<p>8% damage per second didn&#8217;t lead to any single machine being broken. With 10% damage per second, after 100 seconds,
+there is the first broken machine.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s take a look what amount of damage two mechanics can handle.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="gauss_2_mech_12_damage.png" alt="gauss 2 mech 12 damage">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="gauss_2_mech_16_damage.png" alt="gauss 2 mech 16 damage">
+</div>
+</div>
+<div class="paragraph">
+<p>16% damage per second seems not be manageable, even that the first failure occurred just after 3 minutes of simulation.
+Let&#8217;s add one more mechanic.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="gauss_3_mech_24_damage.png" alt="gauss 3 mech 24 damage">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="gauss_3_mech_32_damage.png" alt="gauss 3 mech 32 damage">
+</div>
+</div>
+<div class="paragraph">
+<p>8% damage per second seems to be manageable by a single mechanic. Does it mean that 2 mechanics can handle 16% of damage?
+The simulation figures above show they could not. On the other hand, 3 mechanics were able to fix machines receiving
+24% damage per second. In contrast to the uniform damage distribution, with the normal distribution, we cannot just
+blindly hope that the amount of damage mechanics can handle is proportional to their count.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_lessons_learned_from_load_testing">Lessons learned from load testing</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The purpose of load testing is to tell if the system under test is able to handle certain load. If there are
+requirements regarding expected throughput, these can be verified based on the results. With no such requirements,
+load testing can help to find limits of the system in terms of load.</p>
+</div>
+<div class="paragraph">
+<p>Let me share in the lines below what we learned from load testing and what issues we had to fix.</p>
+</div>
+<div class="paragraph">
+<p>Load testing of this application was realized by sending simulated motion data to Node.js component from multiple pods
+in the cluster. During several sessions, with people responsible for individual components and technologies of the demo
+attending, we tested from 100 to 3000 simulated players being connected and sending motion data to the application.</p>
+</div>
+<div class="paragraph">
+<p>In the very first load tests, we noticed that mechanics take way too long fixing broken machines. Something went wrong,
+as the period of time to fix a machine had been set to 2 seconds. Apparently, OptaPlanner was not able to dispatch
+mechanics on time. Looking at the Grafana dashboard, that shows resource utilisation in the OpenShift cluster, revealed
+that OptaPlanner pod had only 0.6 CPU, which means it got only 60% of a single CPU core&#8217;s execution time.
+Taking into account that the OptaPlanner itself usually kept entire CPU core busy and there was another thread
+in the pod - a keeper of time, responsible for timely sending events to other components, 0.6 CPU was definitely not enough.
+It turned out that our OpenShift template didn&#8217;t declare any resource requests, so OptaPlanner pod got just
+breadcrumbs - after Tensor Flow and other components took most of the cluster&#8217;s resources.</p>
+</div>
+<div class="paragraph">
+<p><strong>Lesson one: always declare your required resources and limits.</strong></p>
+</div>
+<div class="paragraph">
+<p>So, template fixed and ready for another load test! Which only revealed that mechanics were again not being
+dispatched on time. What did go wrong this time, we asked ourselves? We had enough CPU and memory resources, but still
+we saw the same issue.</p>
+</div>
+<div class="paragraph">
+<p>The devil was hidden in Infinispan and also in the way we contacted Infinispan for machines&#8217; health every 40 milliseconds.
+Having only 4 infinispan nodes trying to handle all the requests from multiple components didn&#8217;t scale
+because of the network traffic. Involving more Infinispan notes did help for the network part of the issue,
+as the traffic was balanced between more nodes. Using a separate thread to query for each machine&#8217;s health did
+help on OptaPlanner part of the issue, as the timekeeper thread was not blocked anymore, waiting for the information
+about machines&#8217; health to be retrieved from Infinispan.</p>
+</div>
+<div class="paragraph">
+<p><strong>Lesson two: despite you&#8217;ve read one hundred times that you should do I/O in separate threads, make sure you do I/O in separate threads.</strong></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_conclusion">Conclusion</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Once we are supposed to present such a complex platform in front of several thousands of people, we need to avoid
+being surprised. To minimize the risk, we gather as much data as possible to confirm our expectation, our hypothesis.
+Both the simulations and load testing proved an invaluable source of information.
+They helped us understand what we could expect and built a good level of confidence about what we wanted to show.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p>Let me thank the entire team for their great work
+and specifically in this part, a big thanks to
+Guilherme Baufaker Rego and Ben Browning
+for load testing the platform.
+And of course, a big thanks to our one and only captain, Burr Sutter,
+who can set up a show like no other!</p>
+</div>
+<div class="paragraph">
+<p>View the recording of our show:</p>
+</div>
+<div class="videoblock">
+<div class="content">
+<iframe src="https://www.youtube.com/embed/FUu4kMc0PL8?rel=0&amp;start=5785" frameborder="0" allowfullscreen></iframe>
+</div>
+</div>
+</div>
+</div>        </div>
+        <hr class="mb-1"/>
+        <div class="mb-4">
+            <div class="float-end">
+                <a href="https://www.optaplanner.org/blog/2019/05/09/RHSummit2019Part3.html"><span class="badge bg-dark">Permalink</span></a>
+            </div>
+            <div class="tags">
+                <i class="fas fa-tag"></i>&nbsp;tagged as
+                    <a href="../../../../blog/tags/production.html"><span class="badge bg-info">production</span></a>
+                    <a href="../../../../blog/tags/benchmark.html"><span class="badge bg-info">benchmark</span></a>
+                    <a href="../../../../blog/tags/algorithm.html"><span class="badge bg-info">algorithm</span></a>
+            </div>
+        </div>
+    </div>
+    <div class="comments">
+        <h2>Comments</h2>
+        <a class="btn btn-secondary mb-4" href="https://groups.google.com/g/optaplanner-dev">Visit our forum to comment</a>
+    </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-2 mb-4">
+                <div class="text-center">
+                    <a href="../../../../blog/news.atom">
+                        <img class="me-1" alt="Atom" src="../../../../headerFooter/atomFeedIcon.png">News feed
+                    </a>
+                    <div class="small">
+                        <span>Don’t want to miss a single blog post?</span>
+                        <br>
+                        <span>Follow us on</span>
+                    </div>
+                    <ul class="list-inline mb-2">
+                        <li class="list-inline-item"><a href="https://twitter.com/OptaPlanner" target="_blank" title="News stream via Twitter"><img alt="T" src="../../../../headerFooter/twitterLogo.png"></a></li>
+                        <li class="list-inline-item"><a href="https://www.linkedin.com/showcase/optaplanner" target="_blank" title="News stream via LinkedIn"><img alt="L" src="../../../../headerFooter/linkedInLogo.png"></a></li>
+                        <li class="list-inline-item"><a href="https://www.facebook.com/OptaPlanner" target="_blank" title="News stream via Facebook"><img alt="F" src="../../../../headerFooter/facebookLogo.png"></a></li>
+                    </ul>
+                    <a href="../../../../blog/index.html">Blog archive</a>
+                </div>
+            </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest release</div>
+        <div class="card-body">
+            <ul class="list-unstyled mb-0">
+                <li>
+                    <div class="title">
+                        <a href="../../../../download/releaseNotes/releaseNotes8.html">
+                            8.25.0.Final released
+                        </a>
+                    </div>
+                    <div class="small">
+                        Tue 26 July 2022
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Upcoming events</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <div class="title">
+                                    <a href="https://devoxx.be">Devoxx Belgium</a>
+                            </div>
+                            <span>
+                                Antwerp, Belgium - Mon 10 October 2022
+                            </span>
+                        </li>
+                <div class="small float-end">
+                    <a href="https://github.com/kiegroup/optaplanner-website/blob/main/optaplanner-website-root/data/events.yml">Add event</a>
+                    /
+                    <a href="../../../../community/eventsArchive.html">Archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest blog posts</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2022/06/09/RunOptaPlannerWorkloadOnOpenShift.html">Run OptaPlanner workloads on OpenShift, part I.</a>
+                        </div>
+                        <div class="small">Thu 9 June 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2022/05/26/optaplanner-deprecates-score-drl.html">OptaPlanner deprecates score DRL</a>
+                        </div>
+                        <div class="small">Thu 26 May 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/c950743f532471ac34022e92193563c3?s=20&d=mm"/>
+        <span class="align-middle">Lukáš Petrovický</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2022/03/07/Real-time+planning+meets+the+SolverManager.html">Real-time planning meets SolverManager</a>
+                        </div>
+                        <div class="small">Mon 7 March 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2021/10/26/DocsTurnOverANewLeaf.html">OptaPlanner documentation turns over a new leaf</a>
+                        </div>
+                        <div class="small">Tue 26 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2021/10/14/OrderPickingQuickstart.html">Order picking optimization in warehouses and supermarkets with OptaPlanner</a>
+                        </div>
+                        <div class="small">Thu 14 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/4a8c787544c0b40bc033f631dc2256c2?s=20&d=mm"/>
+        <span class="align-middle">Walter Medvedeo</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2021/10/12/MonitorTheSolver.html">Monitor OptaPlanner solvers through Micrometer</a>
+                        </div>
+                        <div class="small">Tue 12 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/16f228a9f340e2a2ca5b42485a17bc3d?s=20&d=mm"/>
+        <span class="align-middle">Christopher Chianelli</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2021/10/05/ANewAIConstraintSolverForPythonOptaPy.html">A new AI constraint solver for Python: OptaPy</a>
+                        </div>
+                        <div class="small">Tue 5 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/16f228a9f340e2a2ca5b42485a17bc3d?s=20&d=mm"/>
+        <span class="align-middle">Christopher Chianelli</span>
+    </span>
+                    </li>
+                <div class="small float-end">
+                    <a href="../../../../blog/index.html">Blog archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest videos</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="kFoaf696VpA" data-video-title="Host your OptaPlanner app on OpenShift (Kubernetes)">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Host your OptaPlanner app on OpenShift (Kubernetes)</span>
+                        </a>
+                        <div class="small">Mon 7 February 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="bIvt9z-zVHo" data-video-title="OptaPlanner - A fast, easy-to-use, open source AI constraint solver for software developers">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">OptaPlanner - A fast, easy-to-use, open source AI constraint solver for software developers</span>
+                        </a>
+                        <div class="small">Mon 31 January 2022</div>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="784Au4PjTzg" data-video-title="Order picking planning with OptaPlanner">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Order picking planning with OptaPlanner</span>
+                        </a>
+                        <div class="small">Fri 31 December 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/54cd5de3bdaf21a942e8d9d5fe95f647?s=20&d=mm"/>
+        <span class="align-middle">Anna Dupliak</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="HVDPxebpSvg" data-video-title="AI lesson scheduling on Quarkus with OptaPlanner">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">AI lesson scheduling on Quarkus with OptaPlanner</span>
+                        </a>
+                        <div class="small">Thu 18 November 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="dqTrjkVxoPI" data-video-title="Maintenance scheduling">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Maintenance scheduling</span>
+                        </a>
+                        <div class="small">Fri 12 November 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="-RSZbMT_alo" data-video-title="Optimized order picking in warehouses and supermarkets">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Optimized order picking in warehouses and supermarkets</span>
+                        </a>
+                        <div class="small">Tue 26 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/4a8c787544c0b40bc033f631dc2256c2?s=20&d=mm"/>
+        <span class="align-middle">Walter Medvedeo</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="-7ips_GMFmo" data-video-title="A modern OO/FP constraint solver">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">A modern OO/FP constraint solver</span>
+                        </a>
+                        <div class="small">Tue 14 September 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                <div class="small float-end">
+                    <a href="https://www.youtube.com/channel/UCcpkOKpujFlM67D2h0RdaeQ">Video archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+        </div>
+    </div>
+        </div>
+    </div>
+<footer class="py-4 bg-black text-white-50">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <p class="small">OptaPlanner is open.
+                    All dependencies of this project are available under the
+                    <a class="link-light" href="../../../../code/license.html">Apache Software License 2.0</a>
+                    or a compatible license.
+                    OptaPlanner is <a class="link-light" href="../../../../community/branding.html">trademarked</a>.
+                </p>
+                <p class="small">
+                    This <a class="link-light" href="../../../../website/websiteInfo.html">website</a>
+                    was built with <a class="link-light" href="https://jbake.org">JBake</a> and is open source.
+                </p>
+            </div>
+            <div class="col-md-4">
+                <h4>Community</h4>
+                <ul class="ps-2 list-unstyled">
+                    <li><a class="link-light" href="../../../../blog/">Blog</a></li>
+                    <li><a class="link-light" href="../../../../community/getHelp.html">Get Help</a></li>
+                    <li><a class="link-light" href="../../../../community/team.html">Team</a></li>
+                    <li><a class="link-light" href="../../../../community/governance.html">Governance</a></li>
+                    <li><a class="link-light" href="../../../../community/research.html">Academic research</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h4>Code</h4>
+                <ul class="ps-2 list-unstyled">
+                    <li><a class="link-light" href="../../../../code/sourceCode.html">Build from source</a></li>
+                    <li><a class="link-light" href="https://issues.redhat.com/projects/PLANNER">Issue tracker</a></li>
+                    <li><a class="link-light" href="../../../../download/releaseNotes/">Release notes</a></li>
+                    <li><a class="link-light" href="../../../../download/upgradeRecipe/">Upgrade recipes</a></li>
+                    <li><a class="link-light" href="../../../../community/branding.html">Logo and branding</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="d-flex justify-content-evenly align-items-center">
+            <div>
+                <i class="fab fa-creative-commons"></i><i class="fab fa-creative-commons-by"></i>
+                <a class="link-light link-underlined" href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC by 3.0</a> |
+                <a class="link-light link-underlined" href="https://www.redhat.com/en/about/privacy-policy">Privacy Policy</a>
+            </div>
+            <div>
+                <span class="me-2 text-white">Sponsored by</span>
+                <a href="https://www.redhat.com/" target="_blank"><img style="width: 6rem" src="https://www.redhat.com/profiles/rh/themes/redhatdotcom/img/logo.svg" alt="Red Hat"></a>
+            </div>
+        </div>
+    </div>
+</footer>
+    <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="ratio ratio-16x9" id="player-container">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"
+            integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/highlight.min.js"
+            integrity="sha256-mfS2sXKEV8eehy39UH7+7BwaoUaIe2TuLO2DXS+c2mI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/asciidoc.min.js"
+            integrity="sha256-gnB2LPAmHPkrj3czfog5GdIu4aByzcKeTUzC2agNMzM=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/properties.min.js"
+            integrity="sha256-1XSLaVD2dn/eCICDUx1DYprsC4UAEa4weDLYY/458wU=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/gradle.min.js"
+            integrity="sha256-B5HtfGpeJKLSEsoqtAdi6sSJ05K49CTGHZbrBiJ9CwE=" crossorigin="anonymous"></script>
+    <script src="../../../../website/optaplannerWebsite.js"></script>
+    <script>
+        // Ruby syntax highlighting works pretty well for DRL source code.
+        hljs.registerAliases(["drl"], { languageName: "ruby"});
+        hljs.highlightAll();
+    </script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script type="text/javascript">
+      if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+        _satellite.pageBottom();
+      }
+    </script>
+</body>
+</html>
+
+

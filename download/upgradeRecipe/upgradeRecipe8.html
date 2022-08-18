@@ -1,0 +1,2503 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script id="dpal" src="https://www.redhat.com/dtm.js" type="text/javascript"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-39485370-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-39485370-1');
+    </script>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>OptaPlanner - Upgrade recipe 8</title>
+    <meta content="Upgrade to OptaPlanner 8 from the previous version." name="description">
+    <meta content="metaheuristic, heuristic, constraint satisfaction, constraint programming, operations research, NP-complete, NP-hard, optimization, planning, scheduling, java, open source, software, library, solver, tabu search, simulated annealing, pareto" name="keywords">
+    <link href="https://www.optaplanner.org/download/upgradeRecipe/upgradeRecipe8.html" rel="canonical">
+
+    <meta content="Upgrade recipe 8" property="og:title">
+    <meta content="Upgrade to OptaPlanner 8 from the previous version." property="og:description">
+    <meta content="https://www.optaplanner.org/download/upgradeRecipe/upgradeRecipe8.html" property="og:url">
+    <meta content="OptaPlanner" property="og:site_name">
+    <meta content="website" property="og:type">
+    <meta content="https://www.optaplanner.org/headerFooter/optaPlannerIcon.png" property="og:image">
+    <meta content="summary" name="twitter:card">
+    <meta content="@OptaPlanner" name="twitter:site">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+          integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css"
+          integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/styles/default.min.css"
+          integrity="sha256-CGf39SzxAmEe09Ojoh16/2xTRNleX9wBZcEXVnNqwSM=" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../website/optaplannerWebsite.css">
+    <link href="../../favicon.ico" rel="shortcut icon">
+</head>
+
+<body>
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light border-bottom shadow">
+    <div class="container">
+        <a class="navbar-brand" href="../../">
+            <img alt="OptaPlanner logo" src="../../headerFooter/optaPlannerLogo200px.png">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="../../download/download.html">Download</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarLearn" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Learn
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarLearn">
+                        <li><a class="dropdown-item" href="../../learn/documentation.html">Documentation</a></li>
+                        <li><a class="dropdown-item" href="../../learn/video.html">Videos</a></li>
+                        <li><a class="dropdown-item" href="../../learn/slides.html">Slides</a></li>
+                        <li><a class="dropdown-item" href="../../learn/training.html">Training</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="../../learn/useCases/index.html">Use cases</a></li>
+                        <li><a class="dropdown-item" href="../../compatibility/index.html">Compatibility</a></li>
+                        <li><a class="dropdown-item" href="../../learn/testimonialsAndCaseStudies.html">Testimonials and case studies</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="../../community/getHelp.html">Get help</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../blog/">Blog</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../code/sourceCode.html">Source</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../community/team.html">Team</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../product/services.html">Services</a></li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="p-2"><a aria-label="Star OptaPlanner on GitHub" class="github-button" data-show-count="true" href="https://github.com/kiegroup/optaplanner">Star</a></li>
+                <li class="p-1"><a href="https://twitter.com/OptaPlanner" target="_blank" title="Follow OptaPlanner on Twitter"><img alt="T" src="../../headerFooter/twitterLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.linkedin.com/showcase/optaplanner" target="_blank" title="Follow OptaPlanner on LinkedIn"><img alt="L" src="../../headerFooter/linkedInLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.facebook.com/OptaPlanner" target="_blank" title="Follow OptaPlanner on Facebook"><img alt="F" src="../../headerFooter/facebookLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.youtube.com/channel/UCcpkOKpujFlM67D2h0RdaeQ" target="_blank" title="OptaPlanner YouTube channel"><img alt="YT" src="../../headerFooter/youtubeLogo.png" style="height: 16px"></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="body-without-header-footer">
+        <div class="forkMeOnGithub">
+            <a href="https://github.com/kiegroup/optaplanner">
+                <img alt="Fork me on GitHub" src="../../headerFooter/forkMeOnGithub.png">
+            </a>
+        </div>
+        <div class="container py-4">
+    <div class="row">
+        <div class="col-md-9">
+    <h1>Upgrade recipe 8</h1>
+    <div class="paragraph summaryParagraph">
+        <p><strong>OptaPlanner’s public API classes are backwards compatible</strong> (per series),
+            but users often also use impl classes (which are documented in the reference manual too).
+            This upgrade recipe <em>minimizes the pain</em> to upgrade your code
+            and to take advantage of <a href="../../download/releaseNotes/releaseNotes8.html">the newest features in OptaPlanner 8</a>.</p>
+    </div>
+    <div class="row">
+        <div class="col-md-7">
+            <h2 class="mt-0">Legend</h2>
+            <p>Every upgrade note has an indication how likely your code will be affected by that change:</p>
+            <ul class="upgrade-recipe-label-list">
+                <li>
+                    <span class="badge bg-danger label-as-badge">Major</span>
+                    Likely to affect your code.
+                </li>
+                <li>
+                    <span class="badge bg-warning label-as-badge">Minor</span>
+                    Unlikely to affect your code (especially if you followed the examples), unless you have hacks.
+                </li>
+                <li>
+                    <span class="badge bg-info label-as-badge">Impl detail</span>
+                    Will not affect your code, unless you have very deep hacks.
+                </li>
+                <li>
+                    <span class="badge bg-primary label-as-badge">Recommended</span>
+                    Not a backward incompatible change, but you probably want to do this.
+                </li>
+                <li>
+                    <span class="badge bg-success label-as-badge">Readme</span>
+                    Read this to better understand why the subsequent major changes were made.
+                </li>
+            </ul>
+            <div class="sect1">
+                <h2>Upgrade from an older version</h2>
+                <p>To upgrade from an older version, first apply <a href="./">the previous upgrade recipes</a>.</p>
+            </div>
+        </div>
+        <div class="col-md-5 mb-4">
+<div class="card mb-4">
+    <div class="card-header">Note for Red Hat Decision Manager customers</div>
+    <div class="card-body">
+        <p>The RHDM version differs from the OptaPlanner version:</p>
+        <table class="tableblock frame-all grid-all spread">
+            <colgroup>
+                <col style="width: 50%;">
+                <col style="width: 50%;">
+            </colgroup>
+            <thead>
+            <tr>
+                <th>RHDM version</th>
+                <th>OptaPlanner version</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>7.8</td>
+                    <td>7.39</td>
+                </tr>
+                <tr>
+                    <td>7.9</td>
+                    <td>7.44</td>
+                </tr>
+                <tr>
+                    <td>7.1</td>
+                    <td>7.48</td>
+                </tr>
+                <tr>
+                    <td>7.11</td>
+                    <td>8.5 (and 7.52)</td>
+                </tr>
+                <tr>
+                    <td>7.12</td>
+                    <td>8.11 (and 7.59)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+        </div>
+    </div>
+<div class="sect1">
+<h2 id="_from_7_48_to_8_0_0_final">From 7.48+ to 8.0.0.Final</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Because this is a new major version number (8.0), which is the foundation for the 8.x series for the next few years,
+it allows us to make backwards incompatible changes to the public API <em>for the long term benefit of this project</em>.</p>
+</div>
+<div class="paragraph">
+<p>We kept these backwards incompatible changes to a strict minimum
+and will not introduce any additional ones during the 8.x era.</p>
+</div>
+<div class="paragraph">
+<p>Any backwards incompatible changes are annotated with a <span class="badge label-as-badge bg-public-api">Public API</span> badge.</p>
+</div>
+<div class="sect2 upgrade-recipe-major upgrade-recipe-public-api">
+<h3 id="_java_11_or_higher_required">Java 11 or higher required</h3>
+<div class="paragraph">
+<p>If you&#8217;re using JRE or JDK 8, upgrade to JDK 11 or higher.</p>
+</div>
+<div class="paragraph">
+<p>JDK 11 or higher is still available for <em>free</em> (including security and bug fixes),
+alongside Oracle&#8217;s paid subscription.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>On linux, get OpenJDK from your linux software repository.
+For example on Fedora and RHEL:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sudo dnf install java-11-openjdk-devel</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>On Windows and macOS, <a href="https://adoptium.net">download OpenJDK from Adoptium</a>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>We currently intend to support a minimal version of Java 11 throughout the entire 8.x series.</p>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-major upgrade-recipe-public-api">
+<h3 id="_solverfactory_and_plannerbenchmarkfactory_no_longer_support_kie_containers"><code>SolverFactory</code> and <code>PlannerBenchmarkFactory</code> no longer support KIE containers</h3>
+<div class="paragraph">
+<p>The KIE container concept no longer applies.
+Therefore, <code>SolverFactory</code> no longer allows to create <code>Solver</code> instances from KIE containers.
+Likewise for <code>PlannerBenchmarkFactory</code> and benchmarks.</p>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-major upgrade-recipe-public-api">
+<h3 id="_osgi_metadata_removed">OSGi metadata removed</h3>
+<div class="paragraph">
+<p>Due to the limited usage of OSGi and the maintenance burden it brings, the OptaPlanner jars in the 8.x series no longer include OSGi metadata in their <code>META-INF/MANIFEST.MF</code> file.</p>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor upgrade-recipe-public-api">
+<h3 id="_refrain_from_using_java_serialization">Refrain from using Java serialization</h3>
+<div class="paragraph">
+<p>Java serialization is
+<a href="https://cr.openjdk.java.net/~briangoetz/amber/serialization.html">considered by its authors to be poorly designed</a> and it was suggested that the capability would, at some point in time, be removed from the platform altogether.
+In OptaPlanner 8, we have removed most uses of the <code>Serializable</code> marker interface from the public API and we encourage users to
+<a href="https://docs.optaplanner.org/latest/optaplanner-docs/html_single/index.html#integrationWithPersistentStorage">serialize
+via JSON or other formats</a>.</p>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-major upgrade-recipe-public-api">
+<h3 id="_solverfactory_getscoredirectorfactory_replaced_by_scoremanager"><code>SolverFactory.getScoreDirectorFactory()</code> replaced by <code>ScoreManager</code></h3>
+<div class="paragraph">
+<p>In version 7 of OptaPlanner, using <code>ScoreDirectorFactory</code> was necessary in order to
+<a href="https://docs.optaplanner.org/latest/optaplanner-docs/html_single/index.html#explainingTheScore">explain the score</a>.
+In version 8, we have added new functionality to the <code>ScoreManager</code> and as a result, there is no longer any reason to create new instances of <code>ScoreDirector</code>.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">ScoreDirectorFactory&lt;CloudBalance&gt; scoreDirectorFactory = solverFactory.getScoreDirectorFactory();
+try (ScoreDirector&lt;CloudBalance&gt; scoreDirector = scoreDirectorFactory.buildScoreDirector()) {
+    scoreDirector.setWorkingSolution(solution);
+    Score score = scoreDirector.calculateScore();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">ScoreManager&lt;CloudBalance&gt; scoreManager = ScoreManager.create(solverFactory);
+Score score = scoreManager.updateScore(solution);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Methods that allowed users to retrieve an instance of <code>ScoreDirector</code> and <code>ScoreDirectorFactory</code> have been removed from public API without replacement.
+A reduced version of the <code>ScoreDirector</code> interface was promoted to public API as part of promoting the
+<code>ProblemFactChange</code> interface to public API.</p>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-major upgrade-recipe-public-api">
+<h3 id="_solverfactory_getsolverconfig_removed"><code>SolverFactory</code>: <code>getSolverConfig()</code> removed</h3>
+<div class="paragraph">
+<p>The method <code>SolverFactory.getSolverConfig()</code> has long been deprecated in favor of <code>SolverFactory.create(SolverConfig)</code>.
+A <code>SolverConfig</code> is now instantiated before a <code>SolverFactory</code> is instantiated, which is more natural.
+The old way has now been removed.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">SolverFactory&lt;MySolution&gt; solverFactory = SolverFactory.createFromXmlResource(".../mySolverConfig.xml");
+SolverConfig solverConfig = solverFactory.getSolverConfig();
+...
+Solver&lt;MySolution&gt; solver = solverFactory.buildSolver();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">SolverConfig solverConfig = SolverConfig.createFromXmlResource(".../mySolverConfig.xml");
+...
+SolverFactory&lt;MySolution&gt; solverFactory = SolverFactory.create(solverConfig);
+Solver&lt;MySolution&gt; solver = solverFactory.buildSolver();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you were also passing a <code>ClassLoader</code>, pass it to both <code>SolverConfig.createFromXmlResource()</code> and <code>SolverFactory.create()</code>.</p>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor upgrade-recipe-public-api">
+<h3 id="_solverconfig_buildsolver_removed"><code>SolverConfig</code>: <code>buildSolver()</code> removed</h3>
+<div class="paragraph">
+<p>The method <code>SolverConfig.buildSolver()</code> is an inner method that doesn&#8217;t belong in the public API.
+Instead, use <code>SolverFactory.buildSolver()</code>.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">SolverConfig solverConfig = SolverConfig.createFromXmlResource(".../mySolverConfig.xml");
+...
+Solver&lt;MySolution&gt; solver = solverConfig.buildSolver();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">SolverConfig solverConfig = SolverConfig.createFromXmlResource(".../mySolverConfig.xml");
+...
+SolverFactory&lt;MySolution&gt; solverFactory = SolverFactory.create(solverConfig);
+Solver&lt;MySolution&gt; solver = solverFactory.buildSolver();</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor upgrade-recipe-public-api">
+<h3 id="_plannerbenchmarkconfig_buildplannerbenchmark_removed"><code>PlannerBenchmarkConfig</code>: <code>buildPlannerBenchmark()</code> removed</h3>
+<div class="paragraph">
+<p>The method <code>PlannerBenchmarkConfig.buildPlannerBenchmark()</code> is an inner method that doesn&#8217;t belong in the public API.
+Instead, use <code>PlannerBenchmarkFactory.buildPlannerBenchmark()</code>.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">PlannerBenchmarkConfig benchmarkConfig = PlannerBenchmarkConfig.createFromXmlResource(
+        ".../cloudBalancingBenchmarkConfig.xml");
+...
+PlannerBenchmark benchmark = benchmarkFactory.buildPlannerBenchmark();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">PlannerBenchmarkConfig benchmarkConfig = PlannerBenchmarkConfig.createFromXmlResource(
+        ".../cloudBalancingBenchmarkConfig.xml");
+...
+PlannerBenchmarkFactory benchmarkFactory = PlannerBenchmarkFactory.create(benchmarkConfig);
+PlannerBenchmark benchmark = benchmarkFactory.buildPlannerBenchmark();</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor upgrade-recipe-public-api">
+<h3 id="_solverfactory_clonesolverfactory_removed"><code>SolverFactory</code>: <code>cloneSolverFactory()</code> removed</h3>
+<div class="paragraph">
+<p>The method <code>SolverFactory.cloneSolverFactory()</code> has long been deprecated in favor of the copy constructor
+<code>new SolverConfig(SolverConfig)</code>.
+It has now been removed.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">private SolverFactory&lt;MySolution&gt; base;
+
+public void userRequest(..., long userInput) {
+    SolverFactory&lt;MySolution&gt; solverFactory = base.cloneSolverFactory();
+    solverFactory.getSolverConfig()
+            .getTerminationConfig()
+            .setMinutesSpentLimit(userInput);
+    Solver&lt;MySolution&gt; solver = solverFactory.buildSolver();
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">private SolverConfig base;
+
+public void userRequest(..., long userInput) {
+    SolverConfig solverConfig = new SolverConfig(base); // Copy it
+    solverConfig.getTerminationConfig()
+            .setMinutesSpentLimit(userInput);
+    SolverFactory&lt;MySolution&gt; solverFactory = SolverFactory.create(solverConfig);
+    Solver&lt;MySolution&gt; solver = solverFactory.buildSolver();
+    ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor upgrade-recipe-public-api">
+<h3 id="_solverfactory_createempty_removed"><code>SolverFactory</code>: <code>createEmpty()</code> removed</h3>
+<div class="paragraph">
+<p>The method <code>SolverFactory.createEmpty()</code> has long been deprecated in favor of <code>new SolverConfig()</code>.
+It has now been removed.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">SolverFactory&lt;MySolution&gt; solverFactory = SolverFactory.createEmpty();
+SolverConfig solverConfig = solverFactory.getSolverConfig()
+...
+Solver&lt;MySolution&gt; solver = solverFactory.buildSolver();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">SolverConfig solverConfig = new SolverConfig();
+...
+SolverFactory&lt;MySolution&gt; solverFactory = SolverFactory.create(solverConfig);
+Solver&lt;MySolution&gt; solver = solverFactory.buildSolver();</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-major upgrade-recipe-public-api">
+<h3 id="_xml_solver_root_element_now_belongs_to_the_httpswww_optaplanner_orgxsdsolver_namespace">XML &lt;solver/&gt; root element now belongs to the <a href="https://www.optaplanner.org/xsd/solver" class="bare">https://www.optaplanner.org/xsd/solver</a> namespace</h3>
+<div class="paragraph">
+<p>OptaPlanner now provides an XML Schema Definition for the solver configuration.
+Although OptaPlanner keeps backward compatibility of the existing XML configuration,
+migrating to the XSD is strongly recommended as OptaPlanner may support only valid configuration XML in the future.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*SolverConfig.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;solver&gt;
+  ...
+&lt;/solver&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*SolverConfig.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;solver xmlns="https://www.optaplanner.org/xsd/solver" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://www.optaplanner.org/xsd/solver https://www.optaplanner.org/xsd/solver/solver.xsd"&gt;
+  ...
+&lt;/solver&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Using the XSD may require reordering some of the XML elements of the configuration.
+Use code completion in the IDE to migrate to a valid XML.</p>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor upgrade-recipe-public-api">
+<h3 id="_property_subpillarenabled_in_move_selector_configuration_has_been_removed">Property <code>subPillarEnabled</code> in move selector configuration has been removed</h3>
+<div class="paragraph">
+<p>The <code>subPillarEnabled</code> property on <code>PillarSwapMoveSelector</code> and <code>PillarChangeMoveSelector</code> has long been deprecated and replaced by a new property, <code>subPillarType</code>.
+It has now been removed.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*SolverConfig.xml</code> and <code>*BenchmarkConfig.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">      &lt;pillar...MoveSelector&gt;
+        ...
+        &lt;pillarSelector&gt;
+          &lt;subPillarEnabled&gt;false&lt;/subPillarEnabled&gt;
+          ...
+        &lt;/pillarSelector&gt;
+        ...
+      &lt;/pillar...MoveSelector&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*SolverConfig.xml</code> and <code>*BenchmarkConfig.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">      &lt;pillar...MoveSelector&gt;
+        &lt;subPillarType&gt;NONE&lt;/subPillarType&gt;
+        &lt;pillarSelector&gt;
+          ...
+        &lt;/pillarSelector&gt;
+        ...
+      &lt;/pillar...MoveSelector&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-major upgrade-recipe-public-api">
+<h3 id="_solver_getscoredirectorfactory_removed"><code>Solver</code>: <code>getScoreDirectorFactory()</code> removed</h3>
+<div class="paragraph">
+<p>The method <code>getScoreDirectorFactory()</code> has long been deprecated and has now been removed from both <code>Solver</code> and
+<code>SolverFactory</code> classes.</p>
+</div>
+<div class="paragraph">
+<p>Now you don&#8217;t need to create a <code>Solver</code> instance just to calculate or explain a score in the UI.
+Instead, use the <code>ScoreManager</code> API.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">SolverFactory&lt;VehicleRoutingSolution&gt; solverFactory = SolverFactory.createFromXmlResource(...);
+Solver&lt;VehicleRoutingSolution&gt; solver = solverFactory.buildSolver();
+uiScoreDirectorFactory = solver.getScoreDirectorFactory();
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">SolverFactory&lt;VehicleRoutingSolution&gt; solverFactory = SolverFactory.createFromXmlResource(...);
+ScoreManager&lt;VehicleRoutingSolution&gt; scoreManager = ScoreManager.create(solverFactory);
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>ScoreDirectorFactory</code> should not be used anymore, as it&#8217;s always been outside the public API and all of its functionality is exposed in various parts of the public API.</p>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor upgrade-recipe-public-api">
+<h3 id="_solver_explainbestscore_removed"><code>Solver.explainBestScore()</code> removed</h3>
+<div class="paragraph">
+<p>The <code>explainBestScore()</code> method on the <code>Solver</code> interface has been deprecated in 7.x and now removed.
+The same information can be obtained via the new <code>ScoreManager</code> API.</p>
+</div>
+<div class="paragraph">
+<p>We continue to advise users not to parse the results of this method call in any way.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">solver = ...;
+scoreExplanation = solver.explainBestScore();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">MySolution solution = ...;
+ScoreManager&lt;MySolution&gt; scoreManager = ...;
+scoreExplanation = scoreManager.explainScore(solution);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor upgrade-recipe-public-api">
+<h3 id="_solvers_getbestsolution_getbestscore_and_gettimemillisspent_removed"><code>Solver</code>’s <code>getBestSolution()</code>, <code>getBestScore()</code> and <code>getTimeMillisSpent()</code> removed</h3>
+<div class="paragraph">
+<p>Several methods on the <code>Solver</code> interface have been deprecated in 7.x and now removed.
+The same information can be obtained by registering an <code>EventListener</code> via <code>Solver.addEventListener(&#8230;&#8203;)</code>.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">solver = ...;
+solution = solver.getBestSolution();
+score = solver.getBestScore();
+timeMillisSpent = solver.getTimeMillisSpent();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">solver = ...;
+solver.addEventListener(event -&gt; {
+    solution = event.getNewBestSolution();
+    score = event.getNewBestScore();
+    timeMillisSpent = event.getTimeMillisSpent();
+});</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-major upgrade-recipe-public-api">
+<h3 id="_annotation_scanning_has_been_removed">Annotation scanning has been removed</h3>
+<div class="paragraph">
+<p>The <code>&lt;scanAnnotatedClasses/&gt;</code> directive in solver configuration has been deprecated in 7.x and now removed.
+Use the <a href="../../compatibility/quarkus.html">Quarkus extension</a> or
+<a href="../../compatibility/springBoot.html">Spring Boot starter</a> to automatically scan for annotated classes instead.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;solver&gt;
+    ...
+    &lt;scanAnnotatedClasses/&gt;
+    ...
+&lt;/solver&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;solver&gt;
+    ...
+    &lt;solutionClass&gt;...&lt;/solutionClass&gt;
+    &lt;entityClass&gt;...&lt;/entityClass&gt;
+    ...
+&lt;/solver&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-major upgrade-recipe-public-api">
+<h3 id="_new_package_for_planningfactproperty_and_planningfactcollectionproperty">New package for <code>@PlanningFactProperty</code> and <code>@PlanningFactCollectionProperty</code></h3>
+<div class="paragraph">
+<p>The <code>@PlanningFactProperty</code> and <code>@PlanningFactCollectionProperty</code> now share the same package with other similar annotations, such as <code>@PlanningSolution</code>.
+The old annotations have been deprecated in 7.x and now removed.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import org.optaplanner.core.api.domain.solution.drools.ProblemFactCollectionProperty;
+import org.optaplanner.core.api.domain.solution.drools.ProblemFactProperty;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import org.optaplanner.core.api.domain.solution.ProblemFactCollectionProperty;
+import org.optaplanner.core.api.domain.solution.ProblemFactProperty;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor upgrade-recipe-public-api">
+<h3 id="_filterclasslist_replaced_by_a_single_filterclass"><code>filterClassList</code> replaced by a single filterClass</h3>
+<div class="paragraph">
+<p>The configuration of <code>EntitySelector</code>, <code>ValueSelector</code> and <code>MoveSelector</code> now has a single filter class in both the configuration API and the solver configuration XML.</p>
+</div>
+<div class="paragraph">
+<p>In practice, you don&#8217;t need multiple selection filter classes often, and you can always replace them by a single selection filter class which implements the logic of all of them.
+Passing a single selection class now requires less boilerplate code.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">ValueSelectorConfig valueSelectorConfig = new ValueSelectorConfig();
+valueSelectorConfig.setFilterClassList(Collections.singletonList(MySelectionFilterClass.class));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">ValueSelectorConfig valueSelectorConfig = new ValueSelectorConfig();
+valueSelectorConfig.setFilterClass(MySelectionFilterClass.class);</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_replacing_multiple_selection_filter_classes_with_a_single_one">Replacing multiple selection filter classes with a single one</h4>
+<div class="paragraph">
+<p>Before in <code>*.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;swapMoveSelector&gt;
+  &lt;entitySelector&gt;
+    &lt;filterClass&gt;com.example.FilterA&lt;/filterClass&gt;
+    &lt;filterClass&gt;com.example.FilterB&lt;/filterClass&gt;
+  &lt;/entitySelector&gt;
+&lt;/swapMoveSelector&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
+...
+public class FilterA implements SelectionFilter&lt;MySolution, MyPlanningEntity&gt; {
+
+    @Override
+    public boolean accept(ScoreDirector&lt;MySolution&gt; scoreDirector, MyPlanningEntity selection) {
+        return selection.getValue() &lt; 500;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
+...
+public class FilterB implements SelectionFilter&lt;MySolution, MyPlanningEntity&gt; {
+
+    @Override
+    public boolean accept(ScoreDirector&lt;MySolution&gt; scoreDirector, MyPlanningEntity selection) {
+        return selection.getOrder() == Order.ASC;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.xml</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;swapMoveSelector&gt;
+  &lt;entitySelector&gt;
+    &lt;filterClass&gt;com.example.SingleEntityFilter&lt;/filterClass&gt;
+  &lt;/entitySelector&gt;
+&lt;/swapMoveSelector&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
+...
+public class SingleEntityFilter implements SelectionFilter&lt;MySolution, MyPlanningEntity&gt; {
+
+    @Override
+    public boolean accept(ScoreDirector&lt;MySolution&gt; scoreDirector, MyPlanningEntity selection) {
+        return selection.getValue() &lt; 500 &amp;&amp; selection.getOrder() == Order.ASC;
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_acceptorconfig_renamed_to_localsearchacceptorconfig"><code>AcceptorConfig</code> renamed to LocalSearchAcceptorConfig</h3>
+<div class="paragraph">
+<p>Impacts only configuration API, solver configuration XML remains intact.</p>
+</div>
+<div class="paragraph">
+<p>Naming consistency with other local-search-specific configuration classes.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">LocalSearchPhaseConfig localSearchPhaseConfig = new LocalSearchPhaseConfig()
+        .withAcceptorConfig(new AcceptorConfig().withEntityTabuSize(5));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">LocalSearchPhaseConfig localSearchPhaseConfig = new LocalSearchPhaseConfig()
+        .withAcceptorConfig(new LocalSearchAcceptorConfig().withEntityTabuSize(5));</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor upgrade-recipe-public-api">
+<h3 id="_custom_properties_xml_configuration_format_changes"><code>Custom properties</code> XML configuration format changes</h3>
+<div class="paragraph">
+<p>Impact only the solver configuration XML, specifically <code>&lt;scoreDirectorFactory/&gt;</code>, <code>&lt;moveIteratorFactory/&gt;</code>,
+<code>&lt;moveListFactory/&gt;</code>, <code>&lt;partitionedSearch/&gt;</code> and <code>&lt;customPhase/&gt;</code>.</p>
+</div>
+<div class="paragraph">
+<p>To enforce structure of the configuration XML in build time.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;partitionedSearch&gt;
+  &lt;solutionPartitionerClass&gt;com.example.MySolutionPartitioner&lt;/solutionPartitionerClass&gt;
+  &lt;solutionPartitionerCustomProperties&gt;
+    &lt;partCount&gt;4&lt;/partCount&gt; &lt;!-- a custom property --&gt;
+    &lt;minimumProcessListSize&gt;300&lt;/minimumProcessListSize&gt; &lt;!-- a custom property --&gt;
+  &lt;/solutionPartitionerCustomProperties&gt;
+&lt;/partitionedSearch&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;partitionedSearch&gt;
+  &lt;solutionPartitionerClass&gt;com.example.MySolutionPartitioner&lt;/solutionPartitionerClass&gt;
+  &lt;solutionPartitionerCustomProperties&gt;
+    &lt;property name="partCount" value="4"/&gt; &lt;!-- a custom property --&gt;
+    &lt;property name="minimumProcessListSize" value="300"/&gt; &lt;!-- a custom property --&gt;
+  &lt;/solutionPartitionerCustomProperties&gt;
+&lt;/partitionedSearch&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor upgrade-recipe-public-api">
+<h3 id="_variablenameinclude_elements_are_now_wrapped_by_the_variablenameincludes_element"><code>&lt;variableNameInclude/&gt;</code> elements are now wrapped by the <code>&lt;variableNameIncludes/&gt;</code> element</h3>
+<div class="paragraph">
+<p>Impact only the solver configuration XML, specifically the <code>&lt;swapMoveSelector/&gt;</code> and <code>&lt;pillarSwapMoveSelector/&gt;</code>.</p>
+</div>
+<div class="paragraph">
+<p>To enforce structure of the configuration XML in build time.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;swapMoveSelector&gt;
+  &lt;variableNameInclude&gt;variableA&lt;/variableNameInclude&gt;
+  &lt;variableNameInclude&gt;variableB&lt;/variableNameInclude&gt;
+&lt;/swapMoveSelector&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;swapMoveSelector&gt;
+  &lt;variableNameIncludes&gt;
+    &lt;variableNameInclude&gt;variableA&lt;/variableNameInclude&gt;
+    &lt;variableNameInclude&gt;variableB&lt;/variableNameInclude&gt;
+  &lt;/variableNameIncludes&gt;
+&lt;/swapMoveSelector&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor upgrade-recipe-public-api">
+<h3 id="_solution_interface_removed"><code>Solution</code> interface removed</h3>
+<div class="paragraph">
+<p><code>Solution</code> interface has long been deprecated for removal and has now been removed.
+The same goes for <code>AbstractSolution</code>, only used by the Workbench.</p>
+</div>
+<div class="paragraph">
+<p>Remove the <code>Solution</code> interface, annotate the <code>getScore()</code> method with <code>@PlanningScore</code>
+and replace the <code>getProblemFacts()</code> method with a <code>@ProblemFactCollectionProperty</code> annotation directly on every problem fact getter (or field).</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@PlanningSolution
+public class CloudBalance implements Solution&lt;HardSoftScore&gt; {
+
+    private List&lt;CloudComputer&gt; computerList;
+    ...
+
+    private HardSoftScore score;
+
+    @ValueRangeProvider(id = "computerRange")
+    public List&lt;CloudComputer&gt; getComputerList() {...}
+
+    public HardSoftScore getScore() {...}
+    public void setScore(HardSoftScore score) {...}
+
+    public Collection&lt;? extends Object&gt; getProblemFacts() {
+        List&lt;Object&gt; facts = new ArrayList&lt;Object&gt;();
+        facts.addAll(computerList);
+        ...
+        return facts;
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@PlanningSolution
+public class CloudBalance {
+
+    private List&lt;CloudComputer&gt; computerList;
+    ...
+
+    private HardSoftScore score;
+
+    @ValueRangeProvider(id = "computerRange")
+    @ProblemFactCollectionProperty
+    public List&lt;CloudComputer&gt; getComputerList() {...}
+
+    @PlanningScore
+    public HardSoftScore getScore() {...}
+    public void setScore(HardSoftScore score) {...}
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For a single problem fact (which is not wrapped in a <code>Collection</code>), use the <code>@ProblemFactProperty</code> annotation, as shown below (with field annotations this time).</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@PlanningSolution
+public class CloudBalance implements Solution&lt;HardSoftScore&gt; {
+
+    private CloudParametrization parametrization;
+    private List&lt;CloudBuilding&gt; buildingList;
+    @ValueRangeProvider(id = "computerRange")
+    private List&lt;CloudComputer&gt; computerList;
+    ...
+
+    public Collection&lt;? extends Object&gt; getProblemFacts() {
+        List&lt;Object&gt; facts = new ArrayList&lt;Object&gt;();
+        facts.add(parametrization); // not a Collection
+        facts.addAll(buildingList);
+        facts.addAll(computerList);
+        ...
+        return facts;
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@PlanningSolution
+public class CloudBalance {
+
+    @ProblemFactProperty
+    private CloudParametrization parametrization;
+    @ProblemFactCollectionProperty
+    private List&lt;CloudBuilding&gt; buildingList;
+    @ValueRangeProvider(id = "computerRange")
+    @ProblemFactCollectionProperty
+    private List&lt;CloudComputer&gt; computerList;
+    ...
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Don&#8217;t add the <code>@ProblemFactCollectionProperty</code> annotation on getters (or fields) that have a <code>@PlanningEntityCollectionProperty</code> annotation.</p>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor upgrade-recipe-public-api">
+<h3 id="_bestsolutionchangedevent_isnewbestsolutioninitialized_removed"><code>BestSolutionChangedEvent</code>: <code>isNewBestSolutionInitialized()</code> removed</h3>
+<div class="paragraph">
+<p>The method <code>BestSolutionChangedEvent.isNewBestSolutionInitialized()</code> has long been deprecated in favor of <code>BestSolutionChangedEvent.getNewBestSolution().getScore().isSolutionInitialized()</code>.
+It has now been removed.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    public void bestSolutionChanged(BestSolutionChangedEvent&lt;CloudBalance&gt; event) {
+        if (event.isEveryProblemFactChangeProcessed()
+                &amp;&amp; event.isNewBestSolutionInitialized()) {
+            ...
+        }
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    public void bestSolutionChanged(BestSolutionChangedEvent&lt;CloudBalance&gt; event) {
+        if (event.isEveryProblemFactChangeProcessed()
+                &amp;&amp; event.getNewBestSolution().getScore().isSolutionInitialized()) {
+            ...
+        }
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>However, if you also check <code>isFeasible()</code>, that&#8217;s enough because it also checks if the solution is initialized.</p>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    public void bestSolutionChanged(BestSolutionChangedEvent&lt;CloudBalance&gt; event) {
+        if (event.isEveryProblemFactChangeProcessed()
+                // isFeasible() checks isSolutionInitialized() too
+                &amp;&amp; event.getNewBestSolution().getScore().isFeasible()) {
+            ...
+        }
+    }</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor upgrade-recipe-public-api">
+<h3 id="_valueselector_variablename_is_now_an_attribute"><code>&lt;valueSelector&gt;</code>: <code>variableName</code> is now an attribute</h3>
+<div class="paragraph">
+<p>When power tweaking move selectors, such as <code>&lt;changeMoveSelector&gt;</code>, in a use case with multiple planning variables, the <code>&lt;variableName&gt;</code> XML element has been replaced by a <code>variableName="&#8230;&#8203;"</code> XML attribute.
+This reduces the solver configuration verbosity.
+After being deprecated for the entire 7.x series, the old way has now been removed.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*SolverConfig.xml</code> and <code>*BenchmarkConfig.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">  &lt;valueSelector&gt;
+    &lt;variableName&gt;room&lt;/variableName&gt;
+  &lt;/valueSelector&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*SolverConfig.xml</code> and <code>*BenchmarkConfig.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">  &lt;valueSelector variableName="room"/&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor upgrade-recipe-public-api">
+<h3 id="_partitioned_search_threadfactoryclass_removed">Partitioned Search: <code>threadFactoryClass</code> removed</h3>
+<div class="paragraph">
+<p>Now that <code>&lt;solver&gt;</code> has supported a <code>&lt;threadFactoryClass&gt;</code> element for a while, the <code>&lt;threadFactoryClass&gt;</code> element under <code>&lt;partitionedSearch&gt;</code> has been removed.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*SolverConfig.xml</code> and <code>*BenchmarkConfig.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">  &lt;solver&gt;
+    ...
+    &lt;partitionedSearch&gt;
+      &lt;threadFactoryClass&gt;...MyAppServerThreadFactory&lt;/threadFactoryClass&gt;
+      ...
+    &lt;/partitionedSearch&gt;
+  &lt;/solver&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*SolverConfig.xml</code> and <code>*BenchmarkConfig.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">  &lt;solver&gt;
+    &lt;threadFactoryClass&gt;...MyAppServerThreadFactory&lt;/threadFactoryClass&gt;
+    ...
+    &lt;partitionedSearch&gt;
+      ...
+    &lt;/partitionedSearch&gt;
+  &lt;/solver&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor upgrade-recipe-public-api">
+<h3 id="_simpledoublescore_and_hardsoftdoublescore_removed"><code>SimpleDoubleScore</code> and <code>HardSoftDoubleScore</code> removed</h3>
+<div class="paragraph">
+<p>The use of double-based score types has <a href="https://docs.optaplanner.org/latest/optaplanner-docs/html_single/index.html#avoidFloatingPointNumbersInScoreCalculation">long been frowned upon</a>
+as it leads to score corruption.
+They have finally been removed.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@PlanningSolution
+public class MyPlanningSolution {
+
+    private SimpleDoubleScore score;
+
+    ...
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@PlanningSolution
+public class MyPlanningSolution {
+
+    private SimpleLongScore score;
+
+    ...
+
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor upgrade-recipe-public-api">
+<h3 id="_score_toinitializedscore_removed"><code>Score.toInitializedScore()</code> removed</h3>
+<div class="paragraph">
+<p>The <code>Score.toInitializedScore()</code> method has been deprecated in favor of <code>Score.withInitScore(int)</code> in 7.x, and now removed.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">score = score.toInitializedScore();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">score = score.withInitScore(0);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor upgrade-recipe-public-api">
+<h3 id="_various_justification_comparators_removed">Various justification <code>Comparators</code> removed</h3>
+<div class="paragraph">
+<p>The following <code>Comparator</code> implementations were deprecated in 7.x and now removed:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>org.optaplanner.core.api.score.comparator.NaturalScoreComparator</code></p>
+</li>
+<li>
+<p><code>org.optaplanner.core.api.score.constraint.ConstraintMatchScoreComparator</code></p>
+</li>
+<li>
+<p><code>org.optaplanner.core.api.score.constraint.ConstraintMatchTotalScoreComparator</code></p>
+</li>
+<li>
+<p><code>org.optaplanner.core.api.score.constraint.IndictmentScoreComparator</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">NaturalScoreComparator comparator = new NaturalScoreComparator();
+ConstraintMatchScoreComparator comparator2 = new ConstraintMatchScoreComparator();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Comparator&lt;Score&gt; comparator = Comparable::compareTo;
+Comparator&lt;ConstraintMatch&gt; comparator2 = Comparator.comparing(ConstraintMatch::getScore);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor upgrade-recipe-public-api">
+<h3 id="_feasibilityscore_removed"><code>FeasibilityScore</code> removed</h3>
+<div class="paragraph">
+<p>The <code>FeasibilityScore</code> interface has been deprecated in 7.x and its only method <code>isFeasible()</code> moved to the <code>Score</code>
+supertype.
+The interface has now been removed.</p>
+</div>
+<div class="paragraph">
+<p>Users should refer to their <code>Score</code>s by their ultimate type, for example <code>HardSoftScore</code> as opposed to <code>Score</code>.</p>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor upgrade-recipe-public-api">
+<h3 id="_planningentity_movableentityselectionfilter_removed"><code>@PlanningEntity.movableEntitySelectionFilter</code> removed</h3>
+<div class="paragraph">
+<p>The <code>movableEntitySelectionFilter</code> field on <code>@PlanningEntity</code> annotation has been deprecated in 7.x and a new field
+<code>pinningFilter</code> has been introduced, the name of which bears a clear relation to the <code>@PlanningPin</code> annotation.
+This filter implements a new <code>PinningFilter</code> interface, returning true if the entity is pinned, and false if movable.
+The logic of this new filter is therefore inverted as compared to the old filter.</p>
+</div>
+<div class="paragraph">
+<p>Users should update their <code>@PlanningEntity</code> annotations, supplying the new filter instead of the old.
+The old field has now been removed.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@PlanningEntity(movableEntitySelectionFilter = MyMovableEntitySelectionFilter.class)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@PlanningEntity(pinningFilter = MyPinningFilter.class)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor upgrade-recipe-public-api">
+<h3 id="_planningvariable_reinitializevariableentityfilter_removed"><code>@PlanningVariable.reinitializeVariableEntityFilter</code> removed</h3>
+<div class="paragraph">
+<p>The <code>reinitializeVariableEntityFilter</code> field on <code>@PlanningVariable</code> annotation has been deprecated for removal in 7.x and now removed.</p>
+</div>
+<div class="paragraph">
+<p>Users of this niche functionality should refer to the documentation on how to achieve the same result by
+<a href="https://docs.optaplanner.org/latest/optaplanner-docs/html_single/index.html#nullablePlanningVariable">power-tweaking construction heuristics</a>.</p>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor upgrade-recipe-public-api">
+<h3 id="_scoreholder_classes_turned_into_interfaces"><code>*ScoreHolder</code> classes turned into interfaces</h3>
+<div class="paragraph">
+<p>In OptaPlanner 7, <code>ScoreHolder</code> classes, used exclusively for
+<a href="https://docs.optaplanner.org/latest/optaplanner-docs/html_single/index.html#droolsScoreCalculation">Drools score calculation</a>, exposed a number of public methods which, if used, allowed the user to unintentionally corrupt or otherwise negatively affect their scores.</p>
+</div>
+<div class="paragraph">
+<p>In OptaPlanner 8, these methods have been removed and the classes have been turned into interfaces.
+You probably don&#8217;t use any of the removed, potentially harmful methods, so there will be no impact on your code.</p>
+</div>
+<div class="paragraph">
+<p>If that is not the case, you will find suitable replacements in the public API in areas of
+<a href="https://docs.optaplanner.org/latest/optaplanner-docs/html_single/index.html#explainingTheScore">score explanation</a> and
+<a href="https://docs.optaplanner.org/latest/optaplanner-docs/html_single/index.html#constraintConfiguration">constraint configuration</a>.</p>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_valuerangefactory_class_now_final"><code>ValueRangeFactory</code> class now final</h3>
+<div class="paragraph">
+<p><code>ValueRangeFactory</code> class is a factory class that has only static methods.
+As such, there is no need for the users to extend this class, and it has therefore been made <code>final</code>.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">class MyValueRangeFactory extends ValueRangeFactory {
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">class MyValueRangeFactory {
+    ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor upgrade-recipe-public-api">
+<h3 id="_constraintmatchtotal_and_indictment_are_now_interfaces"><code>ConstraintMatchTotal</code> and <code>Indictment</code> are now interfaces</h3>
+<div class="paragraph">
+<p><code>ConstraintMatchTotal</code> and <code>Indictment</code> classes have been converted into interfaces and in the process, their implementations were moved out of the public API, together with methods that allowed to mutate their state.
+These methods were never intended for public API, and therefore there is no replacement for them.</p>
+</div>
+<div class="paragraph">
+<p>You may still need the instances themselves if you choose to implement <code>ConstraintMatchAwareIncrementalScoreCalculator</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">ConstraintMatchTotal maximumCapacityMatchTotal = new ConstraintMatchTotal(...);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">ConstraintMatchTotal maximumCapacityMatchTotal = new DefaultConstraintMatchTotal(...);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-major upgrade-recipe-public-api">
+<h3 id="_scoremanager_generic_type_score_added"><code>ScoreManager</code>: generic type <code>Score</code> added</h3>
+<div class="paragraph">
+<p>The <code>ScoreManager</code> and <code>ScoreExplanation</code> APIs
+now have a generic type <code>Score</code> to avoid downcasts in your code, for example from <code>Score</code> to <code>HardSoftScore</code>.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    @Inject // or @Autowired
+    ScoreManager&lt;TimeTable&gt; scoreManager;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    @Inject // or @Autowired
+    ScoreManager&lt;TimeTable, HardSoftScore&gt; scoreManager;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    ScoreExplanation&lt;TimeTable&gt; explanation = scoreManager.explainScore(timeTable);
+    HardSoftScore score = (HardSoftScore) explanation.getScore();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    ScoreExplanation&lt;TimeTable, HardSoftScore&gt; explanation = scoreManager.explainScore(timeTable);
+    HardSoftScore score = explanation.getScore();</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-major">
+<h3 id="_constraintmatchtotal_constraintmatch_and_indictment_generic_type_score_added"><code>ConstraintMatchTotal</code>, <code>ConstraintMatch</code> and <code>Indictment</code>: generic type <code>Score</code> added</h3>
+<div class="paragraph">
+<p>Just like <code>ScoreManager</code> and <code>ScoreExplanation</code>, the <code>ConstraintMatchTotal</code>, <code>ConstraintMatch</code> and <code>Indictment</code> APIs
+now have a generic type <code>Score</code> to avoid downcasts in your code, for example from <code>Score</code> to <code>HardSoftScore</code>.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    ScoreExplanation&lt;TimeTable&gt; explanation = scoreManager.explainScore(timeTable);
+    Map&lt;String, ConstraintMatchTotal&gt; constraintMatchTotalMap = scoreExplanation.getConstraintMatchTotalMap();
+    ConstraintMatchTotal constraintMatchTotal = constraintMatchTotalMap.get(contraintId);
+    HardSoftScore totalScore = (HardSoftScore) constraintMatchTotal.getScore();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    ScoreExplanation&lt;TimeTable, HardSoftScore&gt; explanation = scoreManager.explainScore(timeTable);
+    Map&lt;String, ConstraintMatchTotal&lt;HardSoftScore&gt;&gt; constraintMatchTotalMap = scoreExplanation.getConstraintMatchTotalMap();
+    ConstraintMatchTotal&lt;HardSoftScore&gt; constraintMatchTotal = constraintMatchTotalMap.get(contraintId);
+    HardSoftScore totalScore = constraintMatchTotal.getScore();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    ScoreExplanation&lt;TimeTable&gt; explanation = scoreManager.explainScore(timeTable);
+    Map&lt;Object, Indictment&gt; indictmentMap = scoreExplanation.getIndictmentMap();
+    Indictment indictment = indictmentMap.get(lesson);
+    HardSoftScore totalScore = (HardSoftScore) indictment.getScore();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    ScoreExplanation&lt;TimeTable, HardSoftScore&gt; explanation = scoreManager.explainScore(timeTable);
+    Map&lt;Object, Indictment&lt;HardSoftScore&gt;&gt; indictmentMap = scoreExplanation.getIndictmentMap();
+    Indictment&lt;HardSoftScore&gt; indictment = indictmentMap.get(lesson);
+    HardSoftScore totalScore = indictment.getScore();</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_constraintmatchawareincrementalscorecalculator_generic_type_score_added"><code>ConstraintMatchAwareIncrementalScoreCalculator</code>: generic type <code>Score</code> added</h3>
+<div class="paragraph">
+<p>The interface <code>ConstraintMatchAwareIncrementalScoreCalculator</code>
+now also has a generic type parameter for <code>Score</code> to avoid raw type usages of <code>ConstraintMatchTotal</code> and <code>Indictment</code>.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class MachineReassignmentIncrementalScoreCalculator
+        implements ConstraintMatchAwareIncrementalScoreCalculator&lt;MachineReassignment&gt; {
+
+    @Override
+    public Collection&lt;ConstraintMatchTotal&gt; getConstraintMatchTotals() {
+        ...
+    }
+
+
+    @Override
+    public Map&lt;Object, Indictment&gt; getIndictmentMap() {
+        ...
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class MachineReassignmentIncrementalScoreCalculator
+        implements ConstraintMatchAwareIncrementalScoreCalculator&lt;MachineReassignment, HardSoftLongScore&gt; {
+
+    @Override
+    public Collection&lt;ConstraintMatchTotal&lt;HardSoftLongScore&gt;&gt; getConstraintMatchTotals() {
+        ...
+    }
+
+
+    @Override
+    public Map&lt;Object, Indictment&lt;HardSoftLongScore&gt;&gt; getIndictmentMap() {
+        ...
+    }
+
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_abstractcustomphasecommand_was_removed"><code>AbstractCustomPhaseCommand</code> was removed</h3>
+<div class="paragraph">
+<p>The abstract class <code>AbstractCustomPhaseCommand</code> was removed.
+Any class that extends it should directly implement the <code>CustomPhaseCommand</code> interface.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class DinnerPartySolutionInitializer extends AbstractCustomPhaseCommand&lt;DinnerParty&gt; {
+
+    @Override
+    public void changeWorkingSolution(ScoreDirector&lt;DinnerParty&gt; scoreDirector) {
+        ...
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class DinnerPartySolutionInitializer implements CustomPhaseCommand&lt;DinnerParty&gt; {
+
+    @Override
+    public void changeWorkingSolution(ScoreDirector&lt;DinnerParty&gt; scoreDirector) {
+        ...
+    }
+
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-major">
+<h3 id="_score_calculators_become_public_api">Score calculators become public API</h3>
+<div class="paragraph">
+<p>The interfaces <code>EasyScoreCalculator</code>, <code>IncrementalScoreCalculator</code> and <code>ConstraintMatchAwareIncrementalScoreCalculator</code>
+have moved to a new package in the public API.
+Their deprecated counterparts have been removed.
+The deprecated class <code>org.optaplanner.core.impl.score.director.incremental.AbstractIncrementalScoreCalculator</code>
+has also been removed.
+Replace the use of the removed interfaces and classes with their counterparts in the public API.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code><strong>EasyScoreCalculator.java</strong></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">  ...
+  import org.optaplanner.core.impl.score.director.easy.EasyScoreCalculator;
+  ...
+
+  public class CloudBalancingEasyScoreCalculator implements EasyScoreCalculator&lt;CloudBalance&gt; {
+    ...
+  }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code><strong>EasyScoreCalculator.java</strong></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">  ...
+  import org.optaplanner.core.api.score.calculator.EasyScoreCalculator;
+  ...
+
+  public class CloudBalancingEasyScoreCalculator implements EasyScoreCalculator&lt;CloudBalance, HardSoftScore&gt; {
+    ...
+  }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Before in <code><strong>IncrementalScoreCalculator.java</strong></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">  ...
+  import org.optaplanner.core.impl.score.director.incremental.AbstractIncrementalScoreCalculator;
+  ...
+
+  public class CloudBalancingIncrementalScoreCalculator extends AbstractIncrementalScoreCalculator&lt;CloudBalance&gt; {
+    ...
+  }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code><strong>IncrementalScoreCalculator.java</strong></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">  ...
+  import org.optaplanner.core.api.score.calculator.IncrementalScoreCalculator;
+  ...
+
+  public class CloudBalancingIncrementalScoreCalculator implements IncrementalScoreCalculator&lt;CloudBalance, HardSoftScore&gt; {
+    ...
+  }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Before in <code><strong>ConstraintMatchAwareIncrementalScoreCalculator.java</strong></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">  ...
+  import org.optaplanner.core.impl.score.director.incremental.AbstractIncrementalScoreCalculator;
+  import org.optaplanner.core.impl.score.director.incremental.ConstraintMatchAwareIncrementalScoreCalculator;
+  ...
+
+  public class CheapTimeConstraintMatchAwareIncrementalScoreCalculator
+        extends AbstractIncrementalScoreCalculator&lt;CheapTimeSolution&gt;
+        implements ConstraintMatchAwareIncrementalScoreCalculator&lt;CheapTimeSolution&gt; {
+    ...
+  }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code><strong>ConstraintMatchAwareIncrementalScoreCalculator.java</strong></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">  ...
+  import org.optaplanner.core.api.score.calculator.ConstraintMatchAwareIncrementalScoreCalculator;
+  ...
+
+  public class CheapTimeConstraintMatchAwareIncrementalScoreCalculator
+        implements ConstraintMatchAwareIncrementalScoreCalculator&lt;CheapTimeSolution, HardMediumSoftLongScore&gt; {
+    ...
+  }</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-major upgrade-recipe-public-api">
+<h3 id="_plannerbenchmarkfactory_createfromsolverfactory_removed"><code>PlannerBenchmarkFactory</code>: <code>createFromSolverFactory()</code> removed</h3>
+<div class="paragraph">
+<p>The method <code>PlannerBenchmarkFactory.createFromSolverFactory()</code> has long been deprecated in favor of
+<code>PlannerBenchmarkFactory.createFromSolverConfigXmlResource(String)</code>.
+It has now been removed.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">SolverFactory&lt;CloudBalance&gt; solverFactory = SolverFactory.createFromXmlResource(
+        ".../cloudBalancingSolverConfig.xml");
+PlannerBenchmarkFactory benchmarkFactory = PlannerBenchmarkFactory.createFromSolverFactory(solverFactory);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">PlannerBenchmarkFactory benchmarkFactory = PlannerBenchmarkFactory.createFromSolverConfigXmlResource(
+        ".../cloudBalancingSolverConfig.xml");</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you programmatically adjust the solver configuration, you can use <code>PlannerBenchmarkConfig.createFromSolverConfig(SolverConfig)</code>
+and then <code>PlannerBenchmarkFactory.create(PlannerBenchmarkConfig)</code> instead.</p>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor upgrade-recipe-public-api">
+<h3 id="_plannerbenchmarkfactory_getplannerbenchmarkconfig_removed"><code>PlannerBenchmarkFactory</code>: <code>getPlannerBenchmarkConfig()</code> removed</h3>
+<div class="paragraph">
+<p>The method <code>PlannerBenchmarkFactory.getPlannerBenchmarkConfig()</code> has long been deprecated in favor of
+<code>PlannerBenchmarkFactory.create(PlannerBenchmarkConfig)</code>.
+A <code>PlannerBenchmarkConfig</code> is now instantiated before a <code>PlannerBenchmarkFactory</code> is instantiated, which is more natural.
+<code>PlannerBenchmarkFactory.getPlannerBenchmarkConfig()</code> has been removed.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">PlannerBenchmarkFactory benchmarkFactory = PlannerBenchmarkFactory.createFromXmlResource(
+        ".../cloudBalancingBenchmarkConfig.xml");
+PlannerBenchmarkConfig benchmarkConfig = benchmarkFactory.getPlannerBenchmarkConfig();
+...
+PlannerBenchmark benchmark = benchmarkFactory.buildPlannerBenchmark();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">PlannerBenchmarkConfig benchmarkConfig = PlannerBenchmarkConfig.createFromXmlResource(
+        ".../cloudBalancingBenchmarkConfig.xml");
+...
+PlannerBenchmarkFactory benchmarkFactory = PlannerBenchmarkFactory.create(benchmarkConfig);
+PlannerBenchmark benchmark = benchmarkFactory.buildPlannerBenchmark();</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-major upgrade-recipe-public-api">
+<h3 id="_xml_plannerbenchmark_root_element_now_belongs_to_the_httpswww_optaplanner_orgxsdbenchmark_namespace">XML &lt;plannerBenchmark/&gt; root element now belongs to the <a href="https://www.optaplanner.org/xsd/benchmark" class="bare">https://www.optaplanner.org/xsd/benchmark</a> namespace</h3>
+<div class="paragraph">
+<p>OptaPlanner now provides an XML Schema Definition for the benchmark configuration.
+Although OptaPlanner keeps backward compatibility of the existing XML configuration,
+migrating to the XSD is strongly recommended as OptaPlanner may support only valid configuration XML in the future.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*BenchmarkConfig.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;plannerBenchmark&gt;
+  ...
+&lt;/plannerBenchmark&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*BenchmarkConfig.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;plannerBenchmark xmlns="https://www.optaplanner.org/xsd/benchmark" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://www.optaplanner.org/xsd/benchmark https://www.optaplanner.org/xsd/benchmark/benchmark.xsd"&gt;
+  ...
+&lt;/plannerBenchmark&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Using the XSD may require reordering some of the XML elements of the configuration.
+Use code completion in the IDE to migrate to a valid XML.</p>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-major upgrade-recipe-public-api">
+<h3 id="_problembenchmarksconfig_xstreamannotatedclass_removed"><code>ProblemBenchmarksConfig</code>: <code>xStreamAnnotatedClass</code> removed</h3>
+<div class="paragraph">
+<p>The <code>&lt;xStreamAnnotatedClass/&gt;</code> has been removed from the <code>&lt;problemBenchmarks/&gt;</code> configuration together with  the corresponding
+<code>getXStreamAnnotatedClassList()</code> and <code>setXStreamAnnotatedClassList()</code> methods in the <code>ProblemBenchmarksConfig</code> class.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">ProblemBenchmarksConfig problemBenchmarksConfig = new ProblemBenchmarksConfig();
+problemBenchmarksConfig.setXStreamAnnotatedClassList(MySolution.class);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example;
+...
+public class MySolutionFileIO extends XStreamSolutionFileIO&lt;MySolution&gt; {
+    public MySolutionFileIO() {
+        super(MySolution.class);
+    }
+}
+
+...
+
+ProblemBenchmarksConfig problemBenchmarksConfig = new ProblemBenchmarksConfig();
+problemBenchmarksConfig.setSolutionFileIOClass(MySolutionFileIO.class);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Before in <code>*BenchmarkConfig.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;plannerBenchmark&gt;
+...
+  &lt;solverBenchmark&gt;
+    &lt;problemBenchmarks&gt;
+      &lt;xStreamAnnotatedClass&gt;com.example.MySolution&lt;/xStreamAnnotatedClass&gt;
+      ...
+    &lt;/problemBenchmarks&gt;
+    ...
+  &lt;/solverBenchmark&gt;
+...
+&lt;/plannerBenchmark&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*BenchmarkConfig.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;plannerBenchmark&gt;
+...
+  &lt;solverBenchmark&gt;
+    &lt;problemBenchmarks&gt;
+      &lt;!-- See the "After in *.java" section to create the MySolutionFileIO. --&gt;
+      &lt;solutionFileIOClass&gt;com.example.MySolutionFileIO&lt;/solutionFileIOClass&gt;
+      ...
+    &lt;/problemBenchmarks&gt;
+    ...
+  &lt;/solverBenchmark&gt;
+...
+&lt;/plannerBenchmark&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_benchmarkaggregatorframe_createanddisplayplannerbenchmarkfactory_removed"><code>BenchmarkAggregatorFrame</code>: <code>createAndDisplay(PlannerBenchmarkFactory)</code> removed</h3>
+<div class="paragraph">
+<p>The method <code>BenchmarkAggregatorFrame.createAndDisplay(PlannerBenchmarkFactory)</code> has long been deprecated in favor of <code>BenchmarkAggregatorFrame.createAndDisplayFromXmlResource(String)</code>.
+It has now been removed.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">PlannerBenchmarkFactory benchmarkFactory = PlannerBenchmarkFactory.createFromXmlResource(
+        ".../cloudBalancingBenchmarkConfig.xml");
+BenchmarkAggregatorFrame.createAndDisplay(benchmarkFactory);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">BenchmarkAggregatorFrame.createAndDisplayFromXmlResource(
+        ".../cloudBalancingBenchmarkConfig.xml");</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you programmatically adjust the benchmark configuration, you can use <code>BenchmarkAggregatorFrame.createAndDisplay(PlannerBenchmarkConfig)</code> instead.</p>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_removed_javascript_expression_support_in_configuration">Removed JavaScript expression support in configuration</h3>
+<div class="paragraph">
+<p>Various elements of both the solver configuration and benchmark configuration no longer support nested
+JavaScript expressions.
+Users need to replace these with either auto-configuration or with integer constants.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>solverConfig.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">    &lt;solver&gt;
+        ...
+        &lt;moveThreadCount&gt;availableProcessorCount - 1&lt;/moveThreadCount&gt;
+        ...
+    &lt;/solver&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>solverConfig.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">    &lt;solver&gt;
+        ...
+        &lt;moveThreadCount&gt;1&lt;/moveThreadCount&gt; &lt;!-- Alternatively, use "AUTO" or omit entirely. --&gt;
+        ...
+    &lt;/solver&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Before in <code>benchmarkConfig.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">    &lt;plannerBenchmark&gt;
+      ...
+      &lt;parallelBenchmarkCount&gt;availableProcessorCount - 1&lt;/parallelBenchmarkCount&gt;
+      ...
+    &lt;/plannerBenchmark&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>benchmarkConfig.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">    &lt;plannerBenchmark&gt;
+      ...
+      &lt;parallelBenchmarkCount&gt;1&lt;/parallelBenchmarkCount&gt; &lt;!-- Alternatively, use "AUTO" or omit entirely. --&gt;
+      ...
+    &lt;/plannerBenchmark&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-major">
+<h3 id="_removed_the_deprecated_variable_listeners">Removed the deprecated variable listeners</h3>
+<div class="paragraph">
+<p>A deprecated interface <code>VariableListener</code> from package <code>org.optaplanner.core.impl.domain.variable.listener</code> has been removed,
+along with a deprecated interface <code>StatefulVariableListener</code>
+and a deprecated class <code>VariableListenerAdapter</code> in that same package.
+Instead, use an interface <code>VariableListener</code> from package <code>org.optaplanner.core.api.domain.variable</code>.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code><strong>VariableListener.java</strong></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">  ...
+  import org.optaplanner.core.impl.domain.variable.listener.VariableListenerAdapter;
+  ...
+
+  public class MyVariableListener extends VariableListenerAdapter&lt;Object&gt; {
+
+    ...
+
+    @Override
+    void afterEntityRemoved(ScoreDirector scoreDirector, Object entity);
+      ...
+    }
+
+    ...
+  }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code><strong>VariableListener.java</strong></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">  ...
+  import org.optaplanner.core.api.domain.variable.VariableListener;
+  ...
+
+  public class MyVariableListener extends VariableListener&lt;MySolution, Object&gt; {
+
+    ...
+
+    @Override
+    void afterEntityRemoved(ScoreDirector&lt;MySolution&gt; scoreDirector, Object entity);
+      ...
+    }
+
+    ...
+  }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Before in <code><strong>StatefulVariableListener.java</strong></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">  ...
+  import org.optaplanner.core.impl.domain.variable.listener.StatefulVariableListener;
+  ...
+
+  public class MyStatefulVariableListener implements StatefulVariableListener&lt;Object&gt; {
+
+    ...
+
+    @Override
+    public void clearWorkingSolution(ScoreDirector scoreDirector) {
+      ...
+    }
+
+    ...
+  }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code><strong>StatefulVariableListener.java</strong></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">  ...
+  import org.optaplanner.core.api.domain.variable.VariableListener;
+  ...
+
+  public class MyStatefulVariableListener implements VariableListener&lt;MySolution, Object&gt; {
+
+    ...
+
+    @Override
+    public void close() {
+      ...
+    }
+
+    ...
+  }</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_from_8_2_0_final_to_8_3_0_final">From 8.2.0.Final to 8.3.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2 upgrade-recipe-impl-detail">
+<h3 id="_constraintmatch_compareto_inconsistent_with_equals"><code>ConstraintMatch.compareTo()</code> inconsistent with <code>equals()</code></h3>
+<div class="paragraph">
+<p>The <code>equals()</code> override in <code>ConstraintMatch</code> has been removed.
+As a result, two different <code>ConstraintMatch</code> instances are never considered equal.
+This is in contrast to the <code>compareTo()</code> method, which continues to consider two instances equal
+if all their field values are equal.</p>
+</div>
+<div class="paragraph">
+<p>The <code>equals()</code> override in <code>ConstraintMatch</code> has been removed
+in order to not fail on constraints with non-distinct matches.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_from_8_5_0_final_to_8_6_0_final">From 8.5.0.Final to 8.6.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_planningid_can_no_longer_return_null"><code>@PlanningId</code> can no longer return null</h3>
+<div class="paragraph">
+<p>If a field (or getter) annotated with a <code>@PlanningId</code> annotation returns a <code>null</code> value,
+the <code>Solver</code> now fails fast immediately, instead of failing fast when the second instance with <code>null</code> value appears.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_from_8_7_0_final_to_8_8_0_final">From 8.7.0.Final to 8.8.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_plannerbenchmark_benchmark_now_returns_java_util_file"><code>PlannerBenchmark.benchmark()</code> now returns <code>java.util.File</code></h3>
+<div class="paragraph">
+<p>The return type of <code>org.optaplanner.benchmark.api.PlannerBenchmark</code> methods <code>benchmark()</code> and <code>benchmarkAndShowReportInBrowser()</code>
+has changed from <code>void</code> to <code>File</code>.
+Users can read this value to retrieve the directory in which the benchmark results were written.</p>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_constraintcollectors_tosortedsetbifunction_newly_ambiguous"><code>ConstraintCollectors.toSortedSet(BiFunction)</code> newly ambiguous</h3>
+<div class="paragraph">
+<p>The addition of <code>ConstraintCollectors.toSortedSet(Comparator)</code> has caused a Java compiler ambiguity
+with the pre-existing method <code>ConstraintCollectors.toSortedSet(BiFunction)</code>.
+Users of the original method need to inform the compiler of the particular overload they wish to use.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code><strong>ConstraintProvider.java</strong></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">  ...
+
+  ConstraintCollectors.toSortedSet(Integer::sum);
+
+  ...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code><strong>ConstraintProvider.java</strong></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">  ...
+
+  ConstraintCollectors.toSortedSet((BiFunction&lt;Integer, Integer, Integer&gt;) Integer::sum);
+
+  ...</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_from_8_9_0_final_to_8_10_0_final">From 8.9.0.Final to 8.10.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2 upgrade-recipe-major">
+<h3 id="_switch_to_quarkus_2">Switch to Quarkus 2</h3>
+<div class="paragraph">
+<p>OptaPlanner has been realigned with recently released Quarkus 2.0.
+Users of the OptaPlanner Quarkus integration should refer to <a href="https://github.com/quarkusio/quarkus/wiki/Migration-Guide-2.0">Quarkus 2.0 migration guide</a>.</p>
+</div>
+<div class="paragraph">
+<p>Consequently, OptaPlanner binaries now require JDK 11 or higher to run.
+Even though OptaPlanner 8.x has always required JDK 11, this only becomes a hard requirement with OptaPlanner 8.10.0.Final.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_from_8_11_0_final_to_8_12_0_final">From 8.11.0.Final to 8.12.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2 upgrade-recipe-major">
+<h3 id="_rename_optaplanner_solver_solve_length_to_optaplanner_solver_solve_duration">Rename optaplanner.solver.solve-length to optaplanner.solver.solve.duration</h3>
+<div class="paragraph">
+<p>The Micrometer meter <code>optaplanner.solver.solve-length</code> has been renamed to <code>optaplanner.solver.solve.duration</code> to follow Micrometer naming conventions and make it appear better in a variety of monitoring systems. References to <code>optaplanner.solver.solve-length.*</code> in the monitoring system should be changed to <code>optaplanner.solver.solve.duration.*</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_from_8_13_0_final_to_8_14_0_final">From 8.13.0.Final to 8.14.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2 upgrade-recipe-major">
+<h3 id="_constraint_streams_use_foreach_instead_of_from">Constraint Streams: use <code>forEach(&#8230;&#8203;)</code> instead of <code>from(&#8230;&#8203;)</code></h3>
+<div class="paragraph">
+<p>We have deprecated the following methods on the <code>ConstraintFactory</code> interface:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>from(&#8230;&#8203;)</code> in favor of <code>forEach(&#8230;&#8203;)</code>,</p>
+</li>
+<li>
+<p><code>fromUnfiltered(&#8230;&#8203;)</code> in favor of <code>forEachIncludingNullVars(&#8230;&#8203;)</code>,</p>
+</li>
+<li>
+<p><code>fromUniquePair(&#8230;&#8203;)</code> in favor of <code>forEachUniquePair(&#8230;&#8203;)</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The new methods behave differently when it comes to <code>nullable=true</code> planning variables.
+The deprecated methods will eventually be removed in a future major version.</p>
+</div>
+<div class="sect3">
+<h4 id="_impact_on_users_without_nullable_planning_variables">Impact on users without nullable planning variables</h4>
+<div class="paragraph">
+<p>If you do not use over-constrained planning (where <code>@PlanningVariable(&#8230;&#8203;, nullable = false)</code>) simply replace all the uses of the <code>from*</code> methods with <code>forEach*</code> methods.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code><strong>ConstraintProvider.java</strong></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    Constraint roomConflict(ConstraintFactory constraintFactory) {
+        return constraintFactory.from(Lesson.class)
+            ...
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code><strong>ConstraintProvider.java</strong></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    Constraint roomConflict(ConstraintFactory constraintFactory) {
+        return constraintFactory.forEach(Lesson.class)
+            ...
+    }</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_impact_on_users_with_nullable_planning_variables">Impact on users with nullable planning variables</h4>
+<div class="paragraph">
+<p>If you use over-constrained planning (where <code>@PlanningVariable(&#8230;&#8203;, nullable = true)</code>) take into account the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>forEach(&#8230;&#8203;)</code> filters out planning entities with <code>null</code> values in any of their genuine planning variables,
+regardless if they are initialized or not.</p>
+</li>
+<li>
+<p>The same applies for <code>join(&#8230;&#8203;)</code> following a <code>forEach(&#8230;&#8203;)</code>.</p>
+</li>
+<li>
+<p>And the same also applies for conditional propagation (<code>ifExists(&#8230;&#8203;)</code>, <code>ifNotExists(&#8230;&#8203;)</code> etc.) following a <code>forEach(&#8230;&#8203;)</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In practice, what this means is:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Where you previously used <code>null</code> checks to exclude entities with unassigned variables,
+you should remove these null checks after replacing <code>from(&#8230;&#8203;)</code> with <code>forEach(&#8230;&#8203;)</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Before in <code><strong>ConstraintProvider.java</strong></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    Constraint departmentSpecialismConstraint(ConstraintFactory constraintFactory) {
+        return constraintFactory.from(BedDesignation.class)
+                .filter(bd -&gt; bd.getBed() != null)
+                ...
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code><strong>ConstraintProvider.java</strong></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    Constraint departmentSpecialismConstraint(ConstraintFactory constraintFactory) {
+        return constraintFactory.forEach(BedDesignation.class)
+                ...
+    }</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Where you deliberately intend to retrieve entities with <code>null</code> variables,
+for example in the medium constraint to penalize all unassigned entities,
+you must replace <code>from(&#8230;&#8203;)</code> with <code>forEachIncludingNullVars(&#8230;&#8203;)</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Before in <code><strong>ConstraintProvider.java</strong></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    Constraint assignEveryPatientToABedConstraint(ConstraintFactory constraintFactory) {
+        return constraintFactory.from(BedDesignation.class)
+                .filter(bd -&gt; bd.getBed() == null)
+                .penalize("assignEveryPatientToABed", HardMediumSoftScore.ONE_MEDIUM,
+                        BedDesignation::getAdmissionPartNightCount);
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code><strong>ConstraintProvider.java</strong></code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    Constraint assignEveryPatientToABedConstraint(ConstraintFactory constraintFactory) {
+        return constraintFactory.forEachIncludingNullVars(BedDesignation.class)
+                .filter(bd -&gt; bd.getBed() == null)
+                .penalize("assignEveryPatientToABed", HardMediumSoftScore.ONE_MEDIUM,
+                        BedDesignation::getAdmissionPartNightCount);
+    }</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_from_8_19_0_final_to_8_20_0_final">From 8.19.0.Final to 8.20.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_solvermanager_addproblemchange_and_solverjob_addproblemchange_now_return_completablefuturevoid"><code>SolverManager.addProblemChange()</code> and <code>SolverJob.addProblemChange()</code> now return <code>CompletableFuture&lt;Void&gt;</code></h3>
+<div class="paragraph">
+<p><code>SolverManager.addProblemChange()</code> and <code>SolverJob.addProblemChange()</code> return type has changed from <code>void</code>
+to <code>CompletableFuture&lt;Void&gt;</code>, which might break already compiled code depending on these methods.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_from_8_22_0_final_to_8_23_0_final">From 8.22.0.Final to 8.23.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2 upgrade-recipe-major">
+<h3 id="_score_drl_deprecated_in_favor_of_constraint_streams">Score DRL deprecated in favor of Constraint Streams</h3>
+<div class="paragraph">
+<p>Support for Score DRL has been deprecated and users are encouraged to migrate to <a href="https://www.optaplanner.org/docs/optaplanner/latest/constraint-streams/constraint-streams.html">Constraint Streams</a> at their earliest convenience.
+To help with migration, here&#8217;s the <a href="https://www.optaplanner.org/learn/drl-to-constraint-streams-migration.html">score DRL migration guide</a>.
+Score DRL is not going away in OptaPlanner 8.</p>
+</div>
+</div>
+</div>
+</div>        </div>
+        <div class="col-md-3">
+    <div class="card mb-4">
+        <div class="card-header">Latest release</div>
+        <div class="card-body">
+            <ul class="list-unstyled mb-0">
+                <li>
+                    <div class="title">
+                        <a href="../../download/releaseNotes/releaseNotes8.html">
+                            8.25.0.Final released
+                        </a>
+                    </div>
+                    <div class="small">
+                        Tue 26 July 2022
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Upcoming events</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <div class="title">
+                                    <a href="https://devoxx.be">Devoxx Belgium</a>
+                            </div>
+                            <span>
+                                Antwerp, Belgium - Mon 10 October 2022
+                            </span>
+                        </li>
+                <div class="small float-end">
+                    <a href="https://github.com/kiegroup/optaplanner-website/blob/main/optaplanner-website-root/data/events.yml">Add event</a>
+                    /
+                    <a href="../../community/eventsArchive.html">Archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest blog posts</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../blog/2022/06/09/RunOptaPlannerWorkloadOnOpenShift.html">Run OptaPlanner workloads on OpenShift, part I.</a>
+                        </div>
+                        <div class="small">Thu 9 June 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../blog/2022/05/26/optaplanner-deprecates-score-drl.html">OptaPlanner deprecates score DRL</a>
+                        </div>
+                        <div class="small">Thu 26 May 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/c950743f532471ac34022e92193563c3?s=20&d=mm"/>
+        <span class="align-middle">Lukáš Petrovický</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../blog/2022/03/07/Real-time+planning+meets+the+SolverManager.html">Real-time planning meets SolverManager</a>
+                        </div>
+                        <div class="small">Mon 7 March 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../blog/2021/10/26/DocsTurnOverANewLeaf.html">OptaPlanner documentation turns over a new leaf</a>
+                        </div>
+                        <div class="small">Tue 26 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../blog/2021/10/14/OrderPickingQuickstart.html">Order picking optimization in warehouses and supermarkets with OptaPlanner</a>
+                        </div>
+                        <div class="small">Thu 14 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/4a8c787544c0b40bc033f631dc2256c2?s=20&d=mm"/>
+        <span class="align-middle">Walter Medvedeo</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../blog/2021/10/12/MonitorTheSolver.html">Monitor OptaPlanner solvers through Micrometer</a>
+                        </div>
+                        <div class="small">Tue 12 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/16f228a9f340e2a2ca5b42485a17bc3d?s=20&d=mm"/>
+        <span class="align-middle">Christopher Chianelli</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../blog/2021/10/05/ANewAIConstraintSolverForPythonOptaPy.html">A new AI constraint solver for Python: OptaPy</a>
+                        </div>
+                        <div class="small">Tue 5 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/16f228a9f340e2a2ca5b42485a17bc3d?s=20&d=mm"/>
+        <span class="align-middle">Christopher Chianelli</span>
+    </span>
+                    </li>
+                <div class="small float-end">
+                    <a href="../../blog/index.html">Blog archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest videos</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="kFoaf696VpA" data-video-title="Host your OptaPlanner app on OpenShift (Kubernetes)">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Host your OptaPlanner app on OpenShift (Kubernetes)</span>
+                        </a>
+                        <div class="small">Mon 7 February 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="bIvt9z-zVHo" data-video-title="OptaPlanner - A fast, easy-to-use, open source AI constraint solver for software developers">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">OptaPlanner - A fast, easy-to-use, open source AI constraint solver for software developers</span>
+                        </a>
+                        <div class="small">Mon 31 January 2022</div>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="784Au4PjTzg" data-video-title="Order picking planning with OptaPlanner">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Order picking planning with OptaPlanner</span>
+                        </a>
+                        <div class="small">Fri 31 December 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/54cd5de3bdaf21a942e8d9d5fe95f647?s=20&d=mm"/>
+        <span class="align-middle">Anna Dupliak</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="HVDPxebpSvg" data-video-title="AI lesson scheduling on Quarkus with OptaPlanner">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">AI lesson scheduling on Quarkus with OptaPlanner</span>
+                        </a>
+                        <div class="small">Thu 18 November 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="dqTrjkVxoPI" data-video-title="Maintenance scheduling">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Maintenance scheduling</span>
+                        </a>
+                        <div class="small">Fri 12 November 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="-RSZbMT_alo" data-video-title="Optimized order picking in warehouses and supermarkets">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Optimized order picking in warehouses and supermarkets</span>
+                        </a>
+                        <div class="small">Tue 26 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/4a8c787544c0b40bc033f631dc2256c2?s=20&d=mm"/>
+        <span class="align-middle">Walter Medvedeo</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="-7ips_GMFmo" data-video-title="A modern OO/FP constraint solver">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">A modern OO/FP constraint solver</span>
+                        </a>
+                        <div class="small">Tue 14 September 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                <div class="small float-end">
+                    <a href="https://www.youtube.com/channel/UCcpkOKpujFlM67D2h0RdaeQ">Video archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+        </div>
+    </div>
+        </div>
+    </div>
+<footer class="py-4 bg-black text-white-50">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <p class="small">OptaPlanner is open.
+                    All dependencies of this project are available under the
+                    <a class="link-light" href="../../code/license.html">Apache Software License 2.0</a>
+                    or a compatible license.
+                    OptaPlanner is <a class="link-light" href="../../community/branding.html">trademarked</a>.
+                </p>
+                <p class="small">
+                    This <a class="link-light" href="../../website/websiteInfo.html">website</a>
+                    was built with <a class="link-light" href="https://jbake.org">JBake</a> and is open source.
+                </p>
+            </div>
+            <div class="col-md-4">
+                <h4>Community</h4>
+                <ul class="ps-2 list-unstyled">
+                    <li><a class="link-light" href="../../blog/">Blog</a></li>
+                    <li><a class="link-light" href="../../community/getHelp.html">Get Help</a></li>
+                    <li><a class="link-light" href="../../community/team.html">Team</a></li>
+                    <li><a class="link-light" href="../../community/governance.html">Governance</a></li>
+                    <li><a class="link-light" href="../../community/research.html">Academic research</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h4>Code</h4>
+                <ul class="ps-2 list-unstyled">
+                    <li><a class="link-light" href="../../code/sourceCode.html">Build from source</a></li>
+                    <li><a class="link-light" href="https://issues.redhat.com/projects/PLANNER">Issue tracker</a></li>
+                    <li><a class="link-light" href="../../download/releaseNotes/">Release notes</a></li>
+                    <li><a class="link-light" href="../../download/upgradeRecipe/">Upgrade recipes</a></li>
+                    <li><a class="link-light" href="../../community/branding.html">Logo and branding</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="d-flex justify-content-evenly align-items-center">
+            <div>
+                <i class="fab fa-creative-commons"></i><i class="fab fa-creative-commons-by"></i>
+                <a class="link-light link-underlined" href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC by 3.0</a> |
+                <a class="link-light link-underlined" href="https://www.redhat.com/en/about/privacy-policy">Privacy Policy</a>
+            </div>
+            <div>
+                <span class="me-2 text-white">Sponsored by</span>
+                <a href="https://www.redhat.com/" target="_blank"><img style="width: 6rem" src="https://www.redhat.com/profiles/rh/themes/redhatdotcom/img/logo.svg" alt="Red Hat"></a>
+            </div>
+        </div>
+    </div>
+</footer>
+    <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="ratio ratio-16x9" id="player-container">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"
+            integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/highlight.min.js"
+            integrity="sha256-mfS2sXKEV8eehy39UH7+7BwaoUaIe2TuLO2DXS+c2mI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/asciidoc.min.js"
+            integrity="sha256-gnB2LPAmHPkrj3czfog5GdIu4aByzcKeTUzC2agNMzM=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/properties.min.js"
+            integrity="sha256-1XSLaVD2dn/eCICDUx1DYprsC4UAEa4weDLYY/458wU=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/gradle.min.js"
+            integrity="sha256-B5HtfGpeJKLSEsoqtAdi6sSJ05K49CTGHZbrBiJ9CwE=" crossorigin="anonymous"></script>
+    <script src="../../website/optaplannerWebsite.js"></script>
+    <script>
+        // Ruby syntax highlighting works pretty well for DRL source code.
+        hljs.registerAliases(["drl"], { languageName: "ruby"});
+        hljs.highlightAll();
+    </script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script type="text/javascript">
+      if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+        _satellite.pageBottom();
+      }
+    </script>
+</body>
+</html>
+
+

@@ -1,0 +1,823 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script id="dpal" src="https://www.redhat.com/dtm.js" type="text/javascript"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-39485370-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-39485370-1');
+    </script>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>OptaPlanner - A giant leap forward with multithreaded incremental solving</title>
+    <meta content="OptaPlanner finally supports multithreaded incremental solving. The speedup is spectacular. Even with just a few CPU cores, it triples the score calculation speed. See the results below. To ..." name="description">
+    <meta content="metaheuristic, heuristic, constraint satisfaction, constraint programming, operations research, NP-complete, NP-hard, optimization, planning, scheduling, java, open source, software, library, solver, tabu search, simulated annealing, pareto" name="keywords">
+    <link href="https://www.optaplanner.org/blog/2018/07/03/AGiantLeapForwardWithMultithreadedIncrementalSolving.html" rel="canonical">
+
+    <meta content="A giant leap forward with multithreaded incremental solving" property="og:title">
+    <meta content="OptaPlanner finally supports multithreaded incremental solving. The speedup is spectacular. Even with just a few CPU cores, it triples the score calculation speed. See the results below. To ..." property="og:description">
+    <meta content="https://www.optaplanner.org/blog/2018/07/03/AGiantLeapForwardWithMultithreadedIncrementalSolving.html" property="og:url">
+    <meta content="OptaPlanner" property="og:site_name">
+    <meta content="article" property="og:type">
+    <meta content="https://www.optaplanner.org/blog/2018/07/03/multithreadedSolvingVrpTabuSearch.png" property="og:image">
+    <meta content="summary" name="twitter:card">
+    <meta content="@OptaPlanner" name="twitter:site">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+          integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css"
+          integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/styles/default.min.css"
+          integrity="sha256-CGf39SzxAmEe09Ojoh16/2xTRNleX9wBZcEXVnNqwSM=" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../../../website/optaplannerWebsite.css">
+    <link href="../../../../favicon.ico" rel="shortcut icon">
+</head>
+
+<body>
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light border-bottom shadow">
+    <div class="container">
+        <a class="navbar-brand" href="../../../../">
+            <img alt="OptaPlanner logo" src="../../../../headerFooter/optaPlannerLogo200px.png">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="../../../../download/download.html">Download</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarLearn" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Learn
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarLearn">
+                        <li><a class="dropdown-item" href="../../../../learn/documentation.html">Documentation</a></li>
+                        <li><a class="dropdown-item" href="../../../../learn/video.html">Videos</a></li>
+                        <li><a class="dropdown-item" href="../../../../learn/slides.html">Slides</a></li>
+                        <li><a class="dropdown-item" href="../../../../learn/training.html">Training</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="../../../../learn/useCases/index.html">Use cases</a></li>
+                        <li><a class="dropdown-item" href="../../../../compatibility/index.html">Compatibility</a></li>
+                        <li><a class="dropdown-item" href="../../../../learn/testimonialsAndCaseStudies.html">Testimonials and case studies</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="../../../../community/getHelp.html">Get help</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../../../blog/">Blog</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../../../code/sourceCode.html">Source</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../../../community/team.html">Team</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../../../product/services.html">Services</a></li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="p-2"><a aria-label="Star OptaPlanner on GitHub" class="github-button" data-show-count="true" href="https://github.com/kiegroup/optaplanner">Star</a></li>
+                <li class="p-1"><a href="https://twitter.com/OptaPlanner" target="_blank" title="Follow OptaPlanner on Twitter"><img alt="T" src="../../../../headerFooter/twitterLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.linkedin.com/showcase/optaplanner" target="_blank" title="Follow OptaPlanner on LinkedIn"><img alt="L" src="../../../../headerFooter/linkedInLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.facebook.com/OptaPlanner" target="_blank" title="Follow OptaPlanner on Facebook"><img alt="F" src="../../../../headerFooter/facebookLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.youtube.com/channel/UCcpkOKpujFlM67D2h0RdaeQ" target="_blank" title="OptaPlanner YouTube channel"><img alt="YT" src="../../../../headerFooter/youtubeLogo.png" style="height: 16px"></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="body-without-header-footer">
+        <div class="forkMeOnGithub">
+            <a href="https://github.com/kiegroup/optaplanner">
+                <img alt="Fork me on GitHub" src="../../../../headerFooter/forkMeOnGithub.png">
+            </a>
+        </div>
+        <div class="container py-4">
+    <div class="row">
+        <div class="col-md-9">
+    <div class="post">
+        <h1 class="title border-bottom">A giant leap forward with multithreaded incremental solving</h1>
+        <div class="mb-4">
+            <span class="float-end mb-2">Tue 3 July 2018</span>
+    <div class="card bg-light" style="width: 320px;">
+        <div class="row gx-2">
+            <div class="col-auto">
+                <img class="rounded m-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=64&d=mm" width="64" height="64" alt="Avatar Geoffrey De Smet"/>
+            </div>
+            <div class="col">
+                <div class="card-body p-0 me-1">
+                    <h5 class="card-title my-1">Geoffrey De Smet</h5>
+                    <hr class="m-0"/>
+                    <span class="float-end mx-1">
+                            <a href="https://twitter.com/GeoffreyDeSmet"><img src="../../../../headerFooter/twitterLogo.png" alt="Twitter"/></a>
+                            <a href="https://www.linkedin.com/in/ge0ffrey"><img src="../../../../headerFooter/linkedInLogo.png" alt="LinkedIn"/></a>
+                            <a href="https://github.com/ge0ffrey"><img src="../../../../headerFooter/gitHubLogo.png" alt="GitHub"/></a>
+                    </span>
+                    <p class="small mb-1">OptaPlanner lead</p>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+        <div>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>OptaPlanner finally supports <em>multithreaded incremental solving</em>.
+<strong>The speedup is spectacular. Even with just a few CPU cores, it triples the score calculation speed.</strong>
+See the results below. To activate it, a single extra line in the configuration suffices.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://issues.redhat.com/browse/PLANNER-76">The original feature request</a> stems from 2007.
+Throughout the years, step by step, we diligently prepared the internal architecture for it.
+So now, after 10 years, we fully support it from <code>7.9.0.Final</code> onwards.</p>
+</div>
+<div class="paragraph">
+<p>But why did it take so long to implement?</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_requirements">Requirements</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Let&#8217;s take a look at the requirements for multithreaded incremental solving:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Horizontally scale an algorithm across CPUs.</p>
+</li>
+<li>
+<p>Don&#8217;t ruin the speedup of incremental score calculation.</p>
+</li>
+<li>
+<p>Runs must be reproducible.</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_horizontally_scale_an_algorithm_across_cpus">Horizontally scale an algorithm across CPUs</h3>
+<div class="paragraph">
+<p>There are several ways to use multiple threads without doing real multithreaded solving:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Multitenancy</strong>: Solve multiple datasets, one per thread.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Works since the first OptaPlanner version.</p>
+</li>
+<li>
+<p>Doesn&#8217;t do horizontal scaling on 1 dataset.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Multi bet solving</strong>: Solve one dataset in multiple ways, completely independent of each other. Take the best result.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Works since the first OptaPlanner version.</p>
+</li>
+<li>
+<p>It&#8217;s usually a waste of resources: use the Benchmarker during development instead to find the best algorithm in advance.</p>
+</li>
+<li>
+<p>Doesn&#8217;t scale horizontally: the best result is marginally better than a single-threaded result and takes equally long.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Partitioned Search</strong>: Split up one dataset and solve each one separately.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Fully supported since OptaPlanner 7.0.</p>
+</li>
+<li>
+<p>Scales horizontally at an expensive trade-off of solution quality,
+because <a href="https://www.optaplanner.org/blog/2014/03/03/CanMapReduceSolvePlanningProblems.html">partitioning excludes optimal solutions</a>.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>But none of these are real parallel heuristics, as shown in the bottom right corner below:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="multiThreadingStrategies.png" alt="multiThreadingStrategies">
+</div>
+</div>
+<div class="paragraph">
+<p>In real multithreaded solving, we solve 1 dataset, without partitioning,
+by offloading heavy calculations of 1 algorithm (which could be a composition of multiple algorithms)
+to multiple threads on separate CPU cores.</p>
+</div>
+<div class="paragraph">
+<p>In OptaPlanner&#8217;s Construction Heuristics and Local Search,
+the most CPU-expensive work is calculating the score of a move.
+For example in Tabu Search, each step (the outer iteration) evaluates around a 1000 moves.
+That&#8217;s measured as the <em>score calculation speed</em>.
+It usually varies between 1k evaluated moves per second and 500k evaluated moves per second.</p>
+</div>
+<div class="paragraph">
+<p><em>Multithreaded solving is just a matter of distributing the move evaluations of a step across multiple threads.</em>
+That&#8217;s straightforward. There are even a few users that did this (most notably a space agency supplier), by hacking our code.
+But they didn&#8217;t see a performance gain. Quite the opposite actually (except with an easy score calculator).
+Those changes broke incremental score calculation.
+<strong>Multithreaded solving is easy. But multithreaded <em>incremental</em> solving is hard.</strong></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_dont_ruin_the_speedup_of_incremental_score_calculation">Don&#8217;t ruin the speedup of incremental score calculation</h3>
+<div class="paragraph">
+<p>Ah, this brings us to incremental score calculation. The key to performance.
+It is the rocket science at the heart of OptaPlanner that brings massive scalability.
+And&#8201;&#8212;&#8201;for the few that have seen them&#8201;&#8212;&#8201;the cause of the notorious score corruption exception.</p>
+</div>
+<div class="paragraph">
+<p>What is incremental score calculation?
+For each move, we calculate the score of the solution state after applying that move.
+With non-incremental score calculation, the entire score is calculated from scratch.
+But with incremental score calculation, we only calculate the delta, as shown below.
+That&#8217;s far more efficient.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="incrementalScoreCalculationEmployeeRostering.png" alt="incrementalScoreCalculationEmployeeRostering">
+</div>
+</div>
+<div class="paragraph">
+<p>To put this in perspective: an incremental score calculator on a vehicle routing problem with 1000 locations,
+is theoretically around 500 times faster than a non-incremental score calculator.
+<strong>To offset the loss of an incremental solver on a dataset of a 1000 planning entities,
+a multithreaded non-incremental solver would need around 500 CPU cores (in theory).</strong>
+In practice, the numbers vary, but the gain of incremental solving always outweighs the gain of multithreaded solving.</p>
+</div>
+<div class="paragraph">
+<p>Of course, now, we can have our cake and eat it too.</p>
+</div>
+<div class="paragraph">
+<p>Each incremental score calculator is inherently single threaded,
+so each move thread has its own score calculator and its own solution state.
+Cloning either is too expensive.
+To evaluate a move on a move thread, with incremental score calculation,
+we must reuse the score calculator of the previous evaluation.
+This implies that the working solution must be in the exact same state to begin with.
+But because the outer step iterations change the solution state constantly,
+the move threads must sync up with the main solver thread after every step.</p>
+</div>
+<div class="paragraph">
+<p>It&#8217;s similar to any real-time multiplayer game (such as StarCraft),
+in which multiple hosts need to sync up to show the same game state,
+but can&#8217;t afford to transmit the entire game state for every change.</p>
+</div>
+<div class="paragraph">
+<p>As soon as one thread goes out of sync, all calculations of that thread are corrupted,
+and the entire system is affected.
+But through a well-designed orchestration of concurrent components
+(and multi-day test runs), we prevent race conditions. And it works. Like a charm.</p>
+</div>
+<div class="paragraph">
+<p>Furthermore, the threads must be able to send moves to each other,
+even if it&#8217;s only to share the winning move.
+This too, posed a challenge. <em>OptaPlanner is an object-oriented constraint solver</em>,
+so its decision variables can be any valid Java type (not just booleans, numbers and floats), such as <code>Employee</code> or <code>Foo</code>.
+Those variables can sit in any domain class (called planning entities), such as <code>Shift</code> or <code>Bar</code>.
+The move instances reference those class instances. When a solution gets cloned to initiate a move thread,
+those planning entities, such as <code>Shift</code> get cloned too.
+So when a move from thread A gets sent to thread B, OptaPlanner rebases the move on the solution state of thread B.
+This replaces the references from the move instance to thread A&#8217;s solution state
+with the equivalent references of thread B&#8217;s solution state. Pretty nifty.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_runs_must_be_reproducible">Runs must be reproducible</h3>
+<div class="paragraph">
+<p>Reproducibility is king. The ability to run the same dataset through OptaPlanner twice
+and get the exact same result after the same number of steps (and at every step), is worth its weight in gold.
+To lose that, would make debugging, issue tracking and production audits extremely difficult.</p>
+</div>
+<div class="paragraph">
+<p>The inherent unpredictable nature of thread execution order on multi-core machines, makes reproducibility an interesting requirement.
+Combine that with the reliance of many optimization algorithms on a seeded random number generator (which is not thread-safe),
+for a real challenge.</p>
+</div>
+<div class="paragraph">
+<p>But we did it. We have 100% reproducibility. This involves several ingenious mechanisms, such as
+using a main seeded random to generate a seeded random per thread,
+generating a predictable number of selected, buffered moves (because move generation often relies on the random generator too)
+and reordering evaluated moves in their originally selected order when they come back from the move threads.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_configuration">The configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Multithreaded incremental solving is easy to activate.
+Just add a <code>&lt;moveThreadCount&gt;</code> line in your solver config:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-xml hljs" data-lang="xml">&lt;solver&gt;
+  &lt;moveThreadCount&gt;4&lt;/moveThreadCount&gt;
+  ...
+&lt;/solver&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This basically donates 4 extra CPU cores to the solver.
+Use <code>AUTO</code> to have OptaPlanner deduce it automatically.
+Optionally, specify a <code>&lt;threadFactoryClass&gt;</code> for environments that don&#8217;t like arbitrary thread creation.</p>
+</div>
+<div class="paragraph">
+<p>It combines with every other feature, including other multithreading strategies (such as multitenancy, Partitioned Search, &#8230;&#8203;),
+if you have enough CPU cores to pull it off.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_benchmarks">The benchmarks</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_methodology">Methodology</h3>
+<div class="paragraph">
+<p>Using optaplanner-benchmark, I ran a set of macro benchmarks:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>On a 64-bit <strong>8-core</strong> Intel i7-4790 desktop with 32GB physical RAM.</p>
+</li>
+<li>
+<p>Using OpenJDK 1.8.0_171 on Linux.</p>
+</li>
+<li>
+<p>With the JVM max heap (<code>-Xmx</code>) set to 4GB.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>I also tried 2GB and those results were worse, especially for a higher number of move threads.</p>
+</li>
+<li>
+<p>So when increasing the number of move threads, it&#8217;s important to increase the max memory too.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>With logging set to <code>info</code> logging.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>I also tried <code>debug</code> logging and those results were clearly worse (because the faster it runs, the more debug logging it does).</p>
+</li>
+<li>
+<p>It&#8217;s recommended to <a href="https://www.optaplanner.org/blog/2015/02/23/HowFastIsLogging.html">avoid debug logging in production</a> anyway.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>With score DRL.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>I also tried with the incremental Java calculator and those results had more moves per second,
+but a lower relative gain per move thread (due to higher congestion).</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>5 minutes per dataset.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_results_on_the_vehicle_routing_problem_vrp">Results on the vehicle routing problem (VRP)</h3>
+<div class="paragraph">
+<p>Below are the results on different VRP datasets for a First Fit Decreasing (the Construction Heuristic)
+followed by Tabu Search (the Local Search). Higher is better.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="multithreadedSolvingVrpTabuSearch.png" alt="multithreadedSolvingVrpTabuSearch">
+</div>
+</div>
+<div class="paragraph">
+<p>The blue bar is the traditional, single-threaded OptaPlanner.
+It has an average score calculation speed of <code>26,947</code> moves per second.
+That goes up to <code>45,565</code> with 2 move threads, to <code>80,757</code> with 4 move threads and to <code>88,410</code> with 6 move threads.</p>
+</div>
+<div class="paragraph">
+<p><strong>So by donating more CPU cores to OptaPlanner, it uses a fraction of the time to reach the same result.</strong></p>
+</div>
+<div class="paragraph">
+<p>On other Local Search algorithms, such as Late Acceptance, we see similar results:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="multithreadedSolvingVrpLateAcceptance.png" alt="multithreadedSolvingVrpLateAcceptance">
+</div>
+</div>
+<div class="paragraph">
+<p>Late Acceptance is a fast stepping algorithm (especially in the beginning), which implies that it has fewer moves per step.
+Yet, it has a similar relative speed gain for the Vehicle Routing Problem.</p>
+</div>
+<div class="paragraph">
+<p>We also see a slight reduction of the relative speed gain on the biggest dataset with 2750 VRP locations,
+but I suspect this might be because the 4GB max heap memory is too low for it to function at full efficiency.
+I&#8217;ll investigate this further.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_results_on_nurse_rostering">Results on nurse rostering</h3>
+<div class="paragraph">
+<p>I also ran benchmarks on the nurse rostering use case, but with a JVM max heap (<code>-Xmx</code>) set to 2GB.
+Here I tried Tabu Search, Simulated Annealing and Late Acceptance:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="multithreadedSolvingNurseRosteringTabuSearch.png" alt="multithreadedSolvingNurseRosteringTabuSearch">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="multithreadedSolvingNurseRosteringSimulatedAnnealing.png" alt="multithreadedSolvingNurseRosteringSimulatedAnnealing">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="multithreadedSolvingNurseRosteringLateAcceptance.png" alt="multithreadedSolvingNurseRosteringLateAcceptance">
+</div>
+</div>
+<div class="paragraph">
+<p>In all 3 case, we see a welcome speed gain, but Tabu Search (a slow stepping algorithms) has a bigger relative gain
+than the others (which are fast stepping algorithms).</p>
+</div>
+<div class="paragraph">
+<p>In any case, it&#8217;s clear that <em>your mileage may vary</em>, depending on the use case and other factors.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_future_improvements">Future improvements</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As we increase the number of move threads or decrease the time to evaluate a single move on one thread,
+we see a higher congestion on the inter-thread communication queues, leading to a lower relative scalability gain.
+There are several ways to deal with that and we&#8217;ll be investigating such internal improvements in the future.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_conclusion">Conclusion</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>All your CPU are belong to OptaPlanner.</em> <a href="https://en.wikipedia.org/wiki/All_your_base_are_belong_to_us">[1]</a></p>
+</div>
+<div class="paragraph">
+<p>With a single extra configuration line, <a href="https://www.optaplanner.org/">OptaPlanner</a> can reach the same high-quality solution in a fraction of the time.
+If you have CPU cores to spare, of course.</p>
+</div>
+</div>
+</div>        </div>
+        <hr class="mb-1"/>
+        <div class="mb-4">
+            <div class="float-end">
+                <a href="https://www.optaplanner.org/blog/2018/07/03/AGiantLeapForwardWithMultithreadedIncrementalSolving.html"><span class="badge bg-dark">Permalink</span></a>
+            </div>
+            <div class="tags">
+                <i class="fas fa-tag"></i>&nbsp;tagged as
+                    <a href="../../../../blog/tags/algorithm.html"><span class="badge bg-info">algorithm</span></a>
+                    <a href="../../../../blog/tags/benchmark.html"><span class="badge bg-info">benchmark</span></a>
+            </div>
+        </div>
+    </div>
+    <div class="comments">
+        <h2>Comments</h2>
+        <a class="btn btn-secondary mb-4" href="https://groups.google.com/g/optaplanner-dev">Visit our forum to comment</a>
+    </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-2 mb-4">
+                <div class="text-center">
+                    <a href="../../../../blog/news.atom">
+                        <img class="me-1" alt="Atom" src="../../../../headerFooter/atomFeedIcon.png">News feed
+                    </a>
+                    <div class="small">
+                        <span>Don’t want to miss a single blog post?</span>
+                        <br>
+                        <span>Follow us on</span>
+                    </div>
+                    <ul class="list-inline mb-2">
+                        <li class="list-inline-item"><a href="https://twitter.com/OptaPlanner" target="_blank" title="News stream via Twitter"><img alt="T" src="../../../../headerFooter/twitterLogo.png"></a></li>
+                        <li class="list-inline-item"><a href="https://www.linkedin.com/showcase/optaplanner" target="_blank" title="News stream via LinkedIn"><img alt="L" src="../../../../headerFooter/linkedInLogo.png"></a></li>
+                        <li class="list-inline-item"><a href="https://www.facebook.com/OptaPlanner" target="_blank" title="News stream via Facebook"><img alt="F" src="../../../../headerFooter/facebookLogo.png"></a></li>
+                    </ul>
+                    <a href="../../../../blog/index.html">Blog archive</a>
+                </div>
+            </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest release</div>
+        <div class="card-body">
+            <ul class="list-unstyled mb-0">
+                <li>
+                    <div class="title">
+                        <a href="../../../../download/releaseNotes/releaseNotes8.html">
+                            8.25.0.Final released
+                        </a>
+                    </div>
+                    <div class="small">
+                        Tue 26 July 2022
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Upcoming events</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <div class="title">
+                                    <a href="https://devoxx.be">Devoxx Belgium</a>
+                            </div>
+                            <span>
+                                Antwerp, Belgium - Mon 10 October 2022
+                            </span>
+                        </li>
+                <div class="small float-end">
+                    <a href="https://github.com/kiegroup/optaplanner-website/blob/main/optaplanner-website-root/data/events.yml">Add event</a>
+                    /
+                    <a href="../../../../community/eventsArchive.html">Archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest blog posts</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2022/06/09/RunOptaPlannerWorkloadOnOpenShift.html">Run OptaPlanner workloads on OpenShift, part I.</a>
+                        </div>
+                        <div class="small">Thu 9 June 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2022/05/26/optaplanner-deprecates-score-drl.html">OptaPlanner deprecates score DRL</a>
+                        </div>
+                        <div class="small">Thu 26 May 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/c950743f532471ac34022e92193563c3?s=20&d=mm"/>
+        <span class="align-middle">Lukáš Petrovický</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2022/03/07/Real-time+planning+meets+the+SolverManager.html">Real-time planning meets SolverManager</a>
+                        </div>
+                        <div class="small">Mon 7 March 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2021/10/26/DocsTurnOverANewLeaf.html">OptaPlanner documentation turns over a new leaf</a>
+                        </div>
+                        <div class="small">Tue 26 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2021/10/14/OrderPickingQuickstart.html">Order picking optimization in warehouses and supermarkets with OptaPlanner</a>
+                        </div>
+                        <div class="small">Thu 14 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/4a8c787544c0b40bc033f631dc2256c2?s=20&d=mm"/>
+        <span class="align-middle">Walter Medvedeo</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2021/10/12/MonitorTheSolver.html">Monitor OptaPlanner solvers through Micrometer</a>
+                        </div>
+                        <div class="small">Tue 12 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/16f228a9f340e2a2ca5b42485a17bc3d?s=20&d=mm"/>
+        <span class="align-middle">Christopher Chianelli</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2021/10/05/ANewAIConstraintSolverForPythonOptaPy.html">A new AI constraint solver for Python: OptaPy</a>
+                        </div>
+                        <div class="small">Tue 5 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/16f228a9f340e2a2ca5b42485a17bc3d?s=20&d=mm"/>
+        <span class="align-middle">Christopher Chianelli</span>
+    </span>
+                    </li>
+                <div class="small float-end">
+                    <a href="../../../../blog/index.html">Blog archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest videos</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="kFoaf696VpA" data-video-title="Host your OptaPlanner app on OpenShift (Kubernetes)">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Host your OptaPlanner app on OpenShift (Kubernetes)</span>
+                        </a>
+                        <div class="small">Mon 7 February 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="bIvt9z-zVHo" data-video-title="OptaPlanner - A fast, easy-to-use, open source AI constraint solver for software developers">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">OptaPlanner - A fast, easy-to-use, open source AI constraint solver for software developers</span>
+                        </a>
+                        <div class="small">Mon 31 January 2022</div>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="784Au4PjTzg" data-video-title="Order picking planning with OptaPlanner">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Order picking planning with OptaPlanner</span>
+                        </a>
+                        <div class="small">Fri 31 December 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/54cd5de3bdaf21a942e8d9d5fe95f647?s=20&d=mm"/>
+        <span class="align-middle">Anna Dupliak</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="HVDPxebpSvg" data-video-title="AI lesson scheduling on Quarkus with OptaPlanner">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">AI lesson scheduling on Quarkus with OptaPlanner</span>
+                        </a>
+                        <div class="small">Thu 18 November 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="dqTrjkVxoPI" data-video-title="Maintenance scheduling">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Maintenance scheduling</span>
+                        </a>
+                        <div class="small">Fri 12 November 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="-RSZbMT_alo" data-video-title="Optimized order picking in warehouses and supermarkets">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Optimized order picking in warehouses and supermarkets</span>
+                        </a>
+                        <div class="small">Tue 26 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/4a8c787544c0b40bc033f631dc2256c2?s=20&d=mm"/>
+        <span class="align-middle">Walter Medvedeo</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="-7ips_GMFmo" data-video-title="A modern OO/FP constraint solver">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">A modern OO/FP constraint solver</span>
+                        </a>
+                        <div class="small">Tue 14 September 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                <div class="small float-end">
+                    <a href="https://www.youtube.com/channel/UCcpkOKpujFlM67D2h0RdaeQ">Video archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+        </div>
+    </div>
+        </div>
+    </div>
+<footer class="py-4 bg-black text-white-50">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <p class="small">OptaPlanner is open.
+                    All dependencies of this project are available under the
+                    <a class="link-light" href="../../../../code/license.html">Apache Software License 2.0</a>
+                    or a compatible license.
+                    OptaPlanner is <a class="link-light" href="../../../../community/branding.html">trademarked</a>.
+                </p>
+                <p class="small">
+                    This <a class="link-light" href="../../../../website/websiteInfo.html">website</a>
+                    was built with <a class="link-light" href="https://jbake.org">JBake</a> and is open source.
+                </p>
+            </div>
+            <div class="col-md-4">
+                <h4>Community</h4>
+                <ul class="ps-2 list-unstyled">
+                    <li><a class="link-light" href="../../../../blog/">Blog</a></li>
+                    <li><a class="link-light" href="../../../../community/getHelp.html">Get Help</a></li>
+                    <li><a class="link-light" href="../../../../community/team.html">Team</a></li>
+                    <li><a class="link-light" href="../../../../community/governance.html">Governance</a></li>
+                    <li><a class="link-light" href="../../../../community/research.html">Academic research</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h4>Code</h4>
+                <ul class="ps-2 list-unstyled">
+                    <li><a class="link-light" href="../../../../code/sourceCode.html">Build from source</a></li>
+                    <li><a class="link-light" href="https://issues.redhat.com/projects/PLANNER">Issue tracker</a></li>
+                    <li><a class="link-light" href="../../../../download/releaseNotes/">Release notes</a></li>
+                    <li><a class="link-light" href="../../../../download/upgradeRecipe/">Upgrade recipes</a></li>
+                    <li><a class="link-light" href="../../../../community/branding.html">Logo and branding</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="d-flex justify-content-evenly align-items-center">
+            <div>
+                <i class="fab fa-creative-commons"></i><i class="fab fa-creative-commons-by"></i>
+                <a class="link-light link-underlined" href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC by 3.0</a> |
+                <a class="link-light link-underlined" href="https://www.redhat.com/en/about/privacy-policy">Privacy Policy</a>
+            </div>
+            <div>
+                <span class="me-2 text-white">Sponsored by</span>
+                <a href="https://www.redhat.com/" target="_blank"><img style="width: 6rem" src="https://www.redhat.com/profiles/rh/themes/redhatdotcom/img/logo.svg" alt="Red Hat"></a>
+            </div>
+        </div>
+    </div>
+</footer>
+    <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="ratio ratio-16x9" id="player-container">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"
+            integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/highlight.min.js"
+            integrity="sha256-mfS2sXKEV8eehy39UH7+7BwaoUaIe2TuLO2DXS+c2mI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/asciidoc.min.js"
+            integrity="sha256-gnB2LPAmHPkrj3czfog5GdIu4aByzcKeTUzC2agNMzM=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/properties.min.js"
+            integrity="sha256-1XSLaVD2dn/eCICDUx1DYprsC4UAEa4weDLYY/458wU=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/gradle.min.js"
+            integrity="sha256-B5HtfGpeJKLSEsoqtAdi6sSJ05K49CTGHZbrBiJ9CwE=" crossorigin="anonymous"></script>
+    <script src="../../../../website/optaplannerWebsite.js"></script>
+    <script>
+        // Ruby syntax highlighting works pretty well for DRL source code.
+        hljs.registerAliases(["drl"], { languageName: "ruby"});
+        hljs.highlightAll();
+    </script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script type="text/javascript">
+      if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+        _satellite.pageBottom();
+      }
+    </script>
+</body>
+</html>
+
+

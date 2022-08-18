@@ -1,0 +1,1800 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script id="dpal" src="https://www.redhat.com/dtm.js" type="text/javascript"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-39485370-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-39485370-1');
+    </script>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>OptaPlanner - Release Notes 7</title>
+    <meta content="New and noteworthy, demos and status for OptaPlanner 7." name="description">
+    <meta content="metaheuristic, heuristic, constraint satisfaction, constraint programming, operations research, NP-complete, NP-hard, optimization, planning, scheduling, java, open source, software, library, solver, tabu search, simulated annealing, pareto" name="keywords">
+    <link href="https://www.optaplanner.org/download/releaseNotes/releaseNotes7.html" rel="canonical">
+
+    <meta content="Release Notes 7" property="og:title">
+    <meta content="New and noteworthy, demos and status for OptaPlanner 7." property="og:description">
+    <meta content="https://www.optaplanner.org/download/releaseNotes/releaseNotes7.html" property="og:url">
+    <meta content="OptaPlanner" property="og:site_name">
+    <meta content="website" property="og:type">
+    <meta content="https://www.optaplanner.org/headerFooter/optaPlannerIcon.png" property="og:image">
+    <meta content="summary" name="twitter:card">
+    <meta content="@OptaPlanner" name="twitter:site">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+          integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css"
+          integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/styles/default.min.css"
+          integrity="sha256-CGf39SzxAmEe09Ojoh16/2xTRNleX9wBZcEXVnNqwSM=" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../website/optaplannerWebsite.css">
+    <link href="../../favicon.ico" rel="shortcut icon">
+</head>
+
+<body>
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light border-bottom shadow">
+    <div class="container">
+        <a class="navbar-brand" href="../../">
+            <img alt="OptaPlanner logo" src="../../headerFooter/optaPlannerLogo200px.png">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="../../download/download.html">Download</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarLearn" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Learn
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarLearn">
+                        <li><a class="dropdown-item" href="../../learn/documentation.html">Documentation</a></li>
+                        <li><a class="dropdown-item" href="../../learn/video.html">Videos</a></li>
+                        <li><a class="dropdown-item" href="../../learn/slides.html">Slides</a></li>
+                        <li><a class="dropdown-item" href="../../learn/training.html">Training</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="../../learn/useCases/index.html">Use cases</a></li>
+                        <li><a class="dropdown-item" href="../../compatibility/index.html">Compatibility</a></li>
+                        <li><a class="dropdown-item" href="../../learn/testimonialsAndCaseStudies.html">Testimonials and case studies</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="../../community/getHelp.html">Get help</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../blog/">Blog</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../code/sourceCode.html">Source</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../community/team.html">Team</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../product/services.html">Services</a></li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="p-2"><a aria-label="Star OptaPlanner on GitHub" class="github-button" data-show-count="true" href="https://github.com/kiegroup/optaplanner">Star</a></li>
+                <li class="p-1"><a href="https://twitter.com/OptaPlanner" target="_blank" title="Follow OptaPlanner on Twitter"><img alt="T" src="../../headerFooter/twitterLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.linkedin.com/showcase/optaplanner" target="_blank" title="Follow OptaPlanner on LinkedIn"><img alt="L" src="../../headerFooter/linkedInLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.facebook.com/OptaPlanner" target="_blank" title="Follow OptaPlanner on Facebook"><img alt="F" src="../../headerFooter/facebookLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.youtube.com/channel/UCcpkOKpujFlM67D2h0RdaeQ" target="_blank" title="OptaPlanner YouTube channel"><img alt="YT" src="../../headerFooter/youtubeLogo.png" style="height: 16px"></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="body-without-header-footer">
+        <div class="forkMeOnGithub">
+            <a href="https://github.com/kiegroup/optaplanner">
+                <img alt="Fork me on GitHub" src="../../headerFooter/forkMeOnGithub.png">
+            </a>
+        </div>
+        <div class="container py-4">
+    <div class="row">
+        <div class="col-md-9">
+        <h1>Release Notes 7</h1>
+        <div class="paragraph summaryParagraph">
+            <p>We are happy to announce a 7
+                <strong>Final</strong> release of <a
+                        href="https://www.optaplanner.org">OptaPlanner</a>.
+                OptaPlanner is a lightweight, embeddable planning engine written in Java™ to solve AI constraint
+                optimization problems efficiently.
+                Use cases include <a href="../../learn/useCases/vehicleRoutingProblem.html">Vehicle
+                    Routing</a>,
+                <a href="../../learn/useCases/employeeRostering.html">Employee Rostering</a>,
+                <a href="../../learn/useCases/maintenanceScheduling.html">Maintenance Scheduling</a>,
+                <a href="../../learn/useCases/taskAssignmentOptimization.html">Task Assignment</a>,
+                <a href="../../learn/useCases/schoolTimetabling.html">School Timetabling</a>,
+                <a href="../../learn/useCases/cloudOptimization.html">Cloud Optimization</a>,
+                <a href="../../learn/useCases/conferenceScheduling.html">Conference Scheduling</a> and many
+                more.</p>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="text-center mb-4"><a class="btn btn-lg btn-success versionedButton"
+                                            href="https://download.jboss.org/optaplanner/release/8.25.0.Final/optaplanner-distribution-8.25.0.Final.zip">
+                        <img alt="Download" src="../../download/download.png">
+                        <div>
+                            <span>Download</span>
+                            <br>
+                            <span class="small">8.25.0.Final</span>
+                        </div>
+                    </a></div>
+            </div>
+            <div class="col-md-6">
+                <div class="text-center mb-4"><a class="btn btn-lg btn-primary versionedButton"
+                                            href="https://docs.optaplanner.org/8.25.0.Final/optaplanner-docs/html_single/index.html">
+                        <img alt="Documentation" src="../../learn/documentation.png">
+                        <div>
+                            <span>Documentation</span>
+                            <br>
+                            <span class="small">8.25.0.Final</span>
+                        </div>
+                    </a></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">Status of OptaPlanner</div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li>
+                                <strong>Stable:</strong>
+                                Lots of unit, integration and stress tests
+                            </li>
+                            <li>
+                                <strong>Reliable:</strong>
+                                Used
+                                <a href="../../learn/testimonialsAndCaseStudies.html">across the world</a>
+                                in production
+                            </li>
+                            <li>
+                                <strong>Scalable:</strong>
+                                To billions of constraint matches with minimal RAM and CPU time
+                            </li>
+                            <li>
+                                <strong>Documented:</strong>
+                                Read
+                                <a href="../../learn/documentation.html">the detailed reference manual</a>
+                                and the many examples
+                            </li>
+                            <li>
+                                <strong>Open Source:</strong>
+                                <a href="../../code/license.html">Apache License 2.0</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+<div class="card mb-4">
+    <div class="card-header">Note for Red Hat Decision Manager customers</div>
+    <div class="card-body">
+        <p>The RHDM version differs from the OptaPlanner version:</p>
+        <table class="tableblock frame-all grid-all spread">
+            <colgroup>
+                <col style="width: 50%;">
+                <col style="width: 50%;">
+            </colgroup>
+            <thead>
+            <tr>
+                <th>RHDM version</th>
+                <th>OptaPlanner version</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>7.8</td>
+                    <td>7.39</td>
+                </tr>
+                <tr>
+                    <td>7.9</td>
+                    <td>7.44</td>
+                </tr>
+                <tr>
+                    <td>7.1</td>
+                    <td>7.48</td>
+                </tr>
+                <tr>
+                    <td>7.11</td>
+                    <td>8.5 (and 7.52)</td>
+                </tr>
+                <tr>
+                    <td>7.12</td>
+                    <td>8.11 (and 7.59)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+            </div>
+        </div>
+<div class="sect1">
+<h2 id="_new_and_noteworthy_engine_7_39_0_final">New and noteworthy: Engine 7.39.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_more_deprecations">More deprecations</h3>
+<div class="paragraph">
+<p>In this release, we continue deprecating some rarely used methods for which there are now better alternatives.
+We encourage everyone to check out our <a href="../upgradeRecipe/upgradeRecipe7.html">updated upgrade recipe</a> to adapt accordingly.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_new_and_noteworthy_engine_7_38_0_final">New and noteworthy: Engine 7.38.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_deprecation_effort">Deprecation effort</h3>
+<div class="paragraph">
+<p>With this release, we are deprecating some rarely used methods for which there are now better alternatives.
+We encourage everyone to check out our <a href="../upgradeRecipe/upgradeRecipe7.html">updated upgrade recipe</a> to adapt accordingly.</p>
+</div>
+<div class="paragraph">
+<p>That said, we remain committed to our existing API compatibility guarantees
+and we will not remove any of the deprecated APIs on the 7.x stream of OptaPlanner.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_new_and_noteworthy_engine_7_37_0_final">New and noteworthy: Engine 7.37.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_run_script_for_optaweb_vehicle_routing">Run script for OptaWeb Vehicle Routing</h3>
+<div class="paragraph">
+<p>The run script automates setup steps that would otherwise have to be carried out manually and simplifies the run command.</p>
+</div>
+<div class="paragraph">
+<p>Before:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">java -jar optaweb-vehicle-routing-standalone-7.36.0.Final.jar \
+  --app.persistence.h2-dir=$HOME/.optaweb-vehicle-routing/db \
+  --app.routing.gh-dir=$HOME/.optaweb-vehicle-routing/graphhopper
+  --app.routing.osm-dir=$HOME/.optaweb-vehicle-routing/openstreetmap \
+  --app.routing.osm-file=belgium-latest.osm.pbf \
+  --app.region.country-codes=BE</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">./runLocally.sh belgium</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To learn more about the run script, read the
+<a href="https://docs.optaplanner.org/latestFinal/optaweb-vehicle-routing-docs/html_single/#run-locally-sh">documentation</a>
+or watch this video:</p>
+</div>
+<div class="videoblock">
+<div class="content">
+<iframe src="https://www.youtube.com/embed/rEeAML74oWo?rel=0" frameborder="0" allowfullscreen></iframe>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_new_and_noteworthy_engine_7_36_0_final">New and noteworthy: Engine 7.36.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_constraint_verifier_allows_for_unit_testing_constraint_streams">Constraint Verifier allows for unit testing Constraint Streams</h3>
+<div class="paragraph">
+<p>We have introduced the Constraint Verifier API, allowing you to easily test constraints developed using the Constraint Streams API. Consider the following constraint:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-java hljs" data-lang="java">    protected Constraint horizontalConflict(ConstraintFactory factory) {
+        return factory
+                .fromUniquePair(Queen.class, equal(Queen::getRowIndex))
+                .penalize("Horizontal conflict", SimpleScore.ONE);
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following example uses the Constraint Verifier API to create a simple unit test for the preceding constraint stream:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-java hljs" data-lang="java">    private ConstraintVerifier&lt;NQueensConstraintProvider, NQueens&gt; constraintVerifier
+            = ConstraintVerifier.build(new NQueensConstraintProvider(), NQueens.class, Queen.class);
+
+    @Test
+    public void horizontalConflictWithTwoQueens() {
+        Row row1 = new Row(0);
+        Column column1 = new Column(0);
+        Column column2 = new Column(1);
+        Queen queen1 = new Queen(0, row1, column1);
+        Queen queen2 = new Queen(1, row1, column2);
+        constraintVerifier.verifyThat(NQueensConstraintProvider::horizontalConflict)
+                .given(queen1, queen2)
+                .penalizesBy(1);
+    }</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_new_and_noteworthy_engine_7_34_0_final">New and noteworthy: Engine 7.34.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_various_improvements_to_constraint_streams">Various improvements to constraint streams</h3>
+<div class="paragraph">
+<p>We have added several new constraint collectors: <code>toList()</code>, <code>toSet()</code>, <code>toSortedSet()</code>, <code>toMap()</code> and <code>toSortedMap()</code>.
+Also, the <code>min()</code> and <code>max()</code> collectors have been extended to <code>BiConstraintStream</code>, TriConstraintStream` and
+<code>QuadConstraintStream</code> as well.
+To use these collectors, look for the <code>ConstraintCollectors</code> class.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_more_examples_now_support_constraint_streams">More examples now support constraint streams</h3>
+<div class="paragraph">
+<p>With recent improvements to the constraint streams API, we have been able to add <code>ConstraintProvider</code> implementations
+to more and more examples.
+This release brings constraint stream support to the following examples: <code>investment</code>, <code>machinereassignment</code> and
+<code>scrabble</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_new_and_noteworthy_engine_7_33_0_final">New and noteworthy: Engine 7.33.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_conditional_propagation_in_constraint_streams">Conditional propagation in constraint streams</h3>
+<div class="paragraph">
+<p>The constraint streams API continued to evolve, gaining support for conditional propagation.
+The following example penalizes computers which have at least one process running:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-java hljs" data-lang="java">    private Constraint runningComputer(ConstraintFactory constraintFactory) {
+        return constraintFactory.from(CloudComputer.class)
+                .ifExists(CloudProcess.class, Joiners.equal(Function.identity(), CloudProcess::getComputer))
+                .penalize("runningComputer",
+                        HardSoftScore.ONE_SOFT,
+                        computer -&gt; ...);
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note the use of the <code>ifExists()</code> building block. Conversely, the <code>ifNotExists()</code> building block is also available.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_new_and_noteworthy_engine_7_32_0_final">New and noteworthy: Engine 7.32.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_solvermanager">SolverManager</h3>
+<div class="paragraph">
+<p>A <code>SolverManager</code> is a facade for one or more <code>Solver</code> instances
+to simplify solving planning problems in REST and other enterprise services.
+Its <code>solve(&#8230;&#8203;)</code> methods differ from the normal <code>Solver.solve(&#8230;&#8203;)</code> method:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong><code>SolverManager.solve(&#8230;&#8203;)</code> returns immediately</strong>: it schedules a problem for asynchronous solving without blocking the calling thread.
+This avoids timeout issues of HTTP and other technologies.</p>
+</li>
+<li>
+<p><strong><code>SolverManager.solve(&#8230;&#8203;)</code> solves multiple planning problems</strong> of the same domain, in parallel.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>SolverManager supports batch solving, but also live solving that shows progress to the end-user, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-java hljs" data-lang="java">public class TimeTableService {
+
+    private SolverManager&lt;TimeTable, Long&gt; solverManager;
+
+    // Returns immediately, ok to expose as a REST service
+    public void solve(Long timeTableId) {
+        solverManager.solveAndListen(timeTableId,
+                // Called once, when solving starts
+                this::findById,
+                // Called multiple times, for every best solution change
+                this::save);
+    }
+
+    public TimeTable findById(Long timeTableId) {...}
+
+    public void save(TimeTable timeTable) {...}
+
+    public void stopSolving(Long timeTableId) {
+        solverManager.terminateEarly(timeTableId);
+    }
+
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_spring_boot_starter">Spring Boot starter</h3>
+<div class="paragraph">
+<p>OptaPlanner now includes a Spring Boot starter out of the box.
+This avoids common pitfalls in the Spring ecosystem (such as classloading)
+and enables <code>application.properties</code> to overwrite the solver configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-properties hljs" data-lang="properties"># The solver runs for 30 seconds. To run for 5 minutes use "5m" and for 2 hours use "2h".
+optaplanner.solver.termination.spent-limit=30s</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In fact, <strong>a <code>solverConfig.xml</code> file is no longer needed</strong> on Spring Boot.
+The starter automatically detects <code>@PlanningSolution</code> and <code>@PlanningEntity</code> annotations,
+so the solver config XML file is optional, used only for rare use cases that do power tweaking.</p>
+</div>
+<div class="paragraph">
+<p>Furthermore, it automatically injects a <code>SolverManager</code>, <code>SolverFactory</code> and/or <code>SolverConfig</code> in your code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-java hljs" data-lang="java">public class TimeTableController {
+
+    @Autowired
+    private SolverManager&lt;TimeTable, Long&gt; solverManager;
+
+    @PostMapping("/solve")
+    public void solve() {
+        solverManager.solveAndListen(...);
+    }
+
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To use the starter with Maven, add this dependency to your <code>pom.xml</code> file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.optaplanner&lt;/groupId&gt;
+    &lt;artifactId&gt;optaplanner-spring-boot-starter&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For Gradle, add this dependency to your <code>build.gradle</code> file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-gradle hljs" data-lang="gradle">implementation "org.optaplanner:optaplanner-spring-boot-starter"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For more information on how to use this starter, <a href="https://github.com/spring-guides/getting-started-guides/pull/126">read the detailed guide on spring.io</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_groupby_support_for_constraint_streams_of_bi_tri_and_quad_cardinality"><code>groupBy()</code> support for constraint streams of bi, tri and quad cardinality</h3>
+<div class="paragraph">
+<p>The constraint streams API improved further.
+You can now modify your streams using the <a href="https://docs.optaplanner.org/latestFinal/optaplanner-docs/html_single/index.html#constraintStreamsGroupingAndCollectors"><code>groupBy()</code> building block</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_openshift_support_for_both_optaweb_applications">OpenShift support for both OptaWeb applications</h3>
+<div class="paragraph">
+<p>To run OptaWeb Vehicle Routing or OptaWeb Employee Rostering on OpenShift, use the new script in their distribution zips:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-bash hljs" data-lang="bash">./runOnOpenShift.sh</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_optaweb_distribution_and_documentation">OptaWeb distribution and documentation</h3>
+<div class="paragraph">
+<p>Two new tabs for OptaWeb Employee Rostering and OptaWeb Vehicle Routing have been added to Download and Documentation pages.</p>
+</div>
+<div class="paragraph">
+<p>Go to <a href="../download.html">Download</a>
+and switch to Employee Rostering or Vehicle Routing tab to download a full distribution.</p>
+</div>
+<div class="paragraph">
+<p>Go to <a href="../../learn/documentation.html">Documentation</a>
+and switch to Employee Rostering or Vehicle Routing tab to access documentation.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_new_and_noteworthy_engine_7_31_0_final">New and noteworthy: Engine 7.31.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_quadstreams">QuadStreams</h3>
+<div class="paragraph">
+<p>The constraint streams API received a major update, introducing support for streams of 4 facts.
+Please refer to <a href="https://docs.optaplanner.org/latestFinal/optaplanner-docs/html_single/index.html#constraintStreamsCardinality">constraint streams documentation</a> for details.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_new_and_noteworthy_engine_7_28_0_final">New and noteworthy: Engine 7.28.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_optaplanner_web_examples_are_no_more">OptaPlanner Web Examples are no more</h3>
+<div class="paragraph">
+<p>The <code>optaplanner-webexamples</code> module was removed from distribution and the Git repository.
+It has been superseded by <a href="https://github.com/kiegroup/optaweb-vehicle-routing">OptaWeb Vehicle Routing</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_new_and_noteworthy_engine_7_27_0_final">New and noteworthy: Engine 7.27.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_pillar_moves_are_faster">Pillar moves are faster</h3>
+<div class="paragraph">
+<p><code>PillarSwapMove</code> and <code>PillarChangeMove</code> improved under the hood and are now faster. We observed increases in throughput
+of around 5 %. Your mileage may vary.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sequential_sub_pillars">Sequential sub pillars</h3>
+<div class="paragraph">
+<p><code>PillarSwapMove</code> and <code>PillarChangeMove</code> now support sequential sub pillars, bringing better scores on examples with
+clear entity succession, such as employee shift rostering. The simplest configuration of sequential sub pillars looks
+like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-xml hljs" data-lang="xml">&lt;pillar...MoveSelector&gt;
+  &lt;subPillarType&gt;SEQUENCE&lt;/subPillarType&gt;
+&lt;/pillar...MoveSelector&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For more information, please refer to <a href="../../learn/documentation.html">Documentation</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_new_and_noteworthy_engine_7_20_0_final">New and noteworthy: Engine 7.20.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_programmatic_api_made_more_convenient">Programmatic API made more convenient</h3>
+<div class="paragraph">
+<p>The programmatic API now supports a more fluent form too, because of the new <code>with*()</code> methods:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-java hljs" data-lang="java">solverFactory.getSolverConfig().withTerminationConfig(
+        new TerminationConfig().withMinutesSpentLimit(userInput));</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_other">Other</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>@PlanningId</code> is now supported on primitive types such as <code>int</code> or <code>long</code> too, not just wrapper classes.</p>
+</li>
+<li>
+<p><code>Instant</code>, <code>Duration</code>, <code>Period</code> and other temporal classes in <code>java.time</code> can now be used as planning values in multithreaded solving.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Because they are now compatible with <code>ScoreDirector.lookUpWorkingObject()</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_new_and_noteworthy_workbench_7_15_0_final">New and noteworthy: Workbench 7.15.0.Final</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The KIE Workbench (which includes OptaPlanner support) has been
+<a href="http://blog.athico.com/2018/11/workbench-is-now-business-central.html">renamed to Business Central</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_new_and_noteworthy_engine_7_14_0_final">New and noteworthy: Engine 7.14.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_weight_parametrization_standardized_as_constraintconfiguration_and_constraintweight">Weight parametrization standardized as <code>@ConstraintConfiguration</code> and <code>@ConstraintWeight</code></h3>
+<div class="paragraph">
+<p>Deciding the correct weight and level for each constraint is difficult.
+It often involves negotiating with different stakeholders and their priorities.
+Furthermore, quantifying the impact of soft constraints is often a new experience for business managers,
+so they&#8217;ll need a number of iterations to get it right.</p>
+</div>
+<div class="paragraph">
+<p>So don&#8217;t hard-code the constraint weights. Put them in a new constraint configuration class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-java hljs" data-lang="java">@ConstraintConfiguration
+public class ConferenceConstraintConfiguration {
+
+    @ConstraintWeight("Theme track conflict")
+    private HardMediumSoftScore themeTrackConflict = HardMediumSoftScore.ofSoft(10);
+    @ConstraintWeight("Content conflict")
+    private HardMediumSoftScore contentConflict = HardMediumSoftScore.ofSoft(100);
+
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here, the <em>theme track conflict</em> constraint has a default weight of <code>10soft</code>
+and the <em>content conflict</em> constraint of <code>100soft</code>.
+When we expose these properties in a UI, the business manager can change those numbers,
+based on negotiations with the different stakeholders.</p>
+</div>
+<div class="paragraph">
+<p>In DRL, call the new <code>reward()</code> and <code>penalize()</code> methods to change the score
+by the constraint weight (optionally multiplied a match weight parameter):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-drl hljs" data-lang="drl">rule "Theme track conflict"
+    when
+        ...
+    then
+        scoreHolder.penalize(kcontext);
+end
+
+rule "Content conflict"
+    when
+        ...
+    then
+        scoreHolder.penalize(kcontext, ...);
+end</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_conference_scheduling_devoxx_cfp_importer">Conference Scheduling devoxx-cfp importer</h3>
+<div class="paragraph">
+<p>Devoxx and Voxxed organizers can now import conference data directly from the CFP REST API,
+just by specifying the conference instance&#8217;s api url
+(e.g. <code><a href="http://dvbe18.confinabox.com/api/conferences/dvbe18" class="bare">http://dvbe18.confinabox.com/api/conferences/dvbe18</a></code> for Devoxx Belgium 2018).
+OptaPlanner will then take care of importing all the data and you can start solving and generating
+the schedule right away.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="7.14/CFPImportButton.png" alt="ImportButton"></span></p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="7.14/CFPRestUrl.png" alt="CFPRestUrl"></span></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_other_2">Other</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>JDK 11 compatibility improved</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The minimum required version to build and run remains Java 8 for the foreseeable future.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_new_and_noteworthy_engine_7_13_0_final">New and noteworthy: Engine 7.13.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_other_3">Other</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Score corruption analysis fixed for multithreaded incremental solving.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_new_and_noteworthy_engine_7_12_0_final">New and noteworthy: Engine 7.12.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_unimproved_termination_now_supports_a_score_difference_threshold">Unimproved termination now supports a score difference threshold</h3>
+<div class="paragraph">
+<p>Optionally, configure a score difference threshold by which the best score must improve in the specified time.
+For example, if the score doesn&#8217;t improve by at least <code>100</code> soft points every 30 seconds or less, it terminates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-xml hljs" data-lang="xml">  &lt;localSearch&gt;
+    &lt;termination&gt;
+      &lt;unimprovedSecondsSpentLimit&gt;30&lt;/unimprovedSecondsSpentLimit&gt;
+      &lt;unimprovedScoreDifferenceThreshold&gt;0hard/100soft&lt;/unimprovedScoreDifferenceThreshold&gt;
+    &lt;/termination&gt;
+  &lt;/localSearch&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_other_4">Other</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Important bugfixes for multithreaded incremental solving, especially with chained variables.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_new_and_noteworthy_engine_7_9_0_final">New and noteworthy: Engine 7.9.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_multithreaded_incremental_solving">Multithreaded incremental solving</h3>
+<div class="paragraph">
+<p>OptaPlanner can now solve one dataset (without partitioning)
+with multiple threads to take advantage of multiple CPU cores.</p>
+</div>
+<div class="paragraph">
+<p>Even with just a few CPU cores, it triples the score calculation speed:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="7.9/multithreadedSolvingVrpTabuSearch.png" alt="searchTableOfContents"></span></p>
+</div>
+<div class="paragraph">
+<p>Multithreaded incremental solving is easy to activate.
+Just add a <code>&lt;moveThreadCount&gt;</code> line in your solver config:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-xml hljs" data-lang="xml">&lt;solver&gt;
+  &lt;moveThreadCount&gt;4&lt;/moveThreadCount&gt;
+  ...
+&lt;/solver&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This basically donates 4 extra CPU cores to the solver.
+Use <code>AUTO</code> to have OptaPlanner deduce it automatically.
+Optionally, specify a <code>&lt;threadFactoryClass&gt;</code> for environments that don&#8217;t like arbitrary thread creation.</p>
+</div>
+<div class="paragraph">
+<p>For more information about the complex challenges behind this feature,
+<a href="https://www.optaplanner.org/blog/2018/07/03/AGiantLeapForwardWithMultithreadedIncrementalSolving.html">read this blog post</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_documentation_table_of_contents_toc_improvements">Documentation: table of contents (TOC) improvements</h3>
+<div class="paragraph">
+<p>The TOC is now collapsed by default for a better overview.</p>
+</div>
+<div class="paragraph">
+<p>Use the new search field to find a phrase in the TOC:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="7.9/searchTableOfContents.png" alt="searchTableOfContents"></span></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_new_and_noteworthy_engine_7_8_0_final">New and noteworthy: Engine 7.8.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_solver_explainbestscore">Solver.explainBestScore()</h3>
+<div class="paragraph">
+<p>To make it easier to understand why a solution is infeasible during development
+(before the UI makes use of the ConstraintMatch API),
+use <code>explainBestScore()</code> after solving:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-java hljs" data-lang="java">EmployeeRoster solution = solver.solve();
+System.out.println(solver.explainBestScore());</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For example, it might print:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="7.8/solverExplainBestScore.png" alt="explainBestScore"></span></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_new_and_noteworthy_engine_7_7_0_final">New and noteworthy: Engine 7.7.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_planningpin_to_pin_down_planning_entities">@PlanningPin to pin down planning entities</h3>
+<div class="paragraph">
+<p>To pin down an assignment and force OptaPlanner to leave it untouched,
+simply add the <code>@PlanningPin</code> annotation on a planning entity&#8217;s boolean property
+and make it <code>true</code> for those that are immovable:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-java hljs" data-lang="java">@PlanningEntity
+public class Lecture {
+
+    private boolean pinned;
+    ...
+
+    @PlanningPin
+    public boolean isPinned() {
+        return pinned;
+    }
+
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is syntactic sugar for the more flexible and more verbose <code>movableEntitySelectionFilter</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_new_and_noteworthy_engine_7_6_0_final">New and noteworthy: Engine 7.6.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_new_example_conference_scheduling">New example: Conference Scheduling</h3>
+<div class="paragraph">
+<p>Assign each conference talk to a timeslot and a room.
+Timeslots can overlap. Read/write to/from an <code>*.xlsx</code> file that can be edited with LibreOffice or Excel too.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="7.6/conferenceSchedulingExampleScreenshot.png" alt="Conference scheduling example"></span></p>
+</div>
+<div class="paragraph">
+<p>Hard constraints:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Talk type of timeslot: The type of a talk must match the timeslot&#8217;s talk type.</p>
+</li>
+<li>
+<p>Room unavailable timeslots: A talk&#8217;s room must be available during the talk&#8217;s timeslot.</p>
+</li>
+<li>
+<p>Room conflict: Two talks can&#8217;t use the same room during overlapping timeslots.</p>
+</li>
+<li>
+<p>Speaker unavailable timeslots: Every talk&#8217;s speaker must be available during the talk&#8217;s timeslot.</p>
+</li>
+<li>
+<p>Speaker conflict: Two talks can&#8217;t share a speaker during overlapping timeslots.</p>
+</li>
+<li>
+<p>Speaker required timeslot tag: If a speaker has a required timeslot tag, then all his/her talks must be assigned to a timeslot with that tag.</p>
+</li>
+<li>
+<p>Talk required timeslot tag: If a talk has a required timeslot tag, then it must be assigned to a timeslot with that tag.</p>
+</li>
+<li>
+<p>Speaker required room tag: If a speaker has a required room tag, then all his/her talks must be assigned to a room with that tag.</p>
+</li>
+<li>
+<p>Talk required room tag: If a talk has a required room tag, then it must be assigned to a room with that tag.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Soft constraints:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Theme track conflict: Minimize the number of talks that share a same theme tag during overlapping timeslots.</p>
+</li>
+<li>
+<p>Sector conflict: Minimize the number of talks that share a same sector tag during overlapping timeslots.</p>
+</li>
+<li>
+<p>Content audience level flow violation: For every content tag, schedule the introductory talks before the advanced talks.</p>
+</li>
+<li>
+<p>Audience level diversity: For every timeslot, maximize the number of talks with a different audience level.</p>
+</li>
+<li>
+<p>Language diversity: For every timeslot, maximize the number of talks with a different language.</p>
+</li>
+<li>
+<p>Speaker preferred timeslot tag: If a speaker has a preferred timeslot tag, then all his/her talks should be assigned to a timeslot with that tag.</p>
+</li>
+<li>
+<p>Speaker undesired timeslot tag: If a speaker has an undesired timeslot tag, then all his/her talks should not be assigned to a timeslot with that tag.</p>
+</li>
+<li>
+<p>Talk preferred timeslot tag: If a talk has a preferred timeslot tag, then it should be assigned to a timeslot with that tag.</p>
+</li>
+<li>
+<p>Talk undesired timeslot tag: If a talk has an undesired timeslot tag, then it should not be assigned to a timeslot with that tag.</p>
+</li>
+<li>
+<p>Speaker preferred room tag: If a speaker has a preferred room tag, then all his/her talks should be assigned to a room with that tag.</p>
+</li>
+<li>
+<p>Speaker undesired room tag: If a speaker has an undesired room tag, then all his/her talks should not be assigned to a room with that tag.</p>
+</li>
+<li>
+<p>Talk preferred room tag: If a talk has a preferred room tag, then it should be assigned to a room with that tag.</p>
+</li>
+<li>
+<p>Talk undesired room tag: If a talk has an undesired room tag, then it should not be assigned to a room with that tag.</p>
+</li>
+</ul>
+</div>
+<div class="videoblock">
+<div class="content">
+<iframe src="https://www.youtube.com/embed/R0JizNdxEjU?rel=0" frameborder="0" allowfullscreen></iframe>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_open_the_benchmark_report_automatically">Open the benchmark report automatically</h3>
+<div class="paragraph">
+<p><code>PlannerBenchmark</code> has a new method <code>benchmarkAndShowReportInBrowser()</code>
+to automatically open the benchmark report in the default browser after the benchmark has finished.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_other_engine_improvements">Other engine improvements</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Support for cloning arrays: a solution or planning entity field can now be an array</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_new_and_noteworthy_engine_7_5_0_final">New and noteworthy: Engine 7.5.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_new_algorithm_variable_neighborhood_descent">New algorithm: Variable Neighborhood Descent</h3>
+<div class="paragraph">
+<p>Variable Neighborhood Descent is useful for certain use cases with a limited scale.
+To use it, configure it like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-xml hljs" data-lang="xml">  &lt;localSearch&gt;
+    &lt;localSearchType&gt;VARIABLE_NEIGHBORHOOD_DESCENT&lt;/localSearchType&gt;
+  &lt;/localSearch&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_new_and_noteworthy_engine_7_3_0_final">New and noteworthy: Engine 7.3.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_benchmark_a_solver_configuration_quickly">Benchmark a solver configuration quickly</h3>
+<div class="paragraph">
+<p><strong>There isn&#8217;t a valid excuse anymore to not use the benchmarker.</strong>
+You can now run it in just a few lines of Java code (no XML code):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-java hljs" data-lang="java">    SolverFactory&lt;TennisSolution&gt; solverFactory = SolverFactory.createFromXmlResource(...);
+    // Set up the benchmarkFactory in 1 line (no XML)
+    PlannerBenchmarkFactory benchmarkFactory = PlannerBenchmarkFactory.createFromSolverFactory(
+            solverFactory);
+
+    // Fetch or generate your input problem(s)
+    TennisSolution problem1 = generateProblem1();
+    TennisSolution problem2 = generateProblem2();
+    ...
+    // Run the benchmark
+    PlannerBenchmark plannerBenchmark = benchmarkFactory.buildPlannerBenchmark(problem1, problem2, ...);
+    plannerBenchmark.benchmark();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This builds and runs a vanilla benchmark
+that gives insight in the performance and scalability of your implementation.
+To get more insight, switch to the XML configuration.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_new_and_noteworthy_workbench_7_3_0_final">New and noteworthy: Workbench 7.3.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_guided_decision_tables_integration">Guided decision tables integration</h3>
+<div class="paragraph">
+<p>OptaPlanner now integrates with the Guided decision table editor.
+Modify the score with a build-in OptaPlanner actions that can be accessed in the <code>Action BRL fragment</code> column type.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="7.3/guidedDecisionTable.png" alt="Guided decision table"></span></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_new_and_noteworthy_execution_server_7_2_0_final">New and noteworthy: Execution Server 7.2.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_real_time_planning">Real-time planning</h3>
+<div class="paragraph">
+<p>The KIE Server now exposes an interface to update a problem dataset while the solver is running.
+Use Java client or REST interface to submit your <code>ProblemFactChange</code> implementations.</p>
+</div>
+<div class="sect3">
+<h4 id="_java_client">Java Client</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-java hljs" data-lang="java">    void addProblemFactChange(String containerId,
+            String solverId,
+            ProblemFactChange problemFactChange);
+
+    void addProblemFactChanges(String containerId,
+            String solverId,
+            List&lt;ProblemFactChange&gt; problemFactChange);
+
+    Boolean isEveryProblemFactChangeProcessed(String containerId,
+            String solverId);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_rest_api">REST API</h4>
+<div class="paragraph">
+<p>The following methods are now supported:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>POST <code>/containers/containerId/solvers/solverId/problemfactchanges</code></p>
+</li>
+<li>
+<p>GET <code>/containers/containerId/solvers/solverId/problemfactchanges/processed</code></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_new_and_noteworthy_engine_7_1_0_final">New and noteworthy: Engine 7.1.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_construction_heuristic_power_tweaking_made_simpler">Construction Heuristic power tweaking made simpler</h3>
+<div class="paragraph">
+<p>It&#8217;s now easier to power tweak the Construction Heuristic&#8217;s move selectors if desired.
+This especially useful to improve scaling for use cases with multiple planning variables.</p>
+</div>
+<div class="paragraph">
+<p>For example, in course scheduling this will first assign a period to lecture and then a room to a lecture
+(instead of the combination of both which is the default behaviour):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-xml hljs" data-lang="xml">  &lt;constructionHeuristic&gt;
+    &lt;constructionHeuristicType&gt;FIRST_FIT_DECREASING&lt;/constructionHeuristicType&gt;
+    &lt;changeMoveSelector&gt;
+      &lt;valueSelector variableName="period"/&gt;
+    &lt;/changeMoveSelector&gt;
+    &lt;changeMoveSelector&gt;
+      &lt;valueSelector variableName="room"/&gt;
+    &lt;/changeMoveSelector&gt;
+  &lt;/constructionHeuristic&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This means that it will evaluate a lot less moves, resulting in a Construction Heuristic that end much quicker
+at the cost of solution quality (which Local Search can usually make up for in the time gained).</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_new_and_noteworthy_workbench_7_1_0_final">New and noteworthy: Workbench 7.1.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_guided_decision_table_integration_example">Guided decision table integration example</h3>
+<div class="paragraph">
+<p>The Workbench examples now include the <code>dinnerparty</code> project, which uses a Guided decision table to define score constraints.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_new_and_noteworthy_engine_7_0_0_final">New and noteworthy: Engine 7.0.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_java_8_or_higher">Java 8 or higher</h3>
+<div class="paragraph">
+<p>OptaPlanner 7.x now requires Java 8 or higher to run. The 6.x releases remain compatible with Java 6 or higher.</p>
+</div>
+<div class="paragraph">
+<p>The API and implementation now make use of Java 7 and Java 8 features (such as lambdas).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_multithreaded_partitioned_search">Multithreaded partitioned search</h3>
+<div class="paragraph">
+<p>OptaPlanner now has out of the box support for solving a single dataset by partitioning across multiple threads.
+So it makes use of multiple CPU cores for a single problem.</p>
+</div>
+<div class="paragraph">
+<p>Partitioned Search can implement geo-fencing for Vehicle Routing use cases.
+For example, we can split up Great Britain into 4 parts and solve those parts separately:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="7.0/partitionedSearchThreading.png" alt="Partitioned Search Threading"></span></p>
+</div>
+<div class="paragraph">
+<p>This can potentially <a href="https://www.optaplanner.org/blog/2014/03/03/CanMapReduceSolvePlanningProblems.html">reduce solution quality</a>,
+but for big datasets (usually above 5000 entities) the performance gains normally outweighs the long-term quality loss,
+because when a result is needed within hours or less, the solution quality is still higher.</p>
+</div>
+<div class="paragraph">
+<p>Especially for Construction Heuristics, it can deliver an initial, feasible solution in a fraction of the time.
+For example, <strong>we&#8217;ve benchmarked a 30 time speed increase by partitioning Construction Heuristics in 4 parts
+running on 4 CPU cores</strong>, on an 8 core machine for a dataset with 4800 entities and 1200 planning values.
+This speed is attributed not just to the utilization of more CPU cores (at most a times 4 increase),
+but mainly to the problem search space size reduction per part thread.</p>
+</div>
+<div class="paragraph">
+<p>Partitioned Search is configured like any other solver phase:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-xml hljs" data-lang="xml">&lt;solver&gt;
+  ...
+  &lt;partitionedSearch&gt;
+    &lt;!-- The SolutionParititioner splits a dataset into parts --&gt;
+    &lt;solutionPartitionerClass&gt;...CloudBalancePartitioner&lt;/solutionPartitionerClass&gt;
+
+    &lt;!-- Optionally configure which phase to run on each part --&gt;
+    &lt;constructionHeuristic&gt;...&lt;/constructionHeuristic&gt;
+    &lt;localSearch&gt;...&lt;/localSearch&gt;
+  &lt;/partitionedSearch&gt;
+&lt;/solver&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There is support to limit the number CPU cores OptaPlanner consumes (to avoid CPU starving other processes and thread)
+through <code>runnablePartThreadLimit</code>. Furthermore, it is also possible to configure a <code>threadFactoryClass</code>.</p>
+</div>
+<div class="paragraph">
+<p>For now, you still need to implement the <code>SolutionPartitioner</code> interface,
+but we&#8217;ll add out of the box strategies (such as geo-fencing) soon:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-java hljs" data-lang="java">public interface SolutionPartitioner&lt;Solution_&gt; {
+
+    List&lt;Solution_&gt; splitWorkingSolution(ScoreDirector&lt;Solution_&gt; scoreDirector, Integer runnablePartThreadLimit);
+
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_heat_map_to_visualize_the_score">Heat map to visualize the score</h3>
+<div class="paragraph">
+<p>To explain a score in your UI, use the <code>Indictment</code> API to visualize the broken constraints:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="7.0/indictmentHeatMap.png" alt="Indictment heat map"></span></p>
+</div>
+<div class="paragraph">
+<p>Call <code>ScoreDirector.getIndictmentMap()</code> to extract the score per planning entity:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-java hljs" data-lang="java">Map&lt;Object, Indictment&gt; indictmentMap = guiScoreDirector.getIndictmentMap();
+for (Lecture lecture = courseSchedule.getLectureList()) {
+    Indictment indictment = indictmentMap.get(lecture);
+    if (indictment != null) {
+        // The score impact of that lecture
+        Score scoreTotal = indictment.getScoreTotal();
+        ...
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It&#8217;s even possible to break it down further,
+to see which specific constraints that lecture actually triggered.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_no_longer_needed_to_implement_the_solution_interface">No longer needed to implement the <code>Solution</code> interface</h3>
+<div class="paragraph">
+<p>Your solution class no longer needs both have the <code>@PlanningSolution</code> annotation and implement the <code>Solution</code> interface.
+No need to repeat yourself anymore.
+The <code>Solution</code> interface is now deprecated (but still works for backwards compatibility):
+only the <code>@PlanningSolution</code> annotation suffices.</p>
+</div>
+<div class="paragraph">
+<p>Instead of implementing the old interface methods, annotate your <code>Score</code> getter with <code>@PlanningScore</code>.
+If you&#8217;re using Drools score calculation, annotate all problem fact getters (or fields)
+with <code>@ProblemFactCollectionProperty</code> or <code>@ProblemFactProperty</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@PlanningSolution
+public class CloudBalance {
+
+    private List&lt;CloudComputer&gt; computerList;
+    ...
+
+    private HardSoftScore score;
+
+    @ValueRangeProvider(id = "computerRange")
+    @ProblemFactCollectionProperty
+    public List&lt;CloudComputer&gt; getComputerList() {...}
+
+    @PlanningScore
+    public HardSoftScore getScore() {...}
+    public void setScore(HardSoftScore score) {...}
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Solving hasn&#8217;t changed:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    SolverFactory&lt;CloudBalance&gt; solverFactory = SolverFactory.createFromXmlResource(...);
+    Solver&lt;CloudBalance&gt; solver = solverFactory.buildSolver();
+    CloudBalance solvedCloudBalance = solver.solve(unsolvedCloudBalance);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Contributed by Lukáš Petrovický.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_no_longer_needed_to_define_the_score_type_in_the_solver_configuration">No longer needed to define the score type in the solver configuration</h3>
+<div class="paragraph">
+<p>Planner now picks it up automatically from the domain model.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_new_jaxb_and_jackson_support_and_improved_xstream_support">New JAXB and Jackson support and improved XStream support</h3>
+<div class="paragraph">
+<p>To marshall a <code>Score</code> from or to XML or JSON, use the appropriate binder
+for XStream, JAXB or Jackson in <code>optaplanner-persistence-xstream</code>, <code>optaplanner-persistence-jaxb</code> and <code>optaplanner-persistence-jackson</code>.</p>
+</div>
+<div class="paragraph">
+<p>These will create pretty XML:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;CloudBalance&gt;
+   ...
+   &lt;score&gt;0hard/-200soft&lt;/score&gt;
+&lt;/CloudBalance&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And beautiful JSON:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+   ...
+   "score":"0hard/-200soft"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See the documentation on how to configure them.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_new_module_optaplanner_test_with_junit_testing_support">New module <code>optaplanner-test</code> with JUnit testing support</h3>
+<div class="paragraph">
+<p>To test each score rule individually, to assure it does what the business expects it to do,
+use the new <code>ScoreVerifier</code> support classes in <code>optaplanner-test</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_new_example_task_assigning">New example: Task assigning</h3>
+<div class="paragraph">
+<p>Assign tasks to employee and take into account required skills, affinity with the customer and task priority.
+This example also demonstrates real-time producing and consuming of tasks.</p>
+</div>
+<div class="videoblock">
+<div class="content">
+<iframe src="https://www.youtube.com/embed/ksXjQ851RAU?rel=0" frameborder="0" allowfullscreen></iframe>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_other_engine_improvements_2">Other Engine improvements</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Chained entities (used in Vehicle Routing) can now be immovable entities too</p>
+</li>
+<li>
+<p>Booleans are now supported by <code>ValueRangeFactory</code> too: <code>createBooleanValueRange()</code></p>
+</li>
+<li>
+<p>Dates and time are now supported by <code>ValueRangeFactory</code> too: <code>createTemporalValueRange()</code>. Contributed by Kevin Wallis.</p>
+</li>
+<li>
+<p><code>@ValueRangeProvider</code> now supports methods that return an array too.</p>
+</li>
+<li>
+<p>The log now outputs the score calculation speed for each solver phase too.</p>
+</li>
+<li>
+<p>The documentation is now in AsciiDoc, which improves output quality and makes it easier to contribute.</p>
+</li>
+<li>
+<p><code>HardMediumSoftBigDecimalScore</code>: 3 score levels of BigDecimal scores. Contributed by Brad Hards.</p>
+</li>
+<li>
+<p><code>Score.toShortString()</code>: simplifies <code>0hard/0medium/-7soft</code> to <code>-7soft</code></p>
+</li>
+<li>
+<p>Fairness / load balancing: Tennis example now shows how to give them a scalable weight against other constraints</p>
+</li>
+<li>
+<p>A planning solution&#8217;s fields/getter can now be automatically get their annotations through <code>@PlanningSolution(autoDiscoverMemberType = &#8230;&#8203;)</code></p>
+</li>
+<li>
+<p>The public API is now a solid foundation for the 7.x years.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_new_and_noteworthy_workbench_7_0_0_final">New and noteworthy: Workbench 7.0.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_enhanced_solver_editor">Enhanced solver editor</h3>
+<div class="paragraph">
+<p>OptaPlanner Solver editor screen now supports adding all termination types, including composite termination.
+Phase configuration section allows to tweak Construction Heuristic settings and select Local Search algorithm
+to optimize your planning problem.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="7.0/solverEditorScreen.png" alt="Solver editor screen"></span></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_guided_rule_editor_integration">Guided rule editor integration</h3>
+<div class="paragraph">
+<p>OptaPlanner now integrates with the Guided rule editor.
+Modify the score with a build-in OptaPlanner action.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="7.0/guidedRule.png" alt="Guided rule editor"></span></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_improved_example_import_dialog">Improved example import dialog</h3>
+<div class="paragraph">
+<p>Examples are now part of the Workbench and they work offline too.
+Leverage tag-based filtering to quickly access projects from the field you are interested in.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="7.0/exampleImport.png" alt="Example import dialog"></span></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_difficulty_comparator_definition">Difficulty comparator definition</h3>
+<div class="paragraph">
+<p>OptaPlanner domain editor can now specify a planning entity difficulty.
+Navigate through the object hierarchy and define the sorting attributes.
+Several Construction Heuristic algorithms use this information to construct a better initial solution.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="7.0/difficultyComparator.png" alt="Difficulty comparator"></span></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_other_workbench_improvements">Other Workbench improvements</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>OptaPlanner Workbench now fully supports bendable score types</p>
+</li>
+<li>
+<p>It is no longer required to define <code>plannermgmt</code> role for the Workbench user to access OptaPlanner UI items.
+Use a role-based permission management screen instead to control the access.</p>
+<div class="paragraph">
+<p><span class="image"><img src="7.0/permissionScreen.png" alt="Permission screen"></span></p>
+</div>
+</li>
+<li>
+<p>Two new examples have been added:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A course scheduling example models lecture scheduling at universities.</p>
+</li>
+<li>
+<p>Employee rostering example optimizes task assigning to employees based on their skill.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_new_and_noteworthy_execution_server_7_0_0_final">New and noteworthy: Execution Server 7.0.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_simplified_rest_api">Simplified REST API</h3>
+<div class="paragraph">
+<p><code>ServiceResponse</code> wrapper has been removed from OptaPlanner service responses returned by KIE Execution Server.
+This allows an easier processing of the responses on the client side.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-xml hljs" data-lang="xml">&lt;solver-instance&gt;
+    ...
+    &lt;status&gt;SOLVING&lt;/status&gt;
+    &lt;score scoreClass="org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore"&gt;0hard/-10soft&lt;/score&gt;
+    &lt;best-solution class="curriculumcourse.curriculumcourse.CourseSchedule"&gt;
+        ...
+    &lt;/best-solution&gt;
+&lt;/solver-instance&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>        <div class="sect1">
+            <h2>Upgrade your code to 7</h2>
+            <div class="sectionbody">
+                <div class="paragraph">
+                    <p>The best and easiest way to upgrade to this new version of OptaPlanner is by following
+                        <a href="../../download/upgradeRecipe/upgradeRecipe7.html">the
+                            upgrade recipe</a>.</p>
+                </div>
+            </div>
+        </div>
+        <div class="sect1">
+            <h2>New features in older releases</h2>
+            <div class="sectionbody">
+                <div class="paragraph">
+                    <p>Read <a href="./">the previous release notes</a> to learn about the new and noteworthy in
+                        previous releases.</p>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="col-md-3">
+    <div class="card mb-4">
+        <div class="card-header">Latest release</div>
+        <div class="card-body">
+            <ul class="list-unstyled mb-0">
+                <li>
+                    <div class="title">
+                        <a href="../../download/releaseNotes/releaseNotes8.html">
+                            8.25.0.Final released
+                        </a>
+                    </div>
+                    <div class="small">
+                        Tue 26 July 2022
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Upcoming events</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <div class="title">
+                                    <a href="https://devoxx.be">Devoxx Belgium</a>
+                            </div>
+                            <span>
+                                Antwerp, Belgium - Mon 10 October 2022
+                            </span>
+                        </li>
+                <div class="small float-end">
+                    <a href="https://github.com/kiegroup/optaplanner-website/blob/main/optaplanner-website-root/data/events.yml">Add event</a>
+                    /
+                    <a href="../../community/eventsArchive.html">Archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest blog posts</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../blog/2022/06/09/RunOptaPlannerWorkloadOnOpenShift.html">Run OptaPlanner workloads on OpenShift, part I.</a>
+                        </div>
+                        <div class="small">Thu 9 June 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../blog/2022/05/26/optaplanner-deprecates-score-drl.html">OptaPlanner deprecates score DRL</a>
+                        </div>
+                        <div class="small">Thu 26 May 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/c950743f532471ac34022e92193563c3?s=20&d=mm"/>
+        <span class="align-middle">Lukáš Petrovický</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../blog/2022/03/07/Real-time+planning+meets+the+SolverManager.html">Real-time planning meets SolverManager</a>
+                        </div>
+                        <div class="small">Mon 7 March 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../blog/2021/10/26/DocsTurnOverANewLeaf.html">OptaPlanner documentation turns over a new leaf</a>
+                        </div>
+                        <div class="small">Tue 26 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../blog/2021/10/14/OrderPickingQuickstart.html">Order picking optimization in warehouses and supermarkets with OptaPlanner</a>
+                        </div>
+                        <div class="small">Thu 14 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/4a8c787544c0b40bc033f631dc2256c2?s=20&d=mm"/>
+        <span class="align-middle">Walter Medvedeo</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../blog/2021/10/12/MonitorTheSolver.html">Monitor OptaPlanner solvers through Micrometer</a>
+                        </div>
+                        <div class="small">Tue 12 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/16f228a9f340e2a2ca5b42485a17bc3d?s=20&d=mm"/>
+        <span class="align-middle">Christopher Chianelli</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../blog/2021/10/05/ANewAIConstraintSolverForPythonOptaPy.html">A new AI constraint solver for Python: OptaPy</a>
+                        </div>
+                        <div class="small">Tue 5 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/16f228a9f340e2a2ca5b42485a17bc3d?s=20&d=mm"/>
+        <span class="align-middle">Christopher Chianelli</span>
+    </span>
+                    </li>
+                <div class="small float-end">
+                    <a href="../../blog/index.html">Blog archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest videos</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="kFoaf696VpA" data-video-title="Host your OptaPlanner app on OpenShift (Kubernetes)">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Host your OptaPlanner app on OpenShift (Kubernetes)</span>
+                        </a>
+                        <div class="small">Mon 7 February 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="bIvt9z-zVHo" data-video-title="OptaPlanner - A fast, easy-to-use, open source AI constraint solver for software developers">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">OptaPlanner - A fast, easy-to-use, open source AI constraint solver for software developers</span>
+                        </a>
+                        <div class="small">Mon 31 January 2022</div>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="784Au4PjTzg" data-video-title="Order picking planning with OptaPlanner">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Order picking planning with OptaPlanner</span>
+                        </a>
+                        <div class="small">Fri 31 December 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/54cd5de3bdaf21a942e8d9d5fe95f647?s=20&d=mm"/>
+        <span class="align-middle">Anna Dupliak</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="HVDPxebpSvg" data-video-title="AI lesson scheduling on Quarkus with OptaPlanner">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">AI lesson scheduling on Quarkus with OptaPlanner</span>
+                        </a>
+                        <div class="small">Thu 18 November 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="dqTrjkVxoPI" data-video-title="Maintenance scheduling">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Maintenance scheduling</span>
+                        </a>
+                        <div class="small">Fri 12 November 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="-RSZbMT_alo" data-video-title="Optimized order picking in warehouses and supermarkets">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Optimized order picking in warehouses and supermarkets</span>
+                        </a>
+                        <div class="small">Tue 26 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/4a8c787544c0b40bc033f631dc2256c2?s=20&d=mm"/>
+        <span class="align-middle">Walter Medvedeo</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="-7ips_GMFmo" data-video-title="A modern OO/FP constraint solver">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">A modern OO/FP constraint solver</span>
+                        </a>
+                        <div class="small">Tue 14 September 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                <div class="small float-end">
+                    <a href="https://www.youtube.com/channel/UCcpkOKpujFlM67D2h0RdaeQ">Video archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+        </div>
+    </div>
+        </div>
+    </div>
+<footer class="py-4 bg-black text-white-50">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <p class="small">OptaPlanner is open.
+                    All dependencies of this project are available under the
+                    <a class="link-light" href="../../code/license.html">Apache Software License 2.0</a>
+                    or a compatible license.
+                    OptaPlanner is <a class="link-light" href="../../community/branding.html">trademarked</a>.
+                </p>
+                <p class="small">
+                    This <a class="link-light" href="../../website/websiteInfo.html">website</a>
+                    was built with <a class="link-light" href="https://jbake.org">JBake</a> and is open source.
+                </p>
+            </div>
+            <div class="col-md-4">
+                <h4>Community</h4>
+                <ul class="ps-2 list-unstyled">
+                    <li><a class="link-light" href="../../blog/">Blog</a></li>
+                    <li><a class="link-light" href="../../community/getHelp.html">Get Help</a></li>
+                    <li><a class="link-light" href="../../community/team.html">Team</a></li>
+                    <li><a class="link-light" href="../../community/governance.html">Governance</a></li>
+                    <li><a class="link-light" href="../../community/research.html">Academic research</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h4>Code</h4>
+                <ul class="ps-2 list-unstyled">
+                    <li><a class="link-light" href="../../code/sourceCode.html">Build from source</a></li>
+                    <li><a class="link-light" href="https://issues.redhat.com/projects/PLANNER">Issue tracker</a></li>
+                    <li><a class="link-light" href="../../download/releaseNotes/">Release notes</a></li>
+                    <li><a class="link-light" href="../../download/upgradeRecipe/">Upgrade recipes</a></li>
+                    <li><a class="link-light" href="../../community/branding.html">Logo and branding</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="d-flex justify-content-evenly align-items-center">
+            <div>
+                <i class="fab fa-creative-commons"></i><i class="fab fa-creative-commons-by"></i>
+                <a class="link-light link-underlined" href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC by 3.0</a> |
+                <a class="link-light link-underlined" href="https://www.redhat.com/en/about/privacy-policy">Privacy Policy</a>
+            </div>
+            <div>
+                <span class="me-2 text-white">Sponsored by</span>
+                <a href="https://www.redhat.com/" target="_blank"><img style="width: 6rem" src="https://www.redhat.com/profiles/rh/themes/redhatdotcom/img/logo.svg" alt="Red Hat"></a>
+            </div>
+        </div>
+    </div>
+</footer>
+    <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="ratio ratio-16x9" id="player-container">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"
+            integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/highlight.min.js"
+            integrity="sha256-mfS2sXKEV8eehy39UH7+7BwaoUaIe2TuLO2DXS+c2mI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/asciidoc.min.js"
+            integrity="sha256-gnB2LPAmHPkrj3czfog5GdIu4aByzcKeTUzC2agNMzM=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/properties.min.js"
+            integrity="sha256-1XSLaVD2dn/eCICDUx1DYprsC4UAEa4weDLYY/458wU=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/gradle.min.js"
+            integrity="sha256-B5HtfGpeJKLSEsoqtAdi6sSJ05K49CTGHZbrBiJ9CwE=" crossorigin="anonymous"></script>
+    <script src="../../website/optaplannerWebsite.js"></script>
+    <script>
+        // Ruby syntax highlighting works pretty well for DRL source code.
+        hljs.registerAliases(["drl"], { languageName: "ruby"});
+        hljs.highlightAll();
+    </script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script type="text/javascript">
+      if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+        _satellite.pageBottom();
+      }
+    </script>
+</body>
+</html>
+
+

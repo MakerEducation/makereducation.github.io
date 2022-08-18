@@ -1,0 +1,751 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script id="dpal" src="https://www.redhat.com/dtm.js" type="text/javascript"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-39485370-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-39485370-1');
+    </script>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>OptaPlanner - Batch solving a ActiveMQ queue that contains planning problem data sets in a scalable way</title>
+    <meta content="If I want to solve many data sets of a planning problem every night, what architecture can easily scale out horizontally without loss of data? In this article, we will take a look at how to use a ..." name="description">
+    <meta content="metaheuristic, heuristic, constraint satisfaction, constraint programming, operations research, NP-complete, NP-hard, optimization, planning, scheduling, java, open source, software, library, solver, tabu search, simulated annealing, pareto" name="keywords">
+    <link href="https://www.optaplanner.org/blog/2021/03/25/BatchSolvingWithAmq.html" rel="canonical">
+
+    <meta content="Batch solving a ActiveMQ queue that contains planning problem data sets in a scalable way" property="og:title">
+    <meta content="If I want to solve many data sets of a planning problem every night, what architecture can easily scale out horizontally without loss of data? In this article, we will take a look at how to use a ..." property="og:description">
+    <meta content="https://www.optaplanner.org/blog/2021/03/25/BatchSolvingWithAmq.html" property="og:url">
+    <meta content="OptaPlanner" property="og:site_name">
+    <meta content="article" property="og:type">
+    <meta content="https://www.optaplanner.org/blog/2021/03/25/activemqSolvingArchitecture.png" property="og:image">
+    <meta content="summary" name="twitter:card">
+    <meta content="@OptaPlanner" name="twitter:site">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+          integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css"
+          integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/styles/default.min.css"
+          integrity="sha256-CGf39SzxAmEe09Ojoh16/2xTRNleX9wBZcEXVnNqwSM=" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../../../website/optaplannerWebsite.css">
+    <link href="../../../../favicon.ico" rel="shortcut icon">
+</head>
+
+<body>
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light border-bottom shadow">
+    <div class="container">
+        <a class="navbar-brand" href="../../../../">
+            <img alt="OptaPlanner logo" src="../../../../headerFooter/optaPlannerLogo200px.png">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="../../../../download/download.html">Download</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarLearn" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Learn
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarLearn">
+                        <li><a class="dropdown-item" href="../../../../learn/documentation.html">Documentation</a></li>
+                        <li><a class="dropdown-item" href="../../../../learn/video.html">Videos</a></li>
+                        <li><a class="dropdown-item" href="../../../../learn/slides.html">Slides</a></li>
+                        <li><a class="dropdown-item" href="../../../../learn/training.html">Training</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="../../../../learn/useCases/index.html">Use cases</a></li>
+                        <li><a class="dropdown-item" href="../../../../compatibility/index.html">Compatibility</a></li>
+                        <li><a class="dropdown-item" href="../../../../learn/testimonialsAndCaseStudies.html">Testimonials and case studies</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="../../../../community/getHelp.html">Get help</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../../../blog/">Blog</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../../../code/sourceCode.html">Source</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../../../community/team.html">Team</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../../../product/services.html">Services</a></li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="p-2"><a aria-label="Star OptaPlanner on GitHub" class="github-button" data-show-count="true" href="https://github.com/kiegroup/optaplanner">Star</a></li>
+                <li class="p-1"><a href="https://twitter.com/OptaPlanner" target="_blank" title="Follow OptaPlanner on Twitter"><img alt="T" src="../../../../headerFooter/twitterLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.linkedin.com/showcase/optaplanner" target="_blank" title="Follow OptaPlanner on LinkedIn"><img alt="L" src="../../../../headerFooter/linkedInLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.facebook.com/OptaPlanner" target="_blank" title="Follow OptaPlanner on Facebook"><img alt="F" src="../../../../headerFooter/facebookLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.youtube.com/channel/UCcpkOKpujFlM67D2h0RdaeQ" target="_blank" title="OptaPlanner YouTube channel"><img alt="YT" src="../../../../headerFooter/youtubeLogo.png" style="height: 16px"></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="body-without-header-footer">
+        <div class="forkMeOnGithub">
+            <a href="https://github.com/kiegroup/optaplanner">
+                <img alt="Fork me on GitHub" src="../../../../headerFooter/forkMeOnGithub.png">
+            </a>
+        </div>
+        <div class="container py-4">
+    <div class="row">
+        <div class="col-md-9">
+    <div class="post">
+        <h1 class="title border-bottom">Batch solving a ActiveMQ queue that contains planning problem data sets in a scalable way</h1>
+        <div class="mb-4">
+            <span class="float-end mb-2">Thu 25 March 2021</span>
+    <div class="card bg-light" style="width: 320px;">
+        <div class="row gx-2">
+            <div class="col-auto">
+                <img class="rounded m-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=64&d=mm" width="64" height="64" alt="Avatar Radovan Synek"/>
+            </div>
+            <div class="col">
+                <div class="card-body p-0 me-1">
+                    <h5 class="card-title my-1">Radovan Synek</h5>
+                    <hr class="m-0"/>
+                    <span class="float-end mx-1">
+                            <a href="https://github.com/rsynek"><img src="../../../../headerFooter/gitHubLogo.png" alt="GitHub"/></a>
+                    </span>
+                    <p class="small mb-1">OptaPlanner developer</p>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+        <div>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>If I want to solve many data sets of a planning problem every night, what architecture can easily scale out horizontally without loss of data?
+In this article, we will take a look at how to use a transactional ActiveMQ queue in front of a set of stateless <a href="https://www.optaplanner.org">OptaPlanner</a> pods.
+Client applications can submit data sets to solve and listen to the resulting solutions without worrying about which OptaPlanner pod does the actual solving.</p>
+</div>
+<div class="paragraph">
+<p>The source code is available in the <a href="https://github.com/kiegroup/optaplanner-quickstarts/tree/stable/technology/java-activemq-quarkus">activemq-quarkus-school-timetabling quickstart</a>, along with the other <a href="https://github.com/kiegroup/optaplanner-quickstarts">optaplanner-quickstarts</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_batch_solving">Batch Solving</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Very often, there are multiple instances of the same planning problem to solve.
+Either these come from splitting an enormous input problem into smaller pieces, or just from the need to solve completely unrelated data sets.
+Imagine independently scheduling many vehicle routes for several regions, or optimizing school timetables for numerous schools.
+To take advantage of time, you run OptaPlanner every night to prepare for the next day in the business or even longer for the next semester.
+On the other hand, during the day or in the middle of the semester, there is nothing to optimize and so there should be no OptaPlanner running.
+In other words, these cases call for batch solving.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_school_timetabling">School Timetabling</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The quickstart focuses on the school timetabling problem, which is described in depth in the <a href="https://quarkus.io/guides/optaplanner">Quarkus guide</a>.
+Let’s just very briefly revisit the problem domain and its constraints.</p>
+</div>
+<div class="paragraph">
+<p>In the school timetabling problem, the goal is to assign each lesson to a room and a timeslot.
+To use the OptaPlanner vocabulary, the <code>Lesson</code> is a planning entity and its references to the <code>Room</code> and the <code>Timeslot</code> are planning variables.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="schoolTimetablingClassDiagram.png" alt="School Timetabling class diagram">
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>TimeTableConstraintProvider</code> defines the following constraints on how the lessons should be assigned to timeslots and rooms:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A room can have at most one lesson at the same time (hard).</p>
+</li>
+<li>
+<p>A teacher can teach at most one lesson at the same time (hard).</p>
+</li>
+<li>
+<p>A student can attend at most one lesson at the same time (hard).</p>
+</li>
+<li>
+<p>A teacher prefers to teach in a single room (soft).</p>
+</li>
+<li>
+<p>A teacher prefers to teach sequential lessons and dislikes gaps between lessons (soft).</p>
+</li>
+<li>
+<p>A student dislikes sequential lessons on the same subject (soft).</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_quickstart_structure">Quickstart structure</h2>
+<div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="activemqProjectStructure.png" alt="Project structure">
+</div>
+</div>
+<div class="paragraph">
+<p>The project consists of three modules:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>activemq-quarkus-school-timetabling-common</strong> defines the problem domain, and the <code>SolverRequest</code> and <code>SolverResponse</code> classes for messaging.
+The following two modules depend on this one.</p>
+</li>
+<li>
+<p><strong>activemq-quarkus-school-timetabling-client</strong> is the Client Quarkus application that contains a UI, a REST endpoint and a demo data generator.</p>
+</li>
+<li>
+<p><strong>activemq-quarkus-school-timetabling-solver</strong> is the Solver Server Quarkus application that solves school timetabling problem instances coming via a message queue <code>solver_request</code>.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_messaging">Messaging</h2>
+<div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="activemqSolvingArchitecture.png" alt="Architecture">
+</div>
+</div>
+<div class="paragraph">
+<p>The Client application serializes an unsolved <code>TimeTable</code> wrapped by the <code>SolverRequest</code> class into a JSON and sends it to the <code>solver_request</code> queue.
+The Solver Server receives the request from this queue, deserializes it and solves the <code>TimeTable</code> via OptaPlanner.
+After the solving finishes, the Solver Server wraps the <code>TimeTable</code> by the <code>SolverResponse</code> class, serializes it to a JSON and sends it to the <code>solver_response</code> queue.</p>
+</div>
+<div class="sect2">
+<h3 id="_requirements">Requirements</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>No solver request message must be lost, even if the Solver Server crashes.</p>
+</li>
+<li>
+<p>Any error that occurs in the Solver Server must be propagated back to the Client.</p>
+</li>
+<li>
+<p>Invalid solver request message is sent to a dead letter queue.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_activemq_is_a_natural_fit">ActiveMQ is a natural fit</h3>
+<div class="paragraph">
+<p>ActiveMQ comes as a natural fit for this use case for multiple reasons.
+First, it supports huge messages without extra configuration.
+Second, solving may often take several hours before the Solver Server can send a response with a solution and finally approve the request message.
+Last but not least, the ActiveMQ guarantees to deliver each message exactly once, provided the messages are persisted at the broker.
+These properties let the Solver Server avoid keeping any state and just transform the input planning problems into solutions.</p>
+</div>
+<div class="paragraph">
+<p>For different use cases, for example, real-time planning, other technologies like Kafka may be a better fit, but for this use case, the ActiveMQ wins.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_when_messaging_meets_optaplanner">When messaging meets OptaPlanner</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The quickstart uses Smallrye Reactive Messaging to send and receive messages.
+Let’s take a look at the <code>TimeTableMessagingHandler</code> located in the Solver Server application.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    ...
+    Solver&lt;TimeTable&gt; solver;
+
+    @Inject
+    ObjectMapper objectMapper; // <b class="conum">(1)</b>
+
+    @Inject
+    @Channel("solver_response") // <b class="conum">(2)</b>
+    Emitter&lt;String&gt; solverResponseEmitter;
+
+    @Inject
+    TimeTableMessagingHandler(SolverFactory&lt;TimeTable&gt; solverFactory) {
+        solver = solverFactory.buildSolver(); // <b class="conum">(3)</b>
+    }
+
+    @Incoming("solver_request") // <b class="conum">(4)</b>
+    public CompletionStage&lt;Void&gt; solve(Message&lt;String&gt; solverRequestMessage) { // <b class="conum">(5)</b>
+        return CompletableFuture.runAsync(() -&gt; { // <b class="conum">(6)</b>
+            SolverRequest solverRequest;
+            try {
+                solverRequest = objectMapper.readValue(solverRequestMessage.getPayload(), SolverRequest.class); // <b class="conum">(7)</b>
+            } catch (Throwable throwable) {
+                LOGGER.warn("Unable to deserialize solver request from JSON.", throwable);
+                /* Usually a bad request, which should be immediately rejected.
+                   No error response can be sent back as the problemId is unknown.
+                   Such a NACKed message is redirected to the DLQ (Dead letter queue).
+                   Catching the Throwable to make sure no unchecked exceptions are missed. */
+                solverRequestMessage.nack(throwable);
+                return;
+            }
+
+            TimeTable solution;
+            try {
+                solution = solver.solve(solverRequest.getTimeTable()); // <b class="conum">(8)</b>
+                replySuccess(solverRequestMessage, solverRequest.getProblemId(), solution);
+            } catch (Throwable throwable) {
+                replyFailure(solverRequestMessage, solverRequest.getProblemId(), throwable); // <b class="conum">(9)</b>
+            }
+        });
+    }
+    ...</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Inject <code>ObjectMapper</code> to unmarshall the JSON message payload.</p>
+</li>
+<li>
+<p><code>Emitter</code> sends response messages to the <code>solver_response</code> channel.</p>
+</li>
+<li>
+<p>Inject a <code>SolverFactory</code> and build a <code>Solver</code>.</p>
+</li>
+<li>
+<p>The <code>@Incoming</code> annotation makes the method listen for incoming messages from the <code>solver_request</code> channel.</p>
+</li>
+<li>
+<p>By accepting <code>Message</code> as a parameter, you have full control over acknowledgement of the message.
+The generic type of the <code>Message</code> is <code>String</code>, because the message contains the <code>SolverRequest</code> serialized to a JSON String.
+Finally, the return type <code>CompletionStage&lt;Void&gt;</code> enables an asynchronous acknowledgement.
+See <a href="https://smallrye.io/smallrye-reactive-messaging/smallrye-reactive-messaging/2.8/model/model.html#consuming-messages">Consuming Messages</a> for more details.</p>
+</li>
+<li>
+<p>Return a <code>CompletionStage&lt;Void&gt;</code> to satisfy the method contract and avoid blocking the thread.</p>
+</li>
+<li>
+<p>Unmarshall the JSON payload. If it&#8217;s not possible, reject the message.</p>
+</li>
+<li>
+<p>Solve the input timetabling problem and then send a reply (see the next figure).</p>
+</li>
+<li>
+<p>In case any exception occurs, include information about the exception into the response.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The example below shows how to reply and acknowledge the original request message:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">private void replySuccess(Message&lt;String&gt; solverRequestMessage) {
+    ...
+    solverResponseEmitter.send(jsonResponse)
+        .thenAccept(x -&gt; solverRequestMessage.ack()); // <b class="conum">(1)</b>
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p><code>thenAccept()</code> defines what happens when the ActiveMQ broker acknowledges the response message sent via the <code>Emitter</code>.
+In this case, the request message is acknowledged.
+This way, the request message is never lost even if the Solver Server dies.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>To understand how the channels correspond to messaging queues, see the <code>application.properties</code> file located in <code>src/main/resources</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties"># Configure the ActiveMQ source
+mp.messaging.incoming.solver_request.connector=smallrye-amqp # <b class="conum">(1)</b>
+mp.messaging.incoming.solver_request.durable=true # <b class="conum">(2)</b>
+mp.messaging.incoming.solver_request.failure-strategy=reject # <b class="conum">(3)</b>
+
+# Configure the ActiveMQ sink
+mp.messaging.outgoing.solver_response.connector=smallrye-amqp
+mp.messaging.outgoing.solver_response.durable=true</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Use the <code>smallrye-amqp</code> connector for the <code>solver_request</code> channel.</p>
+</li>
+<li>
+<p>To have the ActiveMQ broker persist messages, make the queue durable.</p>
+</li>
+<li>
+<p>If a message is rejected, the broker redirects it to a dead letter queue and proceeds with the next message.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Every property contains the channel name. By default, it matches the name of the queue at the ActiveMQ broker.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_running_the_quickstart">Running the quickstart</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>Prerequisites:</strong> install <a href="https://docs.docker.com/get-docker/">docker</a> and <a href="https://docs.docker.com/compose/install">docker-compose</a>.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>git clone <a href="https://github.com/kiegroup/optaplanner-quickstarts" class="bare">https://github.com/kiegroup/optaplanner-quickstarts</a> &amp;&amp; cd optaplanner-quickstarts</p>
+</li>
+<li>
+<p>git checkout development &amp;&amp; cd activemq-quarkus-school-timetabling</p>
+</li>
+<li>
+<p>./run.sh</p>
+</li>
+<li>
+<p>Open <a href="http://localhost:8080" class="bare">http://localhost:8080</a> in a browser and click the Solve button.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>        </div>
+        <hr class="mb-1"/>
+        <div class="mb-4">
+            <div class="float-end">
+                <a href="https://www.optaplanner.org/blog/2021/03/25/BatchSolvingWithAmq.html"><span class="badge bg-dark">Permalink</span></a>
+            </div>
+            <div class="tags">
+                <i class="fas fa-tag"></i>&nbsp;tagged as
+                    <a href="../../../../blog/tags/activemq.html"><span class="badge bg-info">activemq</span></a>
+                    <a href="../../../../blog/tags/quarkus.html"><span class="badge bg-info">quarkus</span></a>
+                    <a href="../../../../blog/tags/integration.html"><span class="badge bg-info">integration</span></a>
+            </div>
+        </div>
+    </div>
+    <div class="comments">
+        <h2>Comments</h2>
+        <a class="btn btn-secondary mb-4" href="https://groups.google.com/g/optaplanner-dev">Visit our forum to comment</a>
+    </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-2 mb-4">
+                <div class="text-center">
+                    <a href="../../../../blog/news.atom">
+                        <img class="me-1" alt="Atom" src="../../../../headerFooter/atomFeedIcon.png">News feed
+                    </a>
+                    <div class="small">
+                        <span>Don’t want to miss a single blog post?</span>
+                        <br>
+                        <span>Follow us on</span>
+                    </div>
+                    <ul class="list-inline mb-2">
+                        <li class="list-inline-item"><a href="https://twitter.com/OptaPlanner" target="_blank" title="News stream via Twitter"><img alt="T" src="../../../../headerFooter/twitterLogo.png"></a></li>
+                        <li class="list-inline-item"><a href="https://www.linkedin.com/showcase/optaplanner" target="_blank" title="News stream via LinkedIn"><img alt="L" src="../../../../headerFooter/linkedInLogo.png"></a></li>
+                        <li class="list-inline-item"><a href="https://www.facebook.com/OptaPlanner" target="_blank" title="News stream via Facebook"><img alt="F" src="../../../../headerFooter/facebookLogo.png"></a></li>
+                    </ul>
+                    <a href="../../../../blog/index.html">Blog archive</a>
+                </div>
+            </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest release</div>
+        <div class="card-body">
+            <ul class="list-unstyled mb-0">
+                <li>
+                    <div class="title">
+                        <a href="../../../../download/releaseNotes/releaseNotes8.html">
+                            8.25.0.Final released
+                        </a>
+                    </div>
+                    <div class="small">
+                        Tue 26 July 2022
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Upcoming events</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <div class="title">
+                                    <a href="https://devoxx.be">Devoxx Belgium</a>
+                            </div>
+                            <span>
+                                Antwerp, Belgium - Mon 10 October 2022
+                            </span>
+                        </li>
+                <div class="small float-end">
+                    <a href="https://github.com/kiegroup/optaplanner-website/blob/main/optaplanner-website-root/data/events.yml">Add event</a>
+                    /
+                    <a href="../../../../community/eventsArchive.html">Archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest blog posts</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2022/06/09/RunOptaPlannerWorkloadOnOpenShift.html">Run OptaPlanner workloads on OpenShift, part I.</a>
+                        </div>
+                        <div class="small">Thu 9 June 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2022/05/26/optaplanner-deprecates-score-drl.html">OptaPlanner deprecates score DRL</a>
+                        </div>
+                        <div class="small">Thu 26 May 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/c950743f532471ac34022e92193563c3?s=20&d=mm"/>
+        <span class="align-middle">Lukáš Petrovický</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2022/03/07/Real-time+planning+meets+the+SolverManager.html">Real-time planning meets SolverManager</a>
+                        </div>
+                        <div class="small">Mon 7 March 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2021/10/26/DocsTurnOverANewLeaf.html">OptaPlanner documentation turns over a new leaf</a>
+                        </div>
+                        <div class="small">Tue 26 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2021/10/14/OrderPickingQuickstart.html">Order picking optimization in warehouses and supermarkets with OptaPlanner</a>
+                        </div>
+                        <div class="small">Thu 14 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/4a8c787544c0b40bc033f631dc2256c2?s=20&d=mm"/>
+        <span class="align-middle">Walter Medvedeo</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2021/10/12/MonitorTheSolver.html">Monitor OptaPlanner solvers through Micrometer</a>
+                        </div>
+                        <div class="small">Tue 12 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/16f228a9f340e2a2ca5b42485a17bc3d?s=20&d=mm"/>
+        <span class="align-middle">Christopher Chianelli</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2021/10/05/ANewAIConstraintSolverForPythonOptaPy.html">A new AI constraint solver for Python: OptaPy</a>
+                        </div>
+                        <div class="small">Tue 5 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/16f228a9f340e2a2ca5b42485a17bc3d?s=20&d=mm"/>
+        <span class="align-middle">Christopher Chianelli</span>
+    </span>
+                    </li>
+                <div class="small float-end">
+                    <a href="../../../../blog/index.html">Blog archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest videos</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="kFoaf696VpA" data-video-title="Host your OptaPlanner app on OpenShift (Kubernetes)">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Host your OptaPlanner app on OpenShift (Kubernetes)</span>
+                        </a>
+                        <div class="small">Mon 7 February 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="bIvt9z-zVHo" data-video-title="OptaPlanner - A fast, easy-to-use, open source AI constraint solver for software developers">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">OptaPlanner - A fast, easy-to-use, open source AI constraint solver for software developers</span>
+                        </a>
+                        <div class="small">Mon 31 January 2022</div>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="784Au4PjTzg" data-video-title="Order picking planning with OptaPlanner">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Order picking planning with OptaPlanner</span>
+                        </a>
+                        <div class="small">Fri 31 December 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/54cd5de3bdaf21a942e8d9d5fe95f647?s=20&d=mm"/>
+        <span class="align-middle">Anna Dupliak</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="HVDPxebpSvg" data-video-title="AI lesson scheduling on Quarkus with OptaPlanner">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">AI lesson scheduling on Quarkus with OptaPlanner</span>
+                        </a>
+                        <div class="small">Thu 18 November 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="dqTrjkVxoPI" data-video-title="Maintenance scheduling">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Maintenance scheduling</span>
+                        </a>
+                        <div class="small">Fri 12 November 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="-RSZbMT_alo" data-video-title="Optimized order picking in warehouses and supermarkets">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Optimized order picking in warehouses and supermarkets</span>
+                        </a>
+                        <div class="small">Tue 26 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/4a8c787544c0b40bc033f631dc2256c2?s=20&d=mm"/>
+        <span class="align-middle">Walter Medvedeo</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="-7ips_GMFmo" data-video-title="A modern OO/FP constraint solver">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">A modern OO/FP constraint solver</span>
+                        </a>
+                        <div class="small">Tue 14 September 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                <div class="small float-end">
+                    <a href="https://www.youtube.com/channel/UCcpkOKpujFlM67D2h0RdaeQ">Video archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+        </div>
+    </div>
+        </div>
+    </div>
+<footer class="py-4 bg-black text-white-50">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <p class="small">OptaPlanner is open.
+                    All dependencies of this project are available under the
+                    <a class="link-light" href="../../../../code/license.html">Apache Software License 2.0</a>
+                    or a compatible license.
+                    OptaPlanner is <a class="link-light" href="../../../../community/branding.html">trademarked</a>.
+                </p>
+                <p class="small">
+                    This <a class="link-light" href="../../../../website/websiteInfo.html">website</a>
+                    was built with <a class="link-light" href="https://jbake.org">JBake</a> and is open source.
+                </p>
+            </div>
+            <div class="col-md-4">
+                <h4>Community</h4>
+                <ul class="ps-2 list-unstyled">
+                    <li><a class="link-light" href="../../../../blog/">Blog</a></li>
+                    <li><a class="link-light" href="../../../../community/getHelp.html">Get Help</a></li>
+                    <li><a class="link-light" href="../../../../community/team.html">Team</a></li>
+                    <li><a class="link-light" href="../../../../community/governance.html">Governance</a></li>
+                    <li><a class="link-light" href="../../../../community/research.html">Academic research</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h4>Code</h4>
+                <ul class="ps-2 list-unstyled">
+                    <li><a class="link-light" href="../../../../code/sourceCode.html">Build from source</a></li>
+                    <li><a class="link-light" href="https://issues.redhat.com/projects/PLANNER">Issue tracker</a></li>
+                    <li><a class="link-light" href="../../../../download/releaseNotes/">Release notes</a></li>
+                    <li><a class="link-light" href="../../../../download/upgradeRecipe/">Upgrade recipes</a></li>
+                    <li><a class="link-light" href="../../../../community/branding.html">Logo and branding</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="d-flex justify-content-evenly align-items-center">
+            <div>
+                <i class="fab fa-creative-commons"></i><i class="fab fa-creative-commons-by"></i>
+                <a class="link-light link-underlined" href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC by 3.0</a> |
+                <a class="link-light link-underlined" href="https://www.redhat.com/en/about/privacy-policy">Privacy Policy</a>
+            </div>
+            <div>
+                <span class="me-2 text-white">Sponsored by</span>
+                <a href="https://www.redhat.com/" target="_blank"><img style="width: 6rem" src="https://www.redhat.com/profiles/rh/themes/redhatdotcom/img/logo.svg" alt="Red Hat"></a>
+            </div>
+        </div>
+    </div>
+</footer>
+    <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="ratio ratio-16x9" id="player-container">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"
+            integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/highlight.min.js"
+            integrity="sha256-mfS2sXKEV8eehy39UH7+7BwaoUaIe2TuLO2DXS+c2mI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/asciidoc.min.js"
+            integrity="sha256-gnB2LPAmHPkrj3czfog5GdIu4aByzcKeTUzC2agNMzM=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/properties.min.js"
+            integrity="sha256-1XSLaVD2dn/eCICDUx1DYprsC4UAEa4weDLYY/458wU=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/gradle.min.js"
+            integrity="sha256-B5HtfGpeJKLSEsoqtAdi6sSJ05K49CTGHZbrBiJ9CwE=" crossorigin="anonymous"></script>
+    <script src="../../../../website/optaplannerWebsite.js"></script>
+    <script>
+        // Ruby syntax highlighting works pretty well for DRL source code.
+        hljs.registerAliases(["drl"], { languageName: "ruby"});
+        hljs.highlightAll();
+    </script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script type="text/javascript">
+      if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+        _satellite.pageBottom();
+      }
+    </script>
+</body>
+</html>
+
+

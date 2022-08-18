@@ -1,0 +1,1285 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script id="dpal" src="https://www.redhat.com/dtm.js" type="text/javascript"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-39485370-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-39485370-1');
+    </script>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>OptaPlanner - Workflow processes with AI scheduling</title>
+    <meta content="A BPMN diagram models a Business Process. When the Business Process involves optimization at some step, OptaPlanner can help you quickly find an optimal solution. Now with Kogito, it is easier ..." name="description">
+    <meta content="metaheuristic, heuristic, constraint satisfaction, constraint programming, operations research, NP-complete, NP-hard, optimization, planning, scheduling, java, open source, software, library, solver, tabu search, simulated annealing, pareto" name="keywords">
+    <link href="https://www.optaplanner.org/blog/2020/05/05/WorkflowProcessesWithAIScheduling.html" rel="canonical">
+
+    <meta content="Workflow processes with AI scheduling" property="og:title">
+    <meta content="A BPMN diagram models a Business Process. When the Business Process involves optimization at some step, OptaPlanner can help you quickly find an optimal solution. Now with Kogito, it is easier ..." property="og:description">
+    <meta content="https://www.optaplanner.org/blog/2020/05/05/WorkflowProcessesWithAIScheduling.html" property="og:url">
+    <meta content="OptaPlanner" property="og:site_name">
+    <meta content="article" property="og:type">
+    <meta content="https://www.optaplanner.org/blog/2020/05/05/FinalBPMN.png" property="og:image">
+    <meta content="summary" name="twitter:card">
+    <meta content="@OptaPlanner" name="twitter:site">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+          integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css"
+          integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/styles/default.min.css"
+          integrity="sha256-CGf39SzxAmEe09Ojoh16/2xTRNleX9wBZcEXVnNqwSM=" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../../../website/optaplannerWebsite.css">
+    <link href="../../../../favicon.ico" rel="shortcut icon">
+</head>
+
+<body>
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light border-bottom shadow">
+    <div class="container">
+        <a class="navbar-brand" href="../../../../">
+            <img alt="OptaPlanner logo" src="../../../../headerFooter/optaPlannerLogo200px.png">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="../../../../download/download.html">Download</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarLearn" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Learn
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarLearn">
+                        <li><a class="dropdown-item" href="../../../../learn/documentation.html">Documentation</a></li>
+                        <li><a class="dropdown-item" href="../../../../learn/video.html">Videos</a></li>
+                        <li><a class="dropdown-item" href="../../../../learn/slides.html">Slides</a></li>
+                        <li><a class="dropdown-item" href="../../../../learn/training.html">Training</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="../../../../learn/useCases/index.html">Use cases</a></li>
+                        <li><a class="dropdown-item" href="../../../../compatibility/index.html">Compatibility</a></li>
+                        <li><a class="dropdown-item" href="../../../../learn/testimonialsAndCaseStudies.html">Testimonials and case studies</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="../../../../community/getHelp.html">Get help</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../../../blog/">Blog</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../../../code/sourceCode.html">Source</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../../../community/team.html">Team</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../../../product/services.html">Services</a></li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="p-2"><a aria-label="Star OptaPlanner on GitHub" class="github-button" data-show-count="true" href="https://github.com/kiegroup/optaplanner">Star</a></li>
+                <li class="p-1"><a href="https://twitter.com/OptaPlanner" target="_blank" title="Follow OptaPlanner on Twitter"><img alt="T" src="../../../../headerFooter/twitterLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.linkedin.com/showcase/optaplanner" target="_blank" title="Follow OptaPlanner on LinkedIn"><img alt="L" src="../../../../headerFooter/linkedInLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.facebook.com/OptaPlanner" target="_blank" title="Follow OptaPlanner on Facebook"><img alt="F" src="../../../../headerFooter/facebookLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.youtube.com/channel/UCcpkOKpujFlM67D2h0RdaeQ" target="_blank" title="OptaPlanner YouTube channel"><img alt="YT" src="../../../../headerFooter/youtubeLogo.png" style="height: 16px"></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="body-without-header-footer">
+        <div class="forkMeOnGithub">
+            <a href="https://github.com/kiegroup/optaplanner">
+                <img alt="Fork me on GitHub" src="../../../../headerFooter/forkMeOnGithub.png">
+            </a>
+        </div>
+        <div class="container py-4">
+    <div class="row">
+        <div class="col-md-9">
+    <div class="post">
+        <h1 class="title border-bottom">Workflow processes with AI scheduling</h1>
+        <div class="mb-4">
+            <span class="float-end mb-2">Tue 5 May 2020</span>
+    <div class="card bg-light" style="width: 320px;">
+        <div class="row gx-2">
+            <div class="col-auto">
+                <img class="rounded m-1" src="https://www.gravatar.com/avatar/16f228a9f340e2a2ca5b42485a17bc3d?s=64&d=mm" width="64" height="64" alt="Avatar Christopher Chianelli"/>
+            </div>
+            <div class="col">
+                <div class="card-body p-0 me-1">
+                    <h5 class="card-title my-1">Christopher Chianelli</h5>
+                    <hr class="m-0"/>
+                    <span class="float-end mx-1">
+                            <a href="https://github.com/Christopher-Chianelli"><img src="../../../../headerFooter/gitHubLogo.png" alt="GitHub"/></a>
+                    </span>
+                    <p class="small mb-1">OptaPlanner developer</p>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+        <div>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>A BPMN diagram models a Business Process. When the Business
+Process involves optimization at some step,
+<a href="https://www.optaplanner.org/">OptaPlanner</a> can help you quickly find an optimal solution.
+Now with <a href="https://kogito.kie.org/">Kogito</a>, it is easier than ever before to integrate
+OptaPlanner into your BPMN diagrams! It is so simple, that by the end of this blog,
+you will create a Business Process for scheduling a flight in an airline from scratch using
+OptaPlanner, BPMN and Quarkus in 15 minutes.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_project_setup">Project Setup</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Create a new folder to hold this project. Run the following command to
+create a new Quarkus project:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">mvn io.quarkus:quarkus-maven-plugin:1.4.1.Final:create \
+    -DprojectGroupId=com.company \
+    -DprojectArtifactId=airline-bpmn-optaplanner \
+    -Dextensions="resteasy, resteasy-jackson, optaplanner, \
+                  optaplanner-jackson, kogito-quarkus, smallrye-openapi"</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_creating_your_bpmn_file">Creating your BPMN file</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We will be creating a simple BPMN that models the following process:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Airline creates a flight</p>
+</li>
+<li>
+<p>While the flight is open for boarding:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>When a passenger order a ticket, create a task for security to approve/deny
+them</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>If approved, add the passenger to the flight</p>
+</li>
+<li>
+<p>Otherwise, do nothing</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Send the flight with the finalized passenger list to OptaPlanner</p>
+</li>
+<li>
+<p>Send the optimized seat assignments to the airline for final approval</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Go to the <a href="https://bpmn.new">Kogito BPMN Editor</a>,
+a free online editor for editing and creating BPMN files, no account required.
+You should be greeted with the following screen:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="BPMNNewFile.png" alt="BPMNNewFile">
+</div>
+</div>
+<div class="paragraph">
+<p>Click on the edit button next to <code>new-file.bpmn</code> and name it something more
+appropriate, like <code>flight-process</code>. Now click the "Properties" button
+on the right sidebar</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="BPMNProperties.png" alt="BPMNProperties">
+</div>
+</div>
+<div class="paragraph">
+<p>Replace the auto-generated name in the "Name" field with "Flight Process" and
+the auto-generated id in the "Id" field with "flightProcess". Enter "com.company"
+into the "Package" field.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="BPMNNameIdFields.png" alt="BPMNNameIdFields">
+</div>
+</div>
+<div class="paragraph">
+<p>Before proceeding, we need to know our business process&#8217; variables (that is,
+what data is processed by the business process). Expand the "Process Data"
+tab in the Properties Sidebar and click the "+" icon in the "Process Variable"
+table. In this case, we only have one process variable: the flight we are
+planning. Enter "flight" into the "Name" field, and in the "Type" field,
+select "Custom&#8230;&#8203;" and enter "com.company.Flight".</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="BPMNProcessVariables.png" alt="BPMNProcessVariables">
+</div>
+</div>
+<div class="paragraph">
+<p>Now we get to design the actual business process. Create a start node
+by clicking on the Green Circle in the toolbar on the left, and drag the
+"Start" row somewhere on the canvas.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="BPMNStartNode.png" alt="BPMNStartNode">
+</div>
+</div>
+<div class="paragraph">
+<p>Now we are going to create a User Task to finalize the passenger list.
+Click on the Rectangle in the toolbar on the left, then drag the
+"User Task" row next to the start node.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="BPMNCreateFinalizedPassengerListTask.png" alt="BPMNCreateFinalizedPassengerListTask">
+</div>
+</div>
+<div class="paragraph">
+<p>Click on the start node, then click on the solid arrow icon, then
+click on the newly created User Task to create a sequence flow
+from "Start" to "Task" (this tell the process that after it is
+started, to go to the "Task" node).</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="BPMNCreateSequenceFlow.png" alt="BPMNCreateSequenceFlow">
+</div>
+</div>
+<div class="paragraph">
+<p>Click on the "Task" node to open up its properties (if you closed
+the properties panel from earlier, you can open it up again by clicking on
+the properties icon). Rename the task to "Finalize Passenger List". Open
+its "Implementation/Execution" tab. Change the "Task Name" field to
+"finalizePassengerList"; this field will be used to determine the REST endpoint
+for this task.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="BPMNRenameFinalizePassengerList.png" alt="BPMNRenameFinalizePassengerList">
+</div>
+</div>
+<div class="paragraph">
+<p>Now we are going to model passengers ordering tickets for the flight.
+Create an Event-based subprocess by clicking on the Rectangle with an inner
+filled rectangle on the left toolbar, and drag the "Event" row above
+the start node and task.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="BPMNCreateEventBasedSubprocess.png" alt="BPMNCreateEventBasedSubprocess">
+</div>
+</div>
+<div class="paragraph">
+<p>If the Event-based subprocess is covering other nodes, you can move it by
+dragging the Event-based subprocess. Open the Event-based subprocess properties
+by clicking on it (opening the properties sidebar if necessary), and rename it
+to "Passenger Requests Ticket Subprocess". This subprocess can have its own
+variables, and also inherits the main process&#8217; variables. In this case, we
+need two additional variables:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The passenger who requested a ticket</p>
+</li>
+<li>
+<p>The response from security</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Expand the "Process Data" tab and create two new variables in the same manner
+you created the "flightProcess" variable:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>"passenger", of type "com.company.Passenger" (use Custom type)</p>
+</li>
+<li>
+<p>"isPassengerApprovedBySecurity", of type "Boolean" (use the type in the dropdown)</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="BPMNPassengerRequestsTicketSubprocessProperties.png" alt="BPMNPassengerRequestsTicketSubprocessProperties">
+</div>
+</div>
+<div class="paragraph">
+<p>Now we need to model the event of a passenger requesting a ticket. This can
+be modelled by a "Start Signal" event. Click the green circle on the left
+toolbar and drag the "Start Signal" row into
+"Passenger Requests Ticket Subprocess".</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="BPMNCreateStartSignal.png" alt="BPMNCreateStartSignal">
+</div>
+</div>
+<div class="paragraph">
+<p>Click on the "Start Signal" event you just created and open its properties.
+Rename the event to "Passenger Request Ticket". In the Implementation/Execution
+section, select "New&#8230;&#8203;" in the "Signal" field and enter "passengerRequestTicket".
+Finally, in the "Data Assignment" section, click on the Edit icon beneath
+"Assignments" to open a Task Data I/O modal. Click the "Add" button in the
+modal to add a new assignment. Put "passenger" for Name, select "Custom&#8230;&#8203;"
+and enter "com.company.Passenger" for Type, and select "passenger" for Target.
+Click save to add the assignment.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="BPMNStartSignalProperties.png" alt="BPMNStartSignalProperties">
+</div>
+</div>
+<div class="paragraph">
+<p>Now create a new User Task and drag it into the
+"Passenger Requests Ticket Subprocess". Rename it to "Approve Passenger for
+Flight". In its "Implementation/Execution" tab, change "Task Name"
+to "approvePassengerForFlight". Click on the edit icon beneath "Assignments"
+and add a row for both "Data Inputs and Assignments" and
+"Data Outputs and Assignments". For the "Data Inputs and Assignments"
+row, put "passenger" for Name, "com.company.Passenger" for Type and
+select "passenger" for source. For the "Data Outputs", put
+"isPassengerApprovedBySecurity" for Name, select "Boolean" for Type,
+and select "isPassengerApprovedBySecurity" for Target.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="BPMNApprovePassengerForFlightProperties.png" alt="BPMNApprovePassengerForFlightProperties">
+</div>
+</div>
+<div class="paragraph">
+<p>Now we need to model a decision being made in the process: should we add
+the passenger to the flight or not? We model decisions in the process
+with "Exclusive" Gateways. Click on the diamond in the left toolbar and
+drag the "Exclusive" row into "Passenger Requests Ticket Subprocess".</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="BPMNCreateExclusiveGateway.png" alt="BPMNCreateExclusiveGateway">
+</div>
+</div>
+<div class="paragraph">
+<p>The "Passenger Requests Ticket Subprocess" might be running out of space now,
+so drag the subprocess to a place that has more room and increase it size
+by dragging the dot on the bottom-right corner of the subprocess.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="BPMNMoveResizeSubprocess.png" alt="BPMNMoveResizeSubprocess">
+</div>
+</div>
+<div class="paragraph">
+<p>Now we need to create the two potential outcomes of the decision: either
+we end the process immediately or we add the passenger to the flight. We are
+going to model adding a passenger to the flight first. Create a "Service Task"
+by clicking the rectangle icon in the left toolbar and dragging the
+"Service Task" row into "Passenger Requests Ticket Subprocess".</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="BPMNCreateServiceTask.png" alt="BPMNCreateServiceTask">
+</div>
+</div>
+<div class="paragraph">
+<p>Rename the "Service Task" to "Add Passenger To Flight". In the
+"Implementation/Execution" section, put "com.company.FlightService"
+for "Interface", "addPassengerToFlight" for "Operation". And add the following
+two input assignments (in the same manner you did input assignments for
+"Approve Passenger for Flights"):</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Name: "flight", Type: "com.company.Flight", Source: "flight"</p>
+</li>
+<li>
+<p>Name: "passenger", Type: "com.company.Passenger", Source: "passenger"</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="BPMNAddPassengerToFlightProperties.png" alt="BPMNAddPassengerToFlightProperties">
+</div>
+</div>
+<div class="paragraph">
+<p>Now create two "End" nodes; one for the "Passenger is not approved" path
+and the other for the passenger is approved path. Click the red circle and
+drag the "End" row underneath the "Exclusive Gateway" and again under
+"Add Passenger To Flight".</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="BPMNCreateEndEvents.png" alt="BPMNCreateEndEvents">
+</div>
+</div>
+<div class="paragraph">
+<p>Now create the following sequence flows (click on the "From" node, then click
+the arrow, then click the "To" node):</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>From: "Approve Passenger To Flight", To: "Exclusive Gateway"</p>
+</li>
+<li>
+<p>From: "Exclusive Gateway", To: "First End"</p>
+</li>
+<li>
+<p>From: "Exclusive Gateway", To: "Add Passenger To Flight"</p>
+</li>
+<li>
+<p>From: "Add Passenger To Flight", To: "Second End"</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="BPMNConnectPassengerRequestsTicketSubprocess.png" alt="BPMNConnectPassengerRequestsTicketSubprocess">
+</div>
+</div>
+<div class="paragraph">
+<p>Click on the arrow from "Exclusive Gateway" to "Add Passenger To Flight".
+In its "Implementation/Execution" section, put in the following code in the "Expression"
+text box:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">return isPassengerApprovedBySecurity;</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="BPMNPassengerApprovedPath.png" alt="BPMNPassengerApprovedPath">
+</div>
+</div>
+<div class="paragraph">
+<p>Now click on the arrow from "Exclusive Gateway" to "First End". In its
+"Implementation/Execution" section, put in the following code in the "Expression"
+text box:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">return !isPassengerApprovedBySecurity;</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="BPMNPassengerNotApprovedPath.png" alt="BPMNPassengerNotApprovedPath">
+</div>
+</div>
+<div class="paragraph">
+<p>We are now done with the "Passenger Requests Ticket Subprocess". Since we
+can add passengers to our flight, it is now time to integrate OptaPlanner into
+our BPMN. Create a new "Service Task" in the main process (<strong>not</strong> in
+"Passenger Requests Ticket Subprocess") and create a sequence flow
+from "Finalize Passenger List" to it. Rename it to "Create Seat Assignments", and
+in the "Implementation/Execution" section, put "com.company.FlightService"
+for "Interface", "createSeatAssignments" for "Operation". Add the following
+input and output assignments:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Input:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Name: "flight", Type: "com.company.Flight", Source: "flight"</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Output:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Name: "flight", Type: "com.company.Flight", Target: "flight"</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>(Yes, both input and output have the same values for their respective columns;
+this is not an error)</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="BPMNCreateSeatAssignments.png" alt="BPMNCreateSeatAssignments">
+</div>
+</div>
+<div class="paragraph">
+<p>We are almost finished with the BPMN. Create an "End" node in the main process
+and create a sequence flow from "Create Seat Assignments" to it. Here is the
+final BPMN diagram:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="FinalBPMN.png" alt="FinalBPMN">
+</div>
+</div>
+<div class="paragraph">
+<p>Click on the "Download" button at the top right of the page to download the
+BPMN diagram. Create the directories "src/main/resources/com/company" and
+move the downloaded file there.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_creating_the_java_interfaces">Creating the Java Interfaces</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In our BPMN, we referenced Java classes and services we still need to create.
+In particular:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>We referenced <code>com.company.Flight</code> which is used when creating, modifying
+and getting the seat assignments of a flight.</p>
+</li>
+<li>
+<p>We referenced <code>com.company.Passenger</code> which is used when we add a passenger
+to a flight.</p>
+</li>
+<li>
+<p>We referenced the operation <code>addPassengerToFlight</code> of
+<code>com.company.FlightService</code> when we add a passenger to the flight.</p>
+</li>
+<li>
+<p>We referenced the operation <code>createSeatAssignments</code> of
+<code>com.company.FlightService</code> when we create the seat assignments.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>We&#8217;ll be using the following domain model for our classes:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="flightSeatAssignmentClassDiagram.png" alt="flightSeatAssignmentClassDiagram">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A seat has a seat identifier (ex: "3A") and what type it is.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class Seat {
+    @PlanningId
+    public String seatIdentifier;
+    public Type type;
+
+    public enum Type {
+        WINDOW, AISLE, OTHER
+    }
+}</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A Passenger has a name and a preferred seat type (Window, Aisle, etc.) and
+is assigned a seat on the flight.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@PlanningEntity
+public class Passenger {
+    @PlanningId
+    public String name;
+
+    @PlanningVariable(valueRangeProviderRefs = "seatRange")
+    public Seat seat;
+
+    public Seat.Type preferredSeatType;
+}</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A Flight has an id, a list of passengers on the flight, and the number
+of rows of columns on the plane.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@PlanningSolution
+public class Flight {
+
+    public String id;
+
+    @PlanningScore
+    public HardSoftScore score;
+
+    @PlanningEntityCollectionProperty
+    public List&lt;Passenger&gt; passengerList;
+
+    public int rowCount;
+    public int columnCount;
+
+    @ValueRangeProvider(id = "seatRange")
+    private List&lt;Seat&gt; calculateSeatList() {
+        List&lt;Seat&gt; out = new ArrayList&lt;&gt;(rowCount * columnCount);
+        final int MIDDLE_OF_ROW = columnCount / 2;
+        for (int column = 0; column &lt; columnCount; column++) {
+            for (int row = 0; row &lt; rowCount; row++) {
+                Seat seat = new Seat();
+                // 'A' + n = nth letter of the alphabet
+                seat.seatIdentifier = (row + 1) + String.valueOf((char)('A' + column));
+                seat.type = (column == 0 || column == columnCount - 1)? Seat.Type.WINDOW :
+                    (column == MIDDLE_OF_ROW || column == MIDDLE_OF_ROW + 1)? Seat.Type.AISLE :
+                        Seat.Type.OTHER;
+                out.add(seat);
+            }
+        }
+        return out;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now that we have our domain model, we can create our services. For the
+<code>addPassengerToFlight</code> service, we can simply add the passenger to the
+flight&#8217;s passenger list. For the <code>createSeatAssignments</code> service,
+we can use <code>SolverManager</code> to create a <code>Solver</code> for us and wait for the
+final best solution.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@ApplicationScoped
+public class FlightService {
+    @Inject
+    SolverManager&lt;Flight, String&gt; solverManager;
+
+    public void addPassengerToFlight(Flight flight, Passenger passenger) {
+        flight.passengerList.add(passenger);
+    }
+
+    public Flight createSeatAssignments(Flight flight) {
+        try {
+            return solverManager.solve(flight.id, flight).getFinalBestSolution();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Finally, we need to modify <code>application.properties</code> so the <code>Solver</code> know
+when to terminate. Modify your <code>application.properties</code> to look like the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties"># The solver runs only for 5 seconds to avoid a HTTP timeout in this simple implementation.
+# It's recommended to run for at least 5 minutes ("5m") otherwise.
+quarkus.optaplanner.solver.termination.spent-limit=5s</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_creating_the_constraints">Creating the Constraints</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We can use the Constraint Stream API to create the constraints of our
+application in Java. We&#8217;ll have two constraints:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>No two passengers can be in the same seat.</p>
+</li>
+<li>
+<p>Maximize the number of passengers who get seats they prefer.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To do this, we create a <code>ConstraintProvider</code> that implements these constraints:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class FlightSeatingConstraintProvider implements ConstraintProvider {
+
+    @Override
+    public Constraint[] defineConstraints(ConstraintFactory constraintFactory) {
+        return new Constraint[] {
+            onlyOnePassengerPerSeat(constraintFactory),
+            seatTypePreference(constraintFactory)
+        };
+    }
+
+    private Constraint onlyOnePassengerPerSeat(ConstraintFactory constraintFactory) {
+        return constraintFactory.fromUniquePair(Passenger.class, Joiners.equal(p -&gt; p.seat))
+                   .penalize("Only one passenger per seat", HardSoftScore.ONE_HARD);
+    }
+
+    private Constraint seatTypePreference(ConstraintFactory constraintFactory) {
+        return constraintFactory.from(Passenger.class)
+                   .join(Seat.class, Joiners.equal(p -&gt; p.seat, s -&gt; s))
+                   .filter((p,s) -&gt; p.preferredSeatType != null &amp;&amp; p.preferredSeatType != s.type)
+                   .penalize("Seat type preference", HardSoftScore.ONE_SOFT);
+    }
+
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_testing_the_flight_application">Testing the Flight Application</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Now we are ready to test out the Flight Application we just created!
+Run the following command in the terminal to start the server:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">./mvnw quarkus:dev</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can see the generated API methods by copying
+<a href="http://localhost:8080/openapi" class="bare">http://localhost:8080/openapi</a> to <a href="https://editor.swagger.io">The Swagger Editor</a>.
+Let&#8217;s try creating a flight. Run the following command :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">curl -X POST "localhost:8080/flightProcess" -H  "accept: application/json" -H  "Content-Type: application/json" -d "{\"flight\":{\"id\":\"string\",\"passengerList\":[],\"rowCount\":4,\"columnCount\":4}}"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You should get a response that looks like the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+  "id":"${id}",
+  "flight":{
+    "id":"string",
+    "score":null,
+    "passengerList":[],
+    "rowCount":4,
+    "columnCount":4
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Let add a few passengers to our flight (replace ${id} with the id you got from
+the previous command).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">curl -X POST "localhost:8080/flightProcess/${id}/passengerRequestTicket" -H  "accept: application/json" -H  "Content-Type: application/json" -d "{\"name\":\"Amy Cole\",\"preferredSeatType\":\"WINDOW\"}"
+curl -X POST "localhost:8080/flightProcess/${id}/passengerRequestTicket" -H  "accept: application/json" -H  "Content-Type: application/json" -d "{\"name\":\"John Smith\",\"preferredSeatType\":\"AISLE\"}"
+curl -X POST "localhost:8080/flightProcess/${id}/passengerRequestTicket" -H  "accept: application/json" -H  "Content-Type: application/json" -d "{\"name\":\"Bad Guy\"}"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now let look at our tasks:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">curl -X GET "localhost:8080/flightProcess/${id}/tasks" -H  "accept: application/json"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You should get a response that look like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+  "b484124e-e015-488a-8ee2-4643199a32c5":"approvePassengerForFlight",
+  "8d7710d5-e67c-4b3d-bcbb-5e545373560a":"approvePassengerForFlight",
+  "c27c6e51-7599-4ab3-879c-105c5e27190d":"approvePassengerForFlight",
+  "dd8d9039-9375-4040-96da-89926ce16f93":"finalizePassengerList"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Let looks at one of our passengers (replace ${taskId} with the id of the "approvePassengerForFlight" you want to inspect):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs"> curl -X GET "localhost:8080/flightProcess/${id}/approvePassengerForFlight/${taskId}" -H  "accept: application/json"</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+  "passenger":{
+    "name":"John Smith",
+    "seat":null,
+    "preferredSeatType":"AISLE"
+  },
+  "name":"approvePassengerForFlight",
+  "id":"b484124e-e015-488a-8ee2-4643199a32c5"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Let approve "Amy Cole" and "John Smith":</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">curl -X POST "localhost:8080/flightProcess/${id}/approvePassengerForFlight/${taskId}" -H  "accept: application/json" -H  "Content-Type: application/json" -d "{\"isPassengerApprovedBySecurity\":true}"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>(run the command twice; one for the "approvePassengerForFlight" task for Amy Cole,
+and one for the "approvePassengerForFlight" task for John Smith).</p>
+</div>
+<div class="paragraph">
+<p>And let deny "Bad Guy":</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">curl -X POST "localhost:8080/flightProcess/${id}/approvePassengerForFlight/${taskId}" -H  "accept: application/json" -H  "Content-Type: application/json" -d "{\"isPassengerApprovedBySecurity\":false}"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>(replace ${taskId} with Bad Guy&#8217;s "approvePassengerForFlight" task id)</p>
+</div>
+<div class="paragraph">
+<p>Finally, let create the seat assignments:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">curl -X POST "localhost:8080/flightProcess/${id}/finalizePassengerList/${taskId}" -H  "accept: application/json" -H  "Content-Type: application/json" -d "{}"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>(Use "finalizePassengerList" task&#8217;s id here)</p>
+</div>
+<div class="paragraph">
+<p>This request will take several seconds to return as it waits for OptaPlanner
+to optimize the flight seating. It will return a JSON containing the process
+variables, including the optimized seat assignments in the "flight" field:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+  "id":"61210009-8f75-4bf7-9221-d5c92d7d1be3",
+  "flight":{
+    "id":"string",
+    "score":{
+      "initScore":0,
+      "hardScore":0,
+      "softScore":0,
+      "feasible":true,
+      "solutionInitialized":true
+    },
+    "passengerList":[
+      {
+        "name":"Amy Cole",
+        "seat":{"seatIdentifier":"1A","type":"WINDOW"},
+        "preferredSeatType":"WINDOW"
+      },
+      {
+        "name":"John Smith",
+        "seat":{"seatIdentifier":"1B","type":"AISLE"},
+        "preferredSeatType":"AISLE"
+      }
+    ],
+    "rowCount":4,
+    "columnCount":4
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the above example, "Amy Cole" is assigned to seat "1A" and
+"John Smith" is assigned to seat "1B".</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_what_next">What Next?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Now we have a fully functional REST service, we can easily extend it by:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Creating a UI frontend to the service</p>
+</li>
+<li>
+<p>Signaling the BPMN process when OptaPlanner is finished solving instead of
+waiting for solving to finish, and poll the latest solutions client-side</p>
+</li>
+<li>
+<p>Send Kafka messages whenever OptaPlanner finds a new solution and consume
+them in the BPMN process</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You can find an extended version of the flight example created in this blog
+at <a href="https://github.com/kiegroup/kogito-examples/tree/main/process-optaplanner-quarkus">the Kogito Examples repository</a>,
+which has a full UI and poll for the latest solution from the solver instead of
+waiting for solving to finish.</p>
+</div>
+</div>
+</div>        </div>
+        <hr class="mb-1"/>
+        <div class="mb-4">
+            <div class="float-end">
+                <a href="https://www.optaplanner.org/blog/2020/05/05/WorkflowProcessesWithAIScheduling.html"><span class="badge bg-dark">Permalink</span></a>
+            </div>
+            <div class="tags">
+                <i class="fas fa-tag"></i>&nbsp;tagged as
+                    <a href="../../../../blog/tags/use%20case.html"><span class="badge bg-info">use case</span></a>
+                    <a href="../../../../blog/tags/quarkus.html"><span class="badge bg-info">quarkus</span></a>
+            </div>
+        </div>
+    </div>
+    <div class="comments">
+        <h2>Comments</h2>
+        <a class="btn btn-secondary mb-4" href="https://groups.google.com/g/optaplanner-dev">Visit our forum to comment</a>
+    </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-2 mb-4">
+                <div class="text-center">
+                    <a href="../../../../blog/news.atom">
+                        <img class="me-1" alt="Atom" src="../../../../headerFooter/atomFeedIcon.png">News feed
+                    </a>
+                    <div class="small">
+                        <span>Don’t want to miss a single blog post?</span>
+                        <br>
+                        <span>Follow us on</span>
+                    </div>
+                    <ul class="list-inline mb-2">
+                        <li class="list-inline-item"><a href="https://twitter.com/OptaPlanner" target="_blank" title="News stream via Twitter"><img alt="T" src="../../../../headerFooter/twitterLogo.png"></a></li>
+                        <li class="list-inline-item"><a href="https://www.linkedin.com/showcase/optaplanner" target="_blank" title="News stream via LinkedIn"><img alt="L" src="../../../../headerFooter/linkedInLogo.png"></a></li>
+                        <li class="list-inline-item"><a href="https://www.facebook.com/OptaPlanner" target="_blank" title="News stream via Facebook"><img alt="F" src="../../../../headerFooter/facebookLogo.png"></a></li>
+                    </ul>
+                    <a href="../../../../blog/index.html">Blog archive</a>
+                </div>
+            </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest release</div>
+        <div class="card-body">
+            <ul class="list-unstyled mb-0">
+                <li>
+                    <div class="title">
+                        <a href="../../../../download/releaseNotes/releaseNotes8.html">
+                            8.25.0.Final released
+                        </a>
+                    </div>
+                    <div class="small">
+                        Tue 26 July 2022
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Upcoming events</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <div class="title">
+                                    <a href="https://devoxx.be">Devoxx Belgium</a>
+                            </div>
+                            <span>
+                                Antwerp, Belgium - Mon 10 October 2022
+                            </span>
+                        </li>
+                <div class="small float-end">
+                    <a href="https://github.com/kiegroup/optaplanner-website/blob/main/optaplanner-website-root/data/events.yml">Add event</a>
+                    /
+                    <a href="../../../../community/eventsArchive.html">Archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest blog posts</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2022/06/09/RunOptaPlannerWorkloadOnOpenShift.html">Run OptaPlanner workloads on OpenShift, part I.</a>
+                        </div>
+                        <div class="small">Thu 9 June 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2022/05/26/optaplanner-deprecates-score-drl.html">OptaPlanner deprecates score DRL</a>
+                        </div>
+                        <div class="small">Thu 26 May 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/c950743f532471ac34022e92193563c3?s=20&d=mm"/>
+        <span class="align-middle">Lukáš Petrovický</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2022/03/07/Real-time+planning+meets+the+SolverManager.html">Real-time planning meets SolverManager</a>
+                        </div>
+                        <div class="small">Mon 7 March 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2021/10/26/DocsTurnOverANewLeaf.html">OptaPlanner documentation turns over a new leaf</a>
+                        </div>
+                        <div class="small">Tue 26 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2021/10/14/OrderPickingQuickstart.html">Order picking optimization in warehouses and supermarkets with OptaPlanner</a>
+                        </div>
+                        <div class="small">Thu 14 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/4a8c787544c0b40bc033f631dc2256c2?s=20&d=mm"/>
+        <span class="align-middle">Walter Medvedeo</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2021/10/12/MonitorTheSolver.html">Monitor OptaPlanner solvers through Micrometer</a>
+                        </div>
+                        <div class="small">Tue 12 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/16f228a9f340e2a2ca5b42485a17bc3d?s=20&d=mm"/>
+        <span class="align-middle">Christopher Chianelli</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2021/10/05/ANewAIConstraintSolverForPythonOptaPy.html">A new AI constraint solver for Python: OptaPy</a>
+                        </div>
+                        <div class="small">Tue 5 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/16f228a9f340e2a2ca5b42485a17bc3d?s=20&d=mm"/>
+        <span class="align-middle">Christopher Chianelli</span>
+    </span>
+                    </li>
+                <div class="small float-end">
+                    <a href="../../../../blog/index.html">Blog archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest videos</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="kFoaf696VpA" data-video-title="Host your OptaPlanner app on OpenShift (Kubernetes)">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Host your OptaPlanner app on OpenShift (Kubernetes)</span>
+                        </a>
+                        <div class="small">Mon 7 February 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="bIvt9z-zVHo" data-video-title="OptaPlanner - A fast, easy-to-use, open source AI constraint solver for software developers">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">OptaPlanner - A fast, easy-to-use, open source AI constraint solver for software developers</span>
+                        </a>
+                        <div class="small">Mon 31 January 2022</div>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="784Au4PjTzg" data-video-title="Order picking planning with OptaPlanner">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Order picking planning with OptaPlanner</span>
+                        </a>
+                        <div class="small">Fri 31 December 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/54cd5de3bdaf21a942e8d9d5fe95f647?s=20&d=mm"/>
+        <span class="align-middle">Anna Dupliak</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="HVDPxebpSvg" data-video-title="AI lesson scheduling on Quarkus with OptaPlanner">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">AI lesson scheduling on Quarkus with OptaPlanner</span>
+                        </a>
+                        <div class="small">Thu 18 November 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="dqTrjkVxoPI" data-video-title="Maintenance scheduling">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Maintenance scheduling</span>
+                        </a>
+                        <div class="small">Fri 12 November 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="-RSZbMT_alo" data-video-title="Optimized order picking in warehouses and supermarkets">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Optimized order picking in warehouses and supermarkets</span>
+                        </a>
+                        <div class="small">Tue 26 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/4a8c787544c0b40bc033f631dc2256c2?s=20&d=mm"/>
+        <span class="align-middle">Walter Medvedeo</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="-7ips_GMFmo" data-video-title="A modern OO/FP constraint solver">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">A modern OO/FP constraint solver</span>
+                        </a>
+                        <div class="small">Tue 14 September 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                <div class="small float-end">
+                    <a href="https://www.youtube.com/channel/UCcpkOKpujFlM67D2h0RdaeQ">Video archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+        </div>
+    </div>
+        </div>
+    </div>
+<footer class="py-4 bg-black text-white-50">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <p class="small">OptaPlanner is open.
+                    All dependencies of this project are available under the
+                    <a class="link-light" href="../../../../code/license.html">Apache Software License 2.0</a>
+                    or a compatible license.
+                    OptaPlanner is <a class="link-light" href="../../../../community/branding.html">trademarked</a>.
+                </p>
+                <p class="small">
+                    This <a class="link-light" href="../../../../website/websiteInfo.html">website</a>
+                    was built with <a class="link-light" href="https://jbake.org">JBake</a> and is open source.
+                </p>
+            </div>
+            <div class="col-md-4">
+                <h4>Community</h4>
+                <ul class="ps-2 list-unstyled">
+                    <li><a class="link-light" href="../../../../blog/">Blog</a></li>
+                    <li><a class="link-light" href="../../../../community/getHelp.html">Get Help</a></li>
+                    <li><a class="link-light" href="../../../../community/team.html">Team</a></li>
+                    <li><a class="link-light" href="../../../../community/governance.html">Governance</a></li>
+                    <li><a class="link-light" href="../../../../community/research.html">Academic research</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h4>Code</h4>
+                <ul class="ps-2 list-unstyled">
+                    <li><a class="link-light" href="../../../../code/sourceCode.html">Build from source</a></li>
+                    <li><a class="link-light" href="https://issues.redhat.com/projects/PLANNER">Issue tracker</a></li>
+                    <li><a class="link-light" href="../../../../download/releaseNotes/">Release notes</a></li>
+                    <li><a class="link-light" href="../../../../download/upgradeRecipe/">Upgrade recipes</a></li>
+                    <li><a class="link-light" href="../../../../community/branding.html">Logo and branding</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="d-flex justify-content-evenly align-items-center">
+            <div>
+                <i class="fab fa-creative-commons"></i><i class="fab fa-creative-commons-by"></i>
+                <a class="link-light link-underlined" href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC by 3.0</a> |
+                <a class="link-light link-underlined" href="https://www.redhat.com/en/about/privacy-policy">Privacy Policy</a>
+            </div>
+            <div>
+                <span class="me-2 text-white">Sponsored by</span>
+                <a href="https://www.redhat.com/" target="_blank"><img style="width: 6rem" src="https://www.redhat.com/profiles/rh/themes/redhatdotcom/img/logo.svg" alt="Red Hat"></a>
+            </div>
+        </div>
+    </div>
+</footer>
+    <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="ratio ratio-16x9" id="player-container">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"
+            integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/highlight.min.js"
+            integrity="sha256-mfS2sXKEV8eehy39UH7+7BwaoUaIe2TuLO2DXS+c2mI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/asciidoc.min.js"
+            integrity="sha256-gnB2LPAmHPkrj3czfog5GdIu4aByzcKeTUzC2agNMzM=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/properties.min.js"
+            integrity="sha256-1XSLaVD2dn/eCICDUx1DYprsC4UAEa4weDLYY/458wU=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/gradle.min.js"
+            integrity="sha256-B5HtfGpeJKLSEsoqtAdi6sSJ05K49CTGHZbrBiJ9CwE=" crossorigin="anonymous"></script>
+    <script src="../../../../website/optaplannerWebsite.js"></script>
+    <script>
+        // Ruby syntax highlighting works pretty well for DRL source code.
+        hljs.registerAliases(["drl"], { languageName: "ruby"});
+        hljs.highlightAll();
+    </script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script type="text/javascript">
+      if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+        _satellite.pageBottom();
+      }
+    </script>
+</body>
+</html>
+
+

@@ -1,0 +1,1026 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script id="dpal" src="https://www.redhat.com/dtm.js" type="text/javascript"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-39485370-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-39485370-1');
+    </script>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>OptaPlanner - How to migrate OptaPlanner score DRL to Constraint Streams</title>
+    <meta content="Upgrade your OptaPlanner scoreDRL constraints to the faster constraint streams constraints today." name="description">
+    <meta content="metaheuristic, heuristic, constraint satisfaction, constraint programming, operations research, NP-complete, NP-hard, optimization, planning, scheduling, java, open source, software, library, solver, tabu search, simulated annealing, pareto" name="keywords">
+    <link href="https://www.optaplanner.org/learn/drl-to-constraint-streams-migration.html" rel="canonical">
+
+    <meta content="How to migrate OptaPlanner score DRL to Constraint Streams" property="og:title">
+    <meta content="Upgrade your OptaPlanner scoreDRL constraints to the faster constraint streams constraints today." property="og:description">
+    <meta content="https://www.optaplanner.org/learn/drl-to-constraint-streams-migration.html" property="og:url">
+    <meta content="OptaPlanner" property="og:site_name">
+    <meta content="website" property="og:type">
+    <meta content="https://www.optaplanner.org/headerFooter/optaPlannerIcon.png" property="og:image">
+    <meta content="summary" name="twitter:card">
+    <meta content="@OptaPlanner" name="twitter:site">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+          integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css"
+          integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/styles/default.min.css"
+          integrity="sha256-CGf39SzxAmEe09Ojoh16/2xTRNleX9wBZcEXVnNqwSM=" crossorigin="anonymous">
+    <link rel="stylesheet" href="../website/optaplannerWebsite.css">
+    <link href="../favicon.ico" rel="shortcut icon">
+</head>
+
+<body>
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light border-bottom shadow">
+    <div class="container">
+        <a class="navbar-brand" href="../">
+            <img alt="OptaPlanner logo" src="../headerFooter/optaPlannerLogo200px.png">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="../download/download.html">Download</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarLearn" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Learn
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarLearn">
+                        <li><a class="dropdown-item" href="../learn/documentation.html">Documentation</a></li>
+                        <li><a class="dropdown-item" href="../learn/video.html">Videos</a></li>
+                        <li><a class="dropdown-item" href="../learn/slides.html">Slides</a></li>
+                        <li><a class="dropdown-item" href="../learn/training.html">Training</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="../learn/useCases/index.html">Use cases</a></li>
+                        <li><a class="dropdown-item" href="../compatibility/index.html">Compatibility</a></li>
+                        <li><a class="dropdown-item" href="../learn/testimonialsAndCaseStudies.html">Testimonials and case studies</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="../community/getHelp.html">Get help</a></li>
+                <li class="nav-item"><a class="nav-link" href="../blog/">Blog</a></li>
+                <li class="nav-item"><a class="nav-link" href="../code/sourceCode.html">Source</a></li>
+                <li class="nav-item"><a class="nav-link" href="../community/team.html">Team</a></li>
+                <li class="nav-item"><a class="nav-link" href="../product/services.html">Services</a></li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="p-2"><a aria-label="Star OptaPlanner on GitHub" class="github-button" data-show-count="true" href="https://github.com/kiegroup/optaplanner">Star</a></li>
+                <li class="p-1"><a href="https://twitter.com/OptaPlanner" target="_blank" title="Follow OptaPlanner on Twitter"><img alt="T" src="../headerFooter/twitterLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.linkedin.com/showcase/optaplanner" target="_blank" title="Follow OptaPlanner on LinkedIn"><img alt="L" src="../headerFooter/linkedInLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.facebook.com/OptaPlanner" target="_blank" title="Follow OptaPlanner on Facebook"><img alt="F" src="../headerFooter/facebookLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.youtube.com/channel/UCcpkOKpujFlM67D2h0RdaeQ" target="_blank" title="OptaPlanner YouTube channel"><img alt="YT" src="../headerFooter/youtubeLogo.png" style="height: 16px"></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="body-without-header-footer">
+        <div class="forkMeOnGithub">
+            <a href="https://github.com/kiegroup/optaplanner">
+                <img alt="Fork me on GitHub" src="../headerFooter/forkMeOnGithub.png">
+            </a>
+        </div>
+        <div class="container py-4">
+    <div class="row">
+        <div class="col-md-9">
+<h1>How to migrate OptaPlanner score DRL to Constraint Streams</h1>
+<div id="toc" class="toc">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_introduction">Introduction</a>
+<ul class="sectlevel2">
+<li><a href="#_what_does_deprecating_score_drl_mean">What does deprecating score DRL mean?</a></li>
+<li><a href="#_benefits_of_constraint_streams">Benefits of Constraint Streams</a></li>
+<li><a href="#_limits_of_this_guide">Limits of this guide</a></li>
+</ul>
+</li>
+<li><a href="#_create_and_configure_a_constraintprovider_class">Create and configure a <code>ConstraintProvider</code> class</a>
+<ul class="sectlevel2">
+<li><a href="#_solver_configuration">Solver configuration</a></li>
+</ul>
+</li>
+<li><a href="#_migrating_trivial_constraints">Migrating trivial constraints</a>
+<ul class="sectlevel2">
+<li><a href="#_applying_rewards_instead_of_penalties">Applying rewards instead of penalties</a></li>
+<li><a href="#_applying_different_penalty_types">Applying different penalty types</a></li>
+<li><a href="#_applying_configurable_constraint_weights">Applying configurable constraint weights</a></li>
+</ul>
+</li>
+<li><a href="#_migrating_constraints_with_filters">Migrating constraints with filters</a>
+<ul class="sectlevel2">
+<li><a href="#_migrating_eval">Migrating <code>eval(&#8230;&#8203;)</code></a></li>
+</ul>
+</li>
+<li><a href="#_migrating_constraints_with_joins">Migrating constraints with joins</a>
+<ul class="sectlevel2">
+<li><a href="#_applying_filters_while_joining">Applying filters while joining</a></li>
+<li><a href="#_migrating_large_joins">Migrating large joins</a></li>
+</ul>
+</li>
+<li><a href="#_migrating_exists_and_not">Migrating <code>exists</code> and <code>not</code></a></li>
+<li><a href="#_migrating_accumulate">Migrating <code>accumulate</code></a></li>
+<li><a href="#_more_resources">More resources</a></li>
+</ul>
+</div>
+<div class="sect1">
+<h2 id="_introduction">Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>For a couple of years now, the <a href="https://www.optaplanner.org/docs/optaplanner/latest/constraint-streams/constraint-streams.html">Constraint Streams API</a> (CS) has been fully featured and widely adopted.
+It can handle any use case written in score DRL. It&#8217;s also faster and <a href="https://www.optaplanner.org/blog/2020/04/07/ConstraintStreams.html">easier to use</a>.
+Therefore, the scoreDRL API is now deprecated.</p>
+</div>
+<div class="sect2">
+<h3 id="_what_does_deprecating_score_drl_mean">What does deprecating score DRL mean?</h3>
+<div class="paragraph">
+<p>OptaPlanner 8 users can continue using score DRL because we will maintain score DRL support for the lifetime of OptaPlanner 8.
+However, if you use score DRL, start planning your migration from score DRL to some other scoring mechanism, preferably CS.
+Migration to CS is simple. Review the real-world examples of constraints found in <a href="https://www.optaplanner.org/docs/optaplanner/latest/use-cases-and-examples/examples-overview/examples-overview.html">OptaPlanner Examples</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_benefits_of_constraint_streams">Benefits of Constraint Streams</h3>
+<div class="paragraph">
+<p>CS is a modern full-featured API for writing OptaPlanner constraints, offering several benefits over score DRL:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Developers do not need to learn any new language. CS is plain Java.</p>
+</li>
+<li>
+<p>CS provides full IDE support including syntax highlighting and refactoring.</p>
+</li>
+<li>
+<p>CS provides comprehensive support for unit testing.</p>
+</li>
+<li>
+<p>In most use cases, CS performs considerably faster than score DRL.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_limits_of_this_guide">Limits of this guide</h3>
+<div class="paragraph">
+<p>CS and DRL are very similar in their approach and in fact both use Drools to execute the constraint logic.
+Because of this, migrating many parts of score DRL to CS is straight-forward, even mechanical.
+However, this guide does not help you if your score DRL uses the following constructs, because there is no direct mapping between DRL and CS in these cases:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The DRL <code>insertLogical()</code> attribute allows information to be transferred between rules.
+This is not possible in CS, where each constraint is isolated and stands on its own.</p>
+</li>
+<li>
+<p>The DRL right-hand side allows for arbitrary Java code execution that goes far beyond calculating the match weight.
+This anti-pattern is not possible in CS, where each constraint can only result in either a score reward or a penalty.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If you are using either of these constructs, we recommend that you first refactor them out of your DRL and then check back with this migration guide.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_and_configure_a_constraintprovider_class">Create and configure a <code>ConstraintProvider</code> class</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In score DRL, all your constraints are typically written in a single text file, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-drl hljs" data-lang="drl">package org.optaplanner.examples.vehiclerouting.optional.score;
+    dialect "java"
+
+import ...;
+
+global HardSoftLongScoreHolder scoreHolder;
+
+rule "vehicleCapacity"
+    when
+        ...
+    then
+        ...
+end
+
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this file, each rule represents one or more constraints.
+In CS, the DRL file is replaced by a standard Java source code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.optaplanner.examples.vehiclerouting.score;
+
+import ...;
+
+public class VehicleRoutingConstraintProvider implements ConstraintProvider {
+
+    @Override
+    public Constraint[] defineConstraints(ConstraintFactory factory) {
+        return new Constraint[] {
+                vehicleCapacity(factory),
+                ...
+        };
+    }
+
+    protected Constraint vehicleCapacity(ConstraintFactory factory) {
+        ...
+    }
+
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The method <code>defineConstraints(&#8230;&#8203;)</code>, a single method on the <code>ConstraintProvider</code>, lists all your constraints.
+Each constraint is then typically represented by a method.</p>
+</div>
+<div class="sect2">
+<h3 id="_solver_configuration">Solver configuration</h3>
+<div class="paragraph">
+<p>Quarkus and Spring users most likely do not need to worry about solver configuration.
+Just remove the score DRL and create a <code>ConstraintProvider</code> implementation.</p>
+</div>
+<div class="paragraph">
+<p>In solver configuration XML however, score DRL is configured by pointing the solver to the DRL file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;solver&gt;
+
+  ...
+
+  &lt;scoreDirectorFactory&gt;
+    &lt;scoreDrl&gt;org/optaplanner/examples/vehiclerouting/optional/score/vehicleRoutingConstraints.drl&lt;/scoreDrl&gt;
+  &lt;/scoreDirectorFactory&gt;
+
+  ...
+
+&lt;/solver&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Constraint Streams are selected by pointing the solver to an implementation of the <code>ConstraintProvider</code> interface:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;solver&gt;
+
+  ...
+
+  &lt;scoreDirectorFactory&gt;
+    &lt;constraintProviderClass&gt;org.optaplanner.examples.vehiclerouting.score.VehicleRoutingConstraintProvider&lt;/constraintProviderClass&gt;
+  &lt;/scoreDirectorFactory&gt;
+
+  ...
+
+&lt;/solver&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_migrating_trivial_constraints">Migrating trivial constraints</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Many constraints follow a simple pattern of picking an entity and immediately penalizing it.
+One such case can be found in the Vehicle Routing example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-drl hljs" data-lang="drl">rule "distanceToPreviousStandstill"
+    when
+        Customer(previousStandstill != null, $distanceFromPreviousStandstill : distanceFromPreviousStandstill)
+    then
+        scoreHolder.addSoftConstraintMatch(kcontext, - $distanceFromPreviousStandstill);
+end</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here, each initialized <code>Customer</code> instance incurs a soft penalty equivalent to the value of its <code>distanceFromPreviousStandstill</code> field. Here&#8217;s how the same result is achieved in CS:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Constraint distanceToPreviousStandstill(ConstraintFactory factory) {
+    return factory.forEach(Customer.class)
+        .penalizeLong("distanceToPreviousStandstill",
+            HardSoftLongScore.ONE_SOFT,
+            customer -&gt; customer.getDistanceFromPreviousStandstill());
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>forEach(Customer.class)</code> serves the same purpose as <code>Customer(&#8230;&#8203;)</code> in DRL.</p>
+</li>
+<li>
+<p>There is no need to check if a planning variable is initialized (<code>previousStandstill != null</code>), because <code>forEach(&#8230;&#8203;)</code> does it automatically.
+If this behavior is not what you want, use <code>forEachIncludingNullVars(&#8230;&#8203;)</code> instead.</p>
+</li>
+<li>
+<p>The right-hand side of the rule (the part after <code>then</code>) is replaced by a call to <code>penalizeLong(&#8230;&#8203;)</code>.
+The size of the penalty is now determined by the constraint weight (<code>HardSoftLongScore.ONE_SOFT</code>)
+and match weight (the call to a getter on <code>Customer</code>).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The match weight is a key difference between DRL and CS.
+In DRL, each rule adds a constraint match together with a total penalty.
+In CS, each constraint applies a reward or a penalty based on several factors:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A penalty or reward. A penalty has a negative impact on the score, while a reward impacts the score positively.</p>
+</li>
+<li>
+<p>A constant constraint weight, such as <code>HardSoftScore.ONE_SOFT</code>, <code>HardMediumSoftScore.ONE_HARD</code>. Constraint weights can be either fixed or configurable.</p>
+</li>
+<li>
+<p>A dynamic match weight. This applies to any individual match and is typically specified by a lambda (for example <code>customer -&gt; customer.getDistanceFromPreviousStandstill()</code>). If not specified, it defaults to <code>1</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The impact of each constraint match is calculated using the following formula:</p>
+</div>
+<div class="paragraph">
+<p><code>(isReward ? 1 : -1) * (constraint weight) * (match weight)</code></p>
+</div>
+<div class="sect2">
+<h3 id="_applying_rewards_instead_of_penalties">Applying rewards instead of penalties</h3>
+<div class="paragraph">
+<p>In the example above, score DRL applies a penalty by adding a negative constraint match, for example:</p>
+</div>
+<div class="paragraph">
+<p><code>scoreHolder.addSoftConstraintMatch(kcontext, - $distanceFromPreviousStandstill)</code>.</p>
+</div>
+<div class="paragraph">
+<p>CS makes this more explicit by using the keyword <code>penalize</code> instead of <code>add&#8230;&#8203;</code>, while keeping the match weight positive:</p>
+</div>
+<div class="paragraph">
+<p><code>penalizeLong(&#8230;&#8203;, &#8230;&#8203;, customer -&gt; customer.getDistanceFromPreviousStandstill())</code>.</p>
+</div>
+<div class="paragraph">
+<p>You can accomplish a positive impact without changing the match weight if you replace <code>penalize</code> by <code>reward</code> :</p>
+</div>
+<div class="paragraph">
+<p><code>rewardLong(&#8230;&#8203;, &#8230;&#8203;, customer -&gt; customer.getDistanceFromPreviousStandstill())</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_applying_different_penalty_types">Applying different penalty types</h3>
+<div class="paragraph">
+<p>In the example above, <code>distanceFromPreviousStandstill</code> is of the type <code>long</code> and therefore the DRL
+<code>scoreHolder.addSoftConstraintMatch(kcontext, - $distanceFromPreviousStandstill)</code> maps to the CS
+<code>penalizeLong(&#8230;&#8203;, &#8230;&#8203;, customer -&gt; customer.getDistanceFromPreviousStandstill())</code>.</p>
+</div>
+<div class="paragraph">
+<p>If the type was <code>int</code>, it would map to <code>penalize(&#8230;&#8203;)</code> instead.
+Similarly, if the type was <code>BigDecimal</code>, it would map to <code>penalizeBigDecimal(&#8230;&#8203;)</code>.
+No types other than <code>int</code>, <code>long</code>, and <code>BigDecimal</code> are supported.</p>
+</div>
+<div class="paragraph">
+<p>The same applies to rewards.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_applying_configurable_constraint_weights">Applying configurable constraint weights</h3>
+<div class="paragraph">
+<p>In some cases, such as in the Conference Scheduling example, constraint weights are specified in a <code>@ConstraintConfiguration</code> annotated class and not in the score DRL.
+The following example shows the score DRL:</p>
+</div>
+<div class="paragraph">
+<p><code>scoreHolder.penalize(kcontext, $penalty);</code></p>
+</div>
+<div class="paragraph">
+<p>In CS, this situation maps to <code>penalizeConfigurable(&#8230;&#8203;)</code> and similarly for rewards.</p>
+</div>
+<div class="paragraph">
+<p>For more information, see <a href="https://www.optaplanner.org/docs/optaplanner/latest/constraint-streams/constraint-streams.html#constraintStreamsPenaltiesRewards">penalties and rewards</a> in the OptaPlanner documentation.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_migrating_constraints_with_filters">Migrating constraints with filters</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In the same Vehicle Routing example, we can also find the following rule:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-drl hljs" data-lang="drl">rule "distanceFromLastCustomerToDepot"
+    when
+        $customer : Customer(previousStandstill != null, nextCustomer == null)
+    then
+        Vehicle vehicle = $customer.getVehicle();
+        scoreHolder.addSoftConstraintMatch(kcontext, - $customer.getDistanceTo(vehicle));
+end</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There are many similarities to the previous rule, but this time we penalize <code>Customer</code> only when the <code>nextCustomer</code> field is <code>null</code>.
+To do the same in CS, we introduce a <code>filter(&#8230;&#8203;)</code> call where we check the return value of a getter for <code>null</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Constraint distanceFromLastCustomerToDepot(ConstraintFactory factory) {
+    return factory.forEach(Customer.class)
+        .filter(customer -&gt; customer.getNextCustomer() == null)
+        .penalizeLong("distanceFromLastCustomerToDepot",
+            HardSoftLongScore.ONE_SOFT,
+            customer -&gt; {
+                Vehicle vehicle = customer.getVehicle();
+                return customer.getDistanceTo(vehicle);
+            });
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For more information, see the <a href="https://www.optaplanner.org/docs/optaplanner/latest/constraint-streams/constraint-streams.html#constraintStreamsFilter">filtering</a> section in the OptaPlanner documentation.</p>
+</div>
+<div class="sect2">
+<h3 id="_migrating_eval">Migrating <code>eval(&#8230;&#8203;)</code></h3>
+<div class="paragraph">
+<p>The <code>eval(&#8230;&#8203;)</code> construct allows us to execute an arbitrary piece of code that returns <code>boolean</code>. As such, it is functionally equivalent to the CS <code>filter(&#8230;&#8203;)</code> construct as described previously.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_migrating_constraints_with_joins">Migrating constraints with joins</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Some constraints penalize based on a combination of entities or facts, such as in the NQueens example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-drl hljs" data-lang="drl">rule "Horizontal conflict"
+    when
+        Queen($id : id, row != null, $i : rowIndex)
+        Queen(id &gt; $id, rowIndex == $i)
+    then
+        scoreHolder.addConstraintMatch(kcontext, -1);
+end</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here, we select a pair of different queens (second <code>Queen.id</code> greater than first <code>Queen.id</code>) which share the same row (second <code>Queen.rowIndex</code> equal to first <code>Queen.rowIndex</code>).
+Each pair is then penalized by <code>1</code>.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s how to do the same thing in CS, using a <code>join(&#8230;&#8203;)</code> call with some <code>Joiners</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Constraint horizontalConflict(ConstraintFactory factory) {
+    return factory.forEach(Queen.class)
+        .join(Queen.class,
+            Joiners.greaterThan(Queen::getId),
+            Joiners.equal(Queen::getRowIndex))
+        .penalize("Horizontal conflict", SimpleScore.ONE);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>Joiners.greaterThan(Queen::getId)</code> statement is a way of expressing the DRL <code>queen.id &gt; $id</code> statement in Java.
+Similarly, <code>Joiners.equal(Queen::getRowIndex)</code> represents the DRL <code>queen.rowIndex == $i</code> statement.</p>
+</div>
+<div class="paragraph">
+<p>However, in this case, we can go further and use some CS syntactic sugar:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Constraint horizontalConflict(ConstraintFactory factory) {
+    return factory.forEachUniquePair(Queen.class,
+            equal(Queen::getRowIndex))
+        .penalize("Horizontal conflict", SimpleScore.ONE);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Using <code>forEachUniquePair(Queen.class)</code>, the <code>greaterThan(&#8230;&#8203;)</code> joiner is inserted automatically and we only need to match the row indexes.</p>
+</div>
+<div class="paragraph">
+<p>For more information, see <a href="https://www.optaplanner.org/docs/optaplanner/latest/constraint-streams/constraint-streams.html#constraintStreamsJoin">joining</a> in the OptaPlanner documentation.</p>
+</div>
+<div class="sect2">
+<h3 id="_applying_filters_while_joining">Applying filters while joining</h3>
+<div class="paragraph">
+<p>In certain cases, you might need to apply a filter while joining, such as in the case of the Conference Scheduling example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-drl hljs" data-lang="drl">rule "Talk prerequisite talks"
+    when
+        $talk1 : Talk(timeslot != null)
+        $talk2 : Talk(timeslot != null,
+                !getTimeslot().startsAfter($talk1.getTimeslot()),
+                getPrerequisiteTalkSet().contains($talk1))
+    then
+        scoreHolder.penalize(kcontext,
+                $talk1.getDurationInMinutes() + $talk2.getDurationInMinutes());
+end</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that the second <code>Talk</code> is only selected if its <code>prerequisiteTalkSet</code> contains the first <code>Talk</code>.
+Because there is no CS joiner for this specific operation yet, we need to use a generic filtering joiner:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Constraint talkPrerequisiteTalks(ConstraintFactory factory) {
+    return factory.forEach(Talk.class)
+        .join(Talk.class,
+            Joiners.greaterThan(
+                    talk1 -&gt; talk1.getTimeslot().getEndDateTime(),
+                    talk2 -&gt; talk2.getTimeslot().getStartDateTime()),
+            Joiners.filtering((talk1, talk2) -&gt; talk2.getPrerequisiteTalkSet().contains(talk1)))
+        .penalizeConfigurable(TALK_PREREQUISITE_TALKS, Talk::combinedDurationInMinutes);
+    }</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_migrating_large_joins">Migrating large joins</h3>
+<div class="paragraph">
+<p>CS only supports up to three joins natively.
+If you need four or more joins, refer to <a href="https://www.optaplanner.org/docs/optaplanner/latest/constraint-streams/constraint-streams.html#constraintStreamsMappingTuples">mapping tuples</a> in the OptaPlanner documentation.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_migrating_exists_and_not">Migrating <code>exists</code> and <code>not</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The DRL <code>exists</code> keyword can be converted to CS much like the join above.
+Consider this rule from the Cloud Balancing example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-drl hljs" data-lang="drl">rule "computerCost"
+    when
+        $computer : CloudComputer($cost : cost)
+        exists CloudProcess(computer == $computer)
+    then
+        scoreHolder.addSoftConstraintMatch(kcontext, - $cost);
+end</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here, only penalize a computer if a process exists that runs on that particular computer.
+An equivalent constraint stream looks like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Constraint computerCost(ConstraintFactory constraintFactory) {
+    return constraintFactory.forEach(CloudComputer.class)
+        .ifExists(CloudProcess.class,
+            Joiners.equal(Function.identity(), CloudProcess::getComputer))
+        .penalize("computerCost",
+            HardSoftScore.ONE_SOFT,
+            CloudComputer::getCost);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Notice how the <code>ifExists(&#8230;&#8203;)</code> call uses the <code>Joiners</code> class to define the relationship between <code>CloudProcess</code> and <code>CloudComputer</code>.</p>
+</div>
+<div class="paragraph">
+<p>For the use of the DRL  <code>not</code> keyword, consider this rule from the Traveling Sales Person (TSP) example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-drl hljs" data-lang="drl">rule "distanceFromLastVisitToDomicile"
+    when
+        $visit : Visit(previousStandstill != null)
+        not Visit(previousStandstill == $visit)
+        $domicile : Domicile()
+    then
+        scoreHolder.addConstraintMatch(kcontext, - $visit.getDistanceTo($domicile));
+end</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A visit is only penalized if it is the final visit of the journey.
+The same can be achieved in CS using the <code>ifNotExists(&#8230;&#8203;)</code> building block:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Constraint distanceFromLastVisitToDomicile(ConstraintFactory constraintFactory) {
+    return constraintFactory.forEach(Visit.class)
+        .ifNotExists(Visit.class,
+            Joiners.equal(visit -&gt; visit, Visit::getPreviousStandstill))
+        .join(Domicile.class)
+        .penalizeLong("Distance from last visit to domicile",
+            SimpleLongScore.ONE,
+            Visit::getDistanceTo);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For more information on <code>ifExists()</code> and <code>ifNotExists()</code>, see <a href="https://www.optaplanner.org/docs/optaplanner/latest/constraint-streams/constraint-streams.html#constraintStreamsConditionalPropagation">conditional propagation</a> in the OptaPlanner documentation.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_migrating_accumulate">Migrating <code>accumulate</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>CS does not have a concept that maps mechanically to the DRL <code>accumulate</code> keyword.
+However, it does have a very powerful <code>groupBy(&#8230;&#8203;)</code> concept.
+To understand the differences between the two, consider the following rule taken from the Cloud Balancing example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-drl hljs" data-lang="drl">rule "requiredCpuPowerTotal"
+    when
+        $computer : CloudComputer($cpuPower : cpuPower)
+        accumulate(
+            CloudProcess(
+                computer == $computer,
+                $requiredCpuPower : requiredCpuPower);
+            $requiredCpuPowerTotal : sum($requiredCpuPower);
+            $requiredCpuPowerTotal &gt; $cpuPower
+        )
+    then
+        scoreHolder.addHardConstraintMatch(kcontext, $cpuPower - $requiredCpuPowerTotal);
+end</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For each <code>CloudComputer</code>, it computes a sum of CPU power required by <code>CloudProcess</code> instances (<code>$requiredCpuPowerTotal : sum($requiredCpuPower)</code>) running on that computer (<code>CloudProcess(computer == $computer)</code>) and only penalizes those computers where the total power required exceeds the power available (<code>$requiredCpuPowerTotal &gt; $cpuPower</code>).</p>
+</div>
+<div class="paragraph">
+<p>For comparison, let us now see how the same is accomplished in CS using <code>groupBy(&#8230;&#8203;)</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Constraint requiredCpuPowerTotal(ConstraintFactory constraintFactory) {
+    return constraintFactory.forEach(CloudProcess.class)
+        .groupBy(
+                CloudProcess::getComputer,
+                ConstraintCollectors.sum(CloudProcess::getRequiredCpuPower))
+        .filter((computer, requiredCpuPower) -&gt; requiredCpuPower &gt; computer.getCpuPower())
+        .penalize("requiredCpuPowerTotal",
+            HardSoftScore.ONE_HARD,
+            (computer, requiredCpuPower) -&gt; requiredCpuPower - computer.getCpuPower());
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>First, we select all <code>CloudProcess</code> instances (<code>forEach(CloudProcess.class)</code>).
+Then we apply <code>groupBy</code> in two steps:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>We split the processes into buckets ("groups") by their computer (<code>CloudProcess::getComputer</code>).
+If two or more processes have the same computer, they belong to the same group.</p>
+</li>
+<li>
+<p>For each such group, we apply a <code>ConstraintCollectors.sum(&#8230;&#8203;)</code> to get a sum total of power required by all processes in such group.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The result of that operation is a pair ("tuple") of facts: a <code>CloudComputer</code> and an <code>int</code> representing the sum total of power required by all processes running on that computer.
+We then take all such tuples and <code>filter(&#8230;&#8203;)</code> out all those where the sum total is <code>&lt;=</code> that computer&#8217;s available power.
+Finally, we penalize the positive difference between the required power and the available power, the overconsumption.</p>
+</div>
+<div class="paragraph">
+<p>As you can see, <code>groupBy(&#8230;&#8203;)</code> accomplishes the same result, but goes about it differently.
+This is why mapping DRL <code>accumulate</code> to CS <code>groupBy</code>, while always possible, is not necessarily straight-forward or mechanical.</p>
+</div>
+<div class="paragraph">
+<p>For more information on <code>groupBy(&#8230;&#8203;)</code>, see <a href="https://www.optaplanner.org/docs/optaplanner/latest/constraint-streams/constraint-streams.html#constraintStreamsGroupingAndCollectors">grouping and collectors</a> in the OptaPlanner documentation.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_more_resources">More resources</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In the  <a href="https://www.optaplanner.org/docs/optaplanner/latest/use-cases-and-examples/examples-overview/examples-overview.html">OptaPlanner Examples package</a> section, every example has both a score DRL file and an equivalent <code>ConstraintProvider</code> implementation.
+Browse these examples, contrast respective DRL and CS implementations, and use the information to help with your own migration.</p>
+</div>
+</div>
+</div>        </div>
+        <div class="col-md-3">
+    <div class="card mb-4">
+        <div class="card-header">Latest release</div>
+        <div class="card-body">
+            <ul class="list-unstyled mb-0">
+                <li>
+                    <div class="title">
+                        <a href="../download/releaseNotes/releaseNotes8.html">
+                            8.25.0.Final released
+                        </a>
+                    </div>
+                    <div class="small">
+                        Tue 26 July 2022
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Upcoming events</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <div class="title">
+                                    <a href="https://devoxx.be">Devoxx Belgium</a>
+                            </div>
+                            <span>
+                                Antwerp, Belgium - Mon 10 October 2022
+                            </span>
+                        </li>
+                <div class="small float-end">
+                    <a href="https://github.com/kiegroup/optaplanner-website/blob/main/optaplanner-website-root/data/events.yml">Add event</a>
+                    /
+                    <a href="../community/eventsArchive.html">Archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest blog posts</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../blog/2022/06/09/RunOptaPlannerWorkloadOnOpenShift.html">Run OptaPlanner workloads on OpenShift, part I.</a>
+                        </div>
+                        <div class="small">Thu 9 June 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../blog/2022/05/26/optaplanner-deprecates-score-drl.html">OptaPlanner deprecates score DRL</a>
+                        </div>
+                        <div class="small">Thu 26 May 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/c950743f532471ac34022e92193563c3?s=20&d=mm"/>
+        <span class="align-middle">Lukáš Petrovický</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../blog/2022/03/07/Real-time+planning+meets+the+SolverManager.html">Real-time planning meets SolverManager</a>
+                        </div>
+                        <div class="small">Mon 7 March 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../blog/2021/10/26/DocsTurnOverANewLeaf.html">OptaPlanner documentation turns over a new leaf</a>
+                        </div>
+                        <div class="small">Tue 26 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../blog/2021/10/14/OrderPickingQuickstart.html">Order picking optimization in warehouses and supermarkets with OptaPlanner</a>
+                        </div>
+                        <div class="small">Thu 14 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/4a8c787544c0b40bc033f631dc2256c2?s=20&d=mm"/>
+        <span class="align-middle">Walter Medvedeo</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../blog/2021/10/12/MonitorTheSolver.html">Monitor OptaPlanner solvers through Micrometer</a>
+                        </div>
+                        <div class="small">Tue 12 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/16f228a9f340e2a2ca5b42485a17bc3d?s=20&d=mm"/>
+        <span class="align-middle">Christopher Chianelli</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../blog/2021/10/05/ANewAIConstraintSolverForPythonOptaPy.html">A new AI constraint solver for Python: OptaPy</a>
+                        </div>
+                        <div class="small">Tue 5 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/16f228a9f340e2a2ca5b42485a17bc3d?s=20&d=mm"/>
+        <span class="align-middle">Christopher Chianelli</span>
+    </span>
+                    </li>
+                <div class="small float-end">
+                    <a href="../blog/index.html">Blog archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest videos</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="kFoaf696VpA" data-video-title="Host your OptaPlanner app on OpenShift (Kubernetes)">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Host your OptaPlanner app on OpenShift (Kubernetes)</span>
+                        </a>
+                        <div class="small">Mon 7 February 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="bIvt9z-zVHo" data-video-title="OptaPlanner - A fast, easy-to-use, open source AI constraint solver for software developers">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">OptaPlanner - A fast, easy-to-use, open source AI constraint solver for software developers</span>
+                        </a>
+                        <div class="small">Mon 31 January 2022</div>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="784Au4PjTzg" data-video-title="Order picking planning with OptaPlanner">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Order picking planning with OptaPlanner</span>
+                        </a>
+                        <div class="small">Fri 31 December 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/54cd5de3bdaf21a942e8d9d5fe95f647?s=20&d=mm"/>
+        <span class="align-middle">Anna Dupliak</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="HVDPxebpSvg" data-video-title="AI lesson scheduling on Quarkus with OptaPlanner">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">AI lesson scheduling on Quarkus with OptaPlanner</span>
+                        </a>
+                        <div class="small">Thu 18 November 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="dqTrjkVxoPI" data-video-title="Maintenance scheduling">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Maintenance scheduling</span>
+                        </a>
+                        <div class="small">Fri 12 November 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="-RSZbMT_alo" data-video-title="Optimized order picking in warehouses and supermarkets">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Optimized order picking in warehouses and supermarkets</span>
+                        </a>
+                        <div class="small">Tue 26 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/4a8c787544c0b40bc033f631dc2256c2?s=20&d=mm"/>
+        <span class="align-middle">Walter Medvedeo</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="-7ips_GMFmo" data-video-title="A modern OO/FP constraint solver">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">A modern OO/FP constraint solver</span>
+                        </a>
+                        <div class="small">Tue 14 September 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                <div class="small float-end">
+                    <a href="https://www.youtube.com/channel/UCcpkOKpujFlM67D2h0RdaeQ">Video archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+        </div>
+    </div>
+        </div>
+    </div>
+<footer class="py-4 bg-black text-white-50">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <p class="small">OptaPlanner is open.
+                    All dependencies of this project are available under the
+                    <a class="link-light" href="../code/license.html">Apache Software License 2.0</a>
+                    or a compatible license.
+                    OptaPlanner is <a class="link-light" href="../community/branding.html">trademarked</a>.
+                </p>
+                <p class="small">
+                    This <a class="link-light" href="../website/websiteInfo.html">website</a>
+                    was built with <a class="link-light" href="https://jbake.org">JBake</a> and is open source.
+                </p>
+            </div>
+            <div class="col-md-4">
+                <h4>Community</h4>
+                <ul class="ps-2 list-unstyled">
+                    <li><a class="link-light" href="../blog/">Blog</a></li>
+                    <li><a class="link-light" href="../community/getHelp.html">Get Help</a></li>
+                    <li><a class="link-light" href="../community/team.html">Team</a></li>
+                    <li><a class="link-light" href="../community/governance.html">Governance</a></li>
+                    <li><a class="link-light" href="../community/research.html">Academic research</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h4>Code</h4>
+                <ul class="ps-2 list-unstyled">
+                    <li><a class="link-light" href="../code/sourceCode.html">Build from source</a></li>
+                    <li><a class="link-light" href="https://issues.redhat.com/projects/PLANNER">Issue tracker</a></li>
+                    <li><a class="link-light" href="../download/releaseNotes/">Release notes</a></li>
+                    <li><a class="link-light" href="../download/upgradeRecipe/">Upgrade recipes</a></li>
+                    <li><a class="link-light" href="../community/branding.html">Logo and branding</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="d-flex justify-content-evenly align-items-center">
+            <div>
+                <i class="fab fa-creative-commons"></i><i class="fab fa-creative-commons-by"></i>
+                <a class="link-light link-underlined" href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC by 3.0</a> |
+                <a class="link-light link-underlined" href="https://www.redhat.com/en/about/privacy-policy">Privacy Policy</a>
+            </div>
+            <div>
+                <span class="me-2 text-white">Sponsored by</span>
+                <a href="https://www.redhat.com/" target="_blank"><img style="width: 6rem" src="https://www.redhat.com/profiles/rh/themes/redhatdotcom/img/logo.svg" alt="Red Hat"></a>
+            </div>
+        </div>
+    </div>
+</footer>
+    <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="ratio ratio-16x9" id="player-container">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"
+            integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/highlight.min.js"
+            integrity="sha256-mfS2sXKEV8eehy39UH7+7BwaoUaIe2TuLO2DXS+c2mI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/asciidoc.min.js"
+            integrity="sha256-gnB2LPAmHPkrj3czfog5GdIu4aByzcKeTUzC2agNMzM=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/properties.min.js"
+            integrity="sha256-1XSLaVD2dn/eCICDUx1DYprsC4UAEa4weDLYY/458wU=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/gradle.min.js"
+            integrity="sha256-B5HtfGpeJKLSEsoqtAdi6sSJ05K49CTGHZbrBiJ9CwE=" crossorigin="anonymous"></script>
+    <script src="../website/optaplannerWebsite.js"></script>
+    <script>
+        // Ruby syntax highlighting works pretty well for DRL source code.
+        hljs.registerAliases(["drl"], { languageName: "ruby"});
+        hljs.highlightAll();
+    </script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script type="text/javascript">
+      if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+        _satellite.pageBottom();
+      }
+    </script>
+</body>
+</html>
+
+

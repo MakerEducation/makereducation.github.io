@@ -1,0 +1,757 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script id="dpal" src="https://www.redhat.com/dtm.js" type="text/javascript"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-39485370-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-39485370-1');
+    </script>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>OptaPlanner - Upgrade recipe 6.2</title>
+    <meta content="Upgrade to OptaPlanner 6.2 from a previous version." name="description">
+    <meta content="metaheuristic, heuristic, constraint satisfaction, constraint programming, operations research, NP-complete, NP-hard, optimization, planning, scheduling, java, open source, software, library, solver, tabu search, simulated annealing, pareto" name="keywords">
+    <link href="https://www.optaplanner.org/download/upgradeRecipe/upgradeRecipe6.2.html" rel="canonical">
+
+    <meta content="Upgrade recipe 6.2" property="og:title">
+    <meta content="Upgrade to OptaPlanner 6.2 from a previous version." property="og:description">
+    <meta content="https://www.optaplanner.org/download/upgradeRecipe/upgradeRecipe6.2.html" property="og:url">
+    <meta content="OptaPlanner" property="og:site_name">
+    <meta content="website" property="og:type">
+    <meta content="https://www.optaplanner.org/headerFooter/optaPlannerIcon.png" property="og:image">
+    <meta content="summary" name="twitter:card">
+    <meta content="@OptaPlanner" name="twitter:site">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+          integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css"
+          integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/styles/default.min.css"
+          integrity="sha256-CGf39SzxAmEe09Ojoh16/2xTRNleX9wBZcEXVnNqwSM=" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../website/optaplannerWebsite.css">
+    <link href="../../favicon.ico" rel="shortcut icon">
+</head>
+
+<body>
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light border-bottom shadow">
+    <div class="container">
+        <a class="navbar-brand" href="../../">
+            <img alt="OptaPlanner logo" src="../../headerFooter/optaPlannerLogo200px.png">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="../../download/download.html">Download</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarLearn" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Learn
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarLearn">
+                        <li><a class="dropdown-item" href="../../learn/documentation.html">Documentation</a></li>
+                        <li><a class="dropdown-item" href="../../learn/video.html">Videos</a></li>
+                        <li><a class="dropdown-item" href="../../learn/slides.html">Slides</a></li>
+                        <li><a class="dropdown-item" href="../../learn/training.html">Training</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="../../learn/useCases/index.html">Use cases</a></li>
+                        <li><a class="dropdown-item" href="../../compatibility/index.html">Compatibility</a></li>
+                        <li><a class="dropdown-item" href="../../learn/testimonialsAndCaseStudies.html">Testimonials and case studies</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="../../community/getHelp.html">Get help</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../blog/">Blog</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../code/sourceCode.html">Source</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../community/team.html">Team</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../product/services.html">Services</a></li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="p-2"><a aria-label="Star OptaPlanner on GitHub" class="github-button" data-show-count="true" href="https://github.com/kiegroup/optaplanner">Star</a></li>
+                <li class="p-1"><a href="https://twitter.com/OptaPlanner" target="_blank" title="Follow OptaPlanner on Twitter"><img alt="T" src="../../headerFooter/twitterLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.linkedin.com/showcase/optaplanner" target="_blank" title="Follow OptaPlanner on LinkedIn"><img alt="L" src="../../headerFooter/linkedInLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.facebook.com/OptaPlanner" target="_blank" title="Follow OptaPlanner on Facebook"><img alt="F" src="../../headerFooter/facebookLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.youtube.com/channel/UCcpkOKpujFlM67D2h0RdaeQ" target="_blank" title="OptaPlanner YouTube channel"><img alt="YT" src="../../headerFooter/youtubeLogo.png" style="height: 16px"></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="body-without-header-footer">
+        <div class="forkMeOnGithub">
+            <a href="https://github.com/kiegroup/optaplanner">
+                <img alt="Fork me on GitHub" src="../../headerFooter/forkMeOnGithub.png">
+            </a>
+        </div>
+        <div class="container py-4">
+    <div class="row">
+        <div class="col-md-9">
+    <h1>Upgrade recipe 6.2</h1>
+    <div class="paragraph summaryParagraph">
+        <p><strong>OptaPlanner’s public API classes are backwards compatible</strong> (per series),
+            but users often also use impl classes (which are documented in the reference manual too).
+            This upgrade recipe <em>minimizes the pain</em> to upgrade your code
+            and to take advantage of <a href="../../download/releaseNotes/releaseNotes8.html">the newest features in OptaPlanner 8</a>.</p>
+    </div>
+    <div class="row">
+        <div class="col-md-7">
+            <h2 class="mt-0">Legend</h2>
+            <p>Every upgrade note has an indication how likely your code will be affected by that change:</p>
+            <ul class="upgrade-recipe-label-list">
+                <li>
+                    <span class="badge bg-danger label-as-badge">Major</span>
+                    Likely to affect your code.
+                </li>
+                <li>
+                    <span class="badge bg-warning label-as-badge">Minor</span>
+                    Unlikely to affect your code (especially if you followed the examples), unless you have hacks.
+                </li>
+                <li>
+                    <span class="badge bg-info label-as-badge">Impl detail</span>
+                    Will not affect your code, unless you have very deep hacks.
+                </li>
+                <li>
+                    <span class="badge bg-primary label-as-badge">Recommended</span>
+                    Not a backward incompatible change, but you probably want to do this.
+                </li>
+                <li>
+                    <span class="badge bg-success label-as-badge">Readme</span>
+                    Read this to better understand why the subsequent major changes were made.
+                </li>
+            </ul>
+            <div class="sect1">
+                <h2>Upgrade from an older version</h2>
+                <p>To upgrade from an older version, first apply <a href="./">the previous upgrade recipes</a>.</p>
+            </div>
+        </div>
+        <div class="col-md-5 mb-4">
+<div class="card mb-4">
+    <div class="card-header">Note for Red Hat Decision Manager customers</div>
+    <div class="card-body">
+        <p>The RHDM version differs from the OptaPlanner version:</p>
+        <table class="tableblock frame-all grid-all spread">
+            <colgroup>
+                <col style="width: 50%;">
+                <col style="width: 50%;">
+            </colgroup>
+            <thead>
+            <tr>
+                <th>RHDM version</th>
+                <th>OptaPlanner version</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>7.8</td>
+                    <td>7.39</td>
+                </tr>
+                <tr>
+                    <td>7.9</td>
+                    <td>7.44</td>
+                </tr>
+                <tr>
+                    <td>7.1</td>
+                    <td>7.48</td>
+                </tr>
+                <tr>
+                    <td>7.11</td>
+                    <td>8.5 (and 7.52)</td>
+                </tr>
+                <tr>
+                    <td>7.12</td>
+                    <td>8.11 (and 7.59)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+        </div>
+    </div>
+<div class="sect1">
+<h2 id="_from_6_1_0_final_to_6_2_0_beta1">From 6.1.0.Final to 6.2.0.Beta1</h2>
+<div class="sectionbody">
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_custom_scoredefinition_scoreholder_registerconstraintmatch_refactored">Custom <code>ScoreDefinition</code>: <code>ScoreHolder.register*ConstraintMatch</code> refactored</h3>
+<div class="paragraph">
+<p>If you have a custom <code>ScoreDefinition</code>: the methods <code>ScoreHolder.register*ConstraintMatch</code> have been refactored.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public void addConstraintMatch(RuleContext kcontext, final int weight) {
+    ...
+    registerIntConstraintMatch(kcontext, 0, weight, new Runnable() {
+        public void run() {
+            ...
+        }
+    });
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public void addConstraintMatch(RuleContext kcontext, final int weight) {
+    ...
+    registerIntConstraintMatch(kcontext, 0, weight, new IntConstraintUndoListener() {
+        public void undo() {
+            ...
+        }
+    });
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-major">
+<h3 id="_custom_move_extract_abstractmove">Custom <code>Move</code>: extract <code>AbstractMove</code></h3>
+<div class="paragraph">
+<p>If you have a custom <code>Move</code> implementation, now extract <code>AbstractMove</code></p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class CloudComputerChangeMove implements Move {...}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class CloudComputerChangeMove extends AbstractMove {...}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_custom_move_new_method_getsimplemovetypedescription">Custom <code>Move</code>: new method <code>getSimpleMoveTypeDescription()</code></h3>
+<div class="paragraph">
+<p>The interface <code>Move</code> has a new method <code>getSimpleMoveTypeDescription()</code>.
+Extend <code>AbstractMove</code> so to avoid having to implement it.</p>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_valuerangeprovider_on_an_entity_class_use_pillar_selectors_as_is"><code>@ValueRangeProvider</code> on an entity class: use pillar selectors as is</h3>
+<div class="paragraph">
+<p>If you have a <code>@ValueRangeProvider</code> on an entity class (instead of the <code>Solution</code> class),
+then it&#8217;s now safe to use the <code>&lt;pillarChangeMoveSelector&gt;</code> and <code>&lt;pillarSwapMoveSelector&gt;</code> as is.
+It&#8217;s no longer needed to filter out swaps or changes
+which could put a value in an entity&#8217;s variable that&#8217;s not in its value range.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*SolverConfig.xml</code> and <code>*BenchmarkConfig.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">  &lt;pillarChangeMoveSelector&gt;
+    &lt;filterClass&gt;...ValidChangesOnlyPillarChangeMoveFilter&lt;/filterClass&gt;
+  &lt;/pillarChangeMoveSelector&gt;
+  &lt;pillarSwapMoveSelector&gt;
+    &lt;filterClass&gt;...ValidSwapsOnlyPillarSwapMoveFilter&lt;/filterClass&gt;
+  &lt;/pillarSwapMoveSelector&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*SolverConfig.xml</code> and <code>*BenchmarkConfig.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">  &lt;pillarChangeMoveSelector/&gt;
+  &lt;pillarSwapMoveSelector/&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_constraintmatchtotal_natural_comparison_changed"><code>ConstraintMatchTotal</code> natural comparison changed</h3>
+<div class="paragraph">
+<p><code>ConstraintMatchTotal</code> are now naturally compared by <code>scoreLevel</code>, then <code>constraintPackage</code>, then <code>constraintName</code>
+(instead of by <code>constraintPackage</code>, then <code>constraintName</code>, then <code>scoreLevel</code>) for readability.</p>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_incrementalscorecalculator_method_buildscorecorruptionanalysis_replaced"><code>IncrementalScoreCalculator</code>: method <code>buildScoreCorruptionAnalysis(&#8230;&#8203;)</code> replaced</h3>
+<div class="paragraph">
+<p>The optional method <code>IncrementalScoreCalculator.buildScoreCorruptionAnalysis(IncrementalScoreCalculator)</code> has been removed.
+Instead, to get a pretty score corruption analysis, implement the new interface <code>ConstraintMatchAwareIncrementalScoreCalculator</code>.
+This also enable your GUI to explain the score with an <code>IncrementalScoreCalculator</code>.
+See the example code in <code>MachineReassignmentIncrementalScoreCalculator.getConstraintMatchTotals()</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_from_6_2_0_beta1_to_6_2_0_beta2">From 6.2.0.Beta1 to 6.2.0.Beta2</h2>
+<div class="sectionbody">
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_deciderscorecomparatorfactory_removed"><code>&lt;deciderScoreComparatorFactory&gt;</code> removed</h3>
+<div class="paragraph">
+<p>The element <code>&lt;deciderScoreComparatorFactory&gt;</code> (which was deprecated, not documented, broken and clearly marked as not backwards compatible) has been removed.
+Instead, use strategic oscillation.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*SolverConfig.xml</code> and <code>*BenchmarkConfig.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">  &lt;localSearch&gt;
+...
+&lt;forager&gt;
+  ...
+  &lt;deciderScoreComparatorFactory&gt;
+    ...
+  &lt;/deciderScoreComparatorFactory&gt;
+&lt;/forager&gt;
+  &lt;/localSearch&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*SolverConfig.xml</code> and <code>*BenchmarkConfig.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">  &lt;localSearch&gt;
+...
+&lt;forager&gt;
+  ...
+  &lt;finalistPodiumType&gt;STRATEGIC_OSCILLATION&lt;/finalistPodiumType&gt;
+&lt;/forager&gt;
+  &lt;/localSearch&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-impl-detail">
+<h3 id="_scorebounder_methods_changed"><code>ScoreBounder</code> methods changed</h3>
+<div class="paragraph">
+<p>The <code>ScoreBounder</code> methods <code>calculateOptimisticBound()</code> and <code>calculatePessimisticBound()</code>
+no longer have an <code>uninitializedVariableCount</code> parameter.
+Instead, if all the variables for a branch and bound algorithm are initialized,
+those methods are no longer called to determine the bounds (because the bound is the working score).
+If the <code>uninitializedVariableCount</code> is still needed for some reason, use the <code>ScoreDirector</code> to calculate it accurately.</p>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_scoredirector_getconstraintmatchtotals_behaviour_changed"><code>ScoreDirector.getConstraintMatchTotals()</code> behaviour changed</h3>
+<div class="paragraph">
+<p>Before calling <code>ScoreDirector.getConstraintMatchTotals()</code>, it&#8217;s no longer expected to call <code>ScoreDirector.calculateScore()</code> first.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_from_6_2_0_cr1_to_6_2_0_cr2">From 6.2.0.CR1 to 6.2.0.CR2</h2>
+<div class="sectionbody">
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_compositemove_now_uses_a_move_array"><code>CompositeMove</code> now uses a <code>Move</code> array</h3>
+<div class="paragraph">
+<p><code>CompositeMove</code> now uses a <code>Move</code> array instead of a <code>List&lt;Move&gt;</code> for performance reasons.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">... = CompositeMove.buildMove(Arrays.asList(moveA, moveB, ...));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">... = CompositeMove.buildMove(moveA, moveB, ...);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">... = new CompositeMove(moveList); // Not recommended</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">... = new CompositeMove(moves); // Not recommended</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-impl-detail">
+<h3 id="_inverserelationshadowvariablelistener_renamed"><code>InverseRelationShadowVariableListener</code> renamed</h3>
+<div class="paragraph">
+<p><code>InverseRelationShadowVariableListener</code> renamed to <code>SingletonInverseVariableListener</code>.
+It and <code>InverseRelationShadowVariableDescriptor</code> moved to the package <code>&#8230;&#8203;impl.domain.variable.inverserelation</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_from_6_2_0_cr3_to_6_2_0_cr4">From 6.2.0.CR3 to 6.2.0.CR4</h2>
+<div class="sectionbody">
+<div class="sect2 upgrade-recipe-major">
+<h3 id="_new_anchor_shadow_variable_support">New anchor shadow variable support</h3>
+<div class="paragraph">
+<p>There is now out-of-the-box support for a shadow variable representing the anchor of a chained variable.
+For example, in a VRP each <code>Customer</code> (= entity) needs to know to which <code>Vehicle</code> (= anchor) it belongs.
+This declarative support allows built-in selectors to reuse that knowledge without duplicating the calculation.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@PlanningEntity
+public class Customer implements Standstill {
+    @PlanningVariable(...)
+    public Standstill getPreviousStandstill() {...}
+    @CustomShadowVariable(variableListenerClass = VehicleUpdatingVariableListener.class,
+            sources = {@CustomShadowVariable.Source(variableName = "previousStandstill")})
+    public Vehicle getVehicle() {...}
+}
+public class VehicleUpdatingVariableListener implements VariableListener&lt;Customer&gt; {
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@PlanningEntity
+public class Customer implements Standstill {
+    @PlanningVariable(...)
+    public Standstill getPreviousStandstill() {...}
+    @AnchorShadowVariable(sourceVariableName = "previousStandstill")
+    public Vehicle getVehicle() {...}
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_from_6_2_0_cr4_to_6_2_0_final">From 6.2.0.CR4 to 6.2.0.Final</h2>
+<div class="sectionbody">
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_twooptmoveselector_replaced"><code>&lt;twoOptMoveSelector&gt;</code> replaced</h3>
+<div class="paragraph">
+<p>The undocumented, experimental <code>&lt;twoOptMoveSelector&gt;</code> has been replaced by <code>&lt;tailChainSwapMoveSelector&gt;</code>,
+which is documented.</p>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-readme">
+<h3 id="_vrp_nearby_selection">VRP: Nearby Selection</h3>
+<div class="paragraph">
+<p>To scale VRP cases, Nearby Selection is critical. It is now finally completely supported and documented.</p>
+</div>
+</div>
+</div>
+</div>        </div>
+        <div class="col-md-3">
+    <div class="card mb-4">
+        <div class="card-header">Latest release</div>
+        <div class="card-body">
+            <ul class="list-unstyled mb-0">
+                <li>
+                    <div class="title">
+                        <a href="../../download/releaseNotes/releaseNotes8.html">
+                            8.25.0.Final released
+                        </a>
+                    </div>
+                    <div class="small">
+                        Tue 26 July 2022
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Upcoming events</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <div class="title">
+                                    <a href="https://devoxx.be">Devoxx Belgium</a>
+                            </div>
+                            <span>
+                                Antwerp, Belgium - Mon 10 October 2022
+                            </span>
+                        </li>
+                <div class="small float-end">
+                    <a href="https://github.com/kiegroup/optaplanner-website/blob/main/optaplanner-website-root/data/events.yml">Add event</a>
+                    /
+                    <a href="../../community/eventsArchive.html">Archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest blog posts</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../blog/2022/06/09/RunOptaPlannerWorkloadOnOpenShift.html">Run OptaPlanner workloads on OpenShift, part I.</a>
+                        </div>
+                        <div class="small">Thu 9 June 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../blog/2022/05/26/optaplanner-deprecates-score-drl.html">OptaPlanner deprecates score DRL</a>
+                        </div>
+                        <div class="small">Thu 26 May 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/c950743f532471ac34022e92193563c3?s=20&d=mm"/>
+        <span class="align-middle">Lukáš Petrovický</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../blog/2022/03/07/Real-time+planning+meets+the+SolverManager.html">Real-time planning meets SolverManager</a>
+                        </div>
+                        <div class="small">Mon 7 March 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../blog/2021/10/26/DocsTurnOverANewLeaf.html">OptaPlanner documentation turns over a new leaf</a>
+                        </div>
+                        <div class="small">Tue 26 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../blog/2021/10/14/OrderPickingQuickstart.html">Order picking optimization in warehouses and supermarkets with OptaPlanner</a>
+                        </div>
+                        <div class="small">Thu 14 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/4a8c787544c0b40bc033f631dc2256c2?s=20&d=mm"/>
+        <span class="align-middle">Walter Medvedeo</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../blog/2021/10/12/MonitorTheSolver.html">Monitor OptaPlanner solvers through Micrometer</a>
+                        </div>
+                        <div class="small">Tue 12 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/16f228a9f340e2a2ca5b42485a17bc3d?s=20&d=mm"/>
+        <span class="align-middle">Christopher Chianelli</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../blog/2021/10/05/ANewAIConstraintSolverForPythonOptaPy.html">A new AI constraint solver for Python: OptaPy</a>
+                        </div>
+                        <div class="small">Tue 5 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/16f228a9f340e2a2ca5b42485a17bc3d?s=20&d=mm"/>
+        <span class="align-middle">Christopher Chianelli</span>
+    </span>
+                    </li>
+                <div class="small float-end">
+                    <a href="../../blog/index.html">Blog archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest videos</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="kFoaf696VpA" data-video-title="Host your OptaPlanner app on OpenShift (Kubernetes)">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Host your OptaPlanner app on OpenShift (Kubernetes)</span>
+                        </a>
+                        <div class="small">Mon 7 February 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="bIvt9z-zVHo" data-video-title="OptaPlanner - A fast, easy-to-use, open source AI constraint solver for software developers">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">OptaPlanner - A fast, easy-to-use, open source AI constraint solver for software developers</span>
+                        </a>
+                        <div class="small">Mon 31 January 2022</div>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="784Au4PjTzg" data-video-title="Order picking planning with OptaPlanner">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Order picking planning with OptaPlanner</span>
+                        </a>
+                        <div class="small">Fri 31 December 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/54cd5de3bdaf21a942e8d9d5fe95f647?s=20&d=mm"/>
+        <span class="align-middle">Anna Dupliak</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="HVDPxebpSvg" data-video-title="AI lesson scheduling on Quarkus with OptaPlanner">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">AI lesson scheduling on Quarkus with OptaPlanner</span>
+                        </a>
+                        <div class="small">Thu 18 November 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="dqTrjkVxoPI" data-video-title="Maintenance scheduling">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Maintenance scheduling</span>
+                        </a>
+                        <div class="small">Fri 12 November 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="-RSZbMT_alo" data-video-title="Optimized order picking in warehouses and supermarkets">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Optimized order picking in warehouses and supermarkets</span>
+                        </a>
+                        <div class="small">Tue 26 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/4a8c787544c0b40bc033f631dc2256c2?s=20&d=mm"/>
+        <span class="align-middle">Walter Medvedeo</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="-7ips_GMFmo" data-video-title="A modern OO/FP constraint solver">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">A modern OO/FP constraint solver</span>
+                        </a>
+                        <div class="small">Tue 14 September 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                <div class="small float-end">
+                    <a href="https://www.youtube.com/channel/UCcpkOKpujFlM67D2h0RdaeQ">Video archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+        </div>
+    </div>
+        </div>
+    </div>
+<footer class="py-4 bg-black text-white-50">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <p class="small">OptaPlanner is open.
+                    All dependencies of this project are available under the
+                    <a class="link-light" href="../../code/license.html">Apache Software License 2.0</a>
+                    or a compatible license.
+                    OptaPlanner is <a class="link-light" href="../../community/branding.html">trademarked</a>.
+                </p>
+                <p class="small">
+                    This <a class="link-light" href="../../website/websiteInfo.html">website</a>
+                    was built with <a class="link-light" href="https://jbake.org">JBake</a> and is open source.
+                </p>
+            </div>
+            <div class="col-md-4">
+                <h4>Community</h4>
+                <ul class="ps-2 list-unstyled">
+                    <li><a class="link-light" href="../../blog/">Blog</a></li>
+                    <li><a class="link-light" href="../../community/getHelp.html">Get Help</a></li>
+                    <li><a class="link-light" href="../../community/team.html">Team</a></li>
+                    <li><a class="link-light" href="../../community/governance.html">Governance</a></li>
+                    <li><a class="link-light" href="../../community/research.html">Academic research</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h4>Code</h4>
+                <ul class="ps-2 list-unstyled">
+                    <li><a class="link-light" href="../../code/sourceCode.html">Build from source</a></li>
+                    <li><a class="link-light" href="https://issues.redhat.com/projects/PLANNER">Issue tracker</a></li>
+                    <li><a class="link-light" href="../../download/releaseNotes/">Release notes</a></li>
+                    <li><a class="link-light" href="../../download/upgradeRecipe/">Upgrade recipes</a></li>
+                    <li><a class="link-light" href="../../community/branding.html">Logo and branding</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="d-flex justify-content-evenly align-items-center">
+            <div>
+                <i class="fab fa-creative-commons"></i><i class="fab fa-creative-commons-by"></i>
+                <a class="link-light link-underlined" href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC by 3.0</a> |
+                <a class="link-light link-underlined" href="https://www.redhat.com/en/about/privacy-policy">Privacy Policy</a>
+            </div>
+            <div>
+                <span class="me-2 text-white">Sponsored by</span>
+                <a href="https://www.redhat.com/" target="_blank"><img style="width: 6rem" src="https://www.redhat.com/profiles/rh/themes/redhatdotcom/img/logo.svg" alt="Red Hat"></a>
+            </div>
+        </div>
+    </div>
+</footer>
+    <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="ratio ratio-16x9" id="player-container">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"
+            integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/highlight.min.js"
+            integrity="sha256-mfS2sXKEV8eehy39UH7+7BwaoUaIe2TuLO2DXS+c2mI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/asciidoc.min.js"
+            integrity="sha256-gnB2LPAmHPkrj3czfog5GdIu4aByzcKeTUzC2agNMzM=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/properties.min.js"
+            integrity="sha256-1XSLaVD2dn/eCICDUx1DYprsC4UAEa4weDLYY/458wU=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/gradle.min.js"
+            integrity="sha256-B5HtfGpeJKLSEsoqtAdi6sSJ05K49CTGHZbrBiJ9CwE=" crossorigin="anonymous"></script>
+    <script src="../../website/optaplannerWebsite.js"></script>
+    <script>
+        // Ruby syntax highlighting works pretty well for DRL source code.
+        hljs.registerAliases(["drl"], { languageName: "ruby"});
+        hljs.highlightAll();
+    </script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script type="text/javascript">
+      if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+        _satellite.pageBottom();
+      }
+    </script>
+</body>
+</html>
+
+

@@ -1,0 +1,1633 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script id="dpal" src="https://www.redhat.com/dtm.js" type="text/javascript"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-39485370-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-39485370-1');
+    </script>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>OptaPlanner - Formula for measuring unfairness</title>
+    <meta content="Load balancing is a common constraint for many OptaPlanner use cases. Especially when scheduling employees, the workload needs to be spread out fairly. Easier said than done. Let&#8217;s take a ..." name="description">
+    <meta content="metaheuristic, heuristic, constraint satisfaction, constraint programming, operations research, NP-complete, NP-hard, optimization, planning, scheduling, java, open source, software, library, solver, tabu search, simulated annealing, pareto" name="keywords">
+    <link href="https://www.optaplanner.org/blog/2017/02/03/FormulaForMeasuringUnfairness.html" rel="canonical">
+
+    <meta content="Formula for measuring unfairness" property="og:title">
+    <meta content="Load balancing is a common constraint for many OptaPlanner use cases. Especially when scheduling employees, the workload needs to be spread out fairly. Easier said than done. Let&#8217;s take a ..." property="og:description">
+    <meta content="https://www.optaplanner.org/blog/2017/02/03/FormulaForMeasuringUnfairness.html" property="og:url">
+    <meta content="OptaPlanner" property="og:site_name">
+    <meta content="article" property="og:type">
+    <meta content="https://www.optaplanner.org/headerFooter/optaPlannerIcon.png" property="og:image">
+    <meta content="summary" name="twitter:card">
+    <meta content="@OptaPlanner" name="twitter:site">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+          integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css"
+          integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/styles/default.min.css"
+          integrity="sha256-CGf39SzxAmEe09Ojoh16/2xTRNleX9wBZcEXVnNqwSM=" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../../../website/optaplannerWebsite.css">
+    <link href="../../../../favicon.ico" rel="shortcut icon">
+</head>
+
+<body>
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light border-bottom shadow">
+    <div class="container">
+        <a class="navbar-brand" href="../../../../">
+            <img alt="OptaPlanner logo" src="../../../../headerFooter/optaPlannerLogo200px.png">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="../../../../download/download.html">Download</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarLearn" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Learn
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarLearn">
+                        <li><a class="dropdown-item" href="../../../../learn/documentation.html">Documentation</a></li>
+                        <li><a class="dropdown-item" href="../../../../learn/video.html">Videos</a></li>
+                        <li><a class="dropdown-item" href="../../../../learn/slides.html">Slides</a></li>
+                        <li><a class="dropdown-item" href="../../../../learn/training.html">Training</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="../../../../learn/useCases/index.html">Use cases</a></li>
+                        <li><a class="dropdown-item" href="../../../../compatibility/index.html">Compatibility</a></li>
+                        <li><a class="dropdown-item" href="../../../../learn/testimonialsAndCaseStudies.html">Testimonials and case studies</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="../../../../community/getHelp.html">Get help</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../../../blog/">Blog</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../../../code/sourceCode.html">Source</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../../../community/team.html">Team</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../../../product/services.html">Services</a></li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="p-2"><a aria-label="Star OptaPlanner on GitHub" class="github-button" data-show-count="true" href="https://github.com/kiegroup/optaplanner">Star</a></li>
+                <li class="p-1"><a href="https://twitter.com/OptaPlanner" target="_blank" title="Follow OptaPlanner on Twitter"><img alt="T" src="../../../../headerFooter/twitterLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.linkedin.com/showcase/optaplanner" target="_blank" title="Follow OptaPlanner on LinkedIn"><img alt="L" src="../../../../headerFooter/linkedInLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.facebook.com/OptaPlanner" target="_blank" title="Follow OptaPlanner on Facebook"><img alt="F" src="../../../../headerFooter/facebookLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.youtube.com/channel/UCcpkOKpujFlM67D2h0RdaeQ" target="_blank" title="OptaPlanner YouTube channel"><img alt="YT" src="../../../../headerFooter/youtubeLogo.png" style="height: 16px"></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="body-without-header-footer">
+        <div class="forkMeOnGithub">
+            <a href="https://github.com/kiegroup/optaplanner">
+                <img alt="Fork me on GitHub" src="../../../../headerFooter/forkMeOnGithub.png">
+            </a>
+        </div>
+        <div class="container py-4">
+    <div class="row">
+        <div class="col-md-9">
+    <div class="post">
+        <h1 class="title border-bottom">Formula for measuring unfairness</h1>
+        <div class="mb-4">
+            <span class="float-end mb-2">Fri 3 February 2017</span>
+    <div class="card bg-light" style="width: 320px;">
+        <div class="row gx-2">
+            <div class="col-auto">
+                <img class="rounded m-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=64&d=mm" width="64" height="64" alt="Avatar Geoffrey De Smet"/>
+            </div>
+            <div class="col">
+                <div class="card-body p-0 me-1">
+                    <h5 class="card-title my-1">Geoffrey De Smet</h5>
+                    <hr class="m-0"/>
+                    <span class="float-end mx-1">
+                            <a href="https://twitter.com/GeoffreyDeSmet"><img src="../../../../headerFooter/twitterLogo.png" alt="Twitter"/></a>
+                            <a href="https://www.linkedin.com/in/ge0ffrey"><img src="../../../../headerFooter/linkedInLogo.png" alt="LinkedIn"/></a>
+                            <a href="https://github.com/ge0ffrey"><img src="../../../../headerFooter/gitHubLogo.png" alt="GitHub"/></a>
+                    </span>
+                    <p class="small mb-1">OptaPlanner lead</p>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+        <div>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Load balancing is a common constraint for many OptaPlanner use cases.
+Especially when scheduling employees, the workload needs to be spread out fairly.
+Easier said than done. Let&#8217;s take a look at this challenging problem.</p>
+</div>
+<div class="paragraph">
+<p>For example, let&#8217;s assign <code>15</code> undesirable tasks to <code>5</code> employees.
+Each task takes a day, but they have different skill requirements.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_what_is_fair">What is fair?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>In a perfectly fair schedule, each employee will get <code>3</code> tasks</strong>,
+because the mean (= average) is <code>15 / 5 = 3</code>.
+Or explained more formally, for the math geeks:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Mean (= average): \(\overline{x} = \frac{\sum_{i=1}^{n} x_i}{n}\)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>So this schedule is perfectly fair:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="2"></td>
+<th class="tableblock halign-left valign-top" colspan="5"><p class="tableblock">Number of tasks per employee</p></th>
+<th class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Quality</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Measurement of fairness</p></th>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Ann</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Beth</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Carl</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Dan</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Ed</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Mean</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule A</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Fair</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Problem solved? Unfortunately not, because there are other constraints.
+For example, there are 7 tasks that require a skill which only Ann and Beth posses.
+One of them will have to do at least 4 tasks.</p>
+</div>
+<div class="paragraph">
+<p><strong>Our schedule will not be perfectly fair, but how can we make it as fair as possible?</strong></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_what_is_fairer">What is fairer?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Let&#8217;s look at two opposing definitions of fairness:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A schedule is fair if most users think it is fair to them.</p>
+</li>
+<li>
+<p>A schedule is fair if the employee with most tasks has as little tasks as possible.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Obviously, since we want to treat all employees equally, the second definition is correct.
+Besides, if we make almost everyone happy by letting Ann do all the work, she would probably quit on us.
+That wouldn&#8217;t help.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2858%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="2"></td>
+<th class="tableblock halign-left valign-top" colspan="5"><p class="tableblock">Number of tasks per employee</p></th>
+<th class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Quality</p></th>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Ann</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Beth</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Carl</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Dan</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Ed</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>15</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unfair. Ann quits her job.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_sorting_solutions_by_fairness">Sorting solutions by fairness</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Let&#8217;s look at a few different solutions of the same dataset.
+Each one has <code>15</code> undesirable tasks:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2858%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="2"></td>
+<th class="tableblock halign-left valign-top" colspan="5"><p class="tableblock">Number of tasks per employee</p></th>
+<th class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Quality</p></th>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Ann</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Beth</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Carl</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Dan</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Ed</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule A</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Fairest</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule B</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>4</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>4</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule C</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>5</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule D</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>5</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>5</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule E</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>6</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule F</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>6</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>5</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule G</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>11</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unfairest</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>These are sorted from fair to unfair.
+Several of these are probably infeasible, due to hard constraints such as skill requirements.</p>
+</div>
+<div class="paragraph">
+<p>Ann has most tasks each time. How do we compare 2 schedules in which Ann has the same number of tasks?</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2858%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="2"></td>
+<th class="tableblock halign-left valign-top" colspan="5"><p class="tableblock">Number of tasks per employee</p></th>
+<th class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Quality</p></th>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Ann</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Beth</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Carl</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Dan</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Ed</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule C</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>5</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">More fair</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule D</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>5</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>5</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Less fair</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>In that case, we look at the second unfairest treated employee: Beth in this case.
+And we minimize her tasks.</p>
+</div>
+<div class="paragraph">
+<p>Now that we&#8217;ve defined fairness, how do we implement it?</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_measuring_unfairness">Measuring unfairness</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Ideally, we want to calculate a number for each schedule to measures the fairness of that solution.
+The lower, the fairer. How do we calculate that number? Let&#8217;s look at some formula&#8217;s:</p>
+</div>
+<div class="sect2">
+<h3 id="_deviation_from_the_mean">Deviation from the mean</h3>
+<div class="paragraph">
+<p>Because a perfectly fair schedule has all employees working the average number of tasks,
+what if we simply sum the difference with the mean per employee?</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Absolute deviation from the mean: \(f(n) = \sum_{i=1}^{n} |x_i - \overline{x}|\)</p>
+</li>
+<li>
+<p>Average deviation from the mean: \(f(n) = \frac{\sum_{i=1}^{n} |x_i - \overline{x}|}{n}\)</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="2"></td>
+<th class="tableblock halign-left valign-top" colspan="5"><p class="tableblock">Number of tasks per employee</p></th>
+<th class="tableblock halign-left valign-top" colspan="2"><p class="tableblock">Measurement of fairness</p></th>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Ann</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Beth</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Carl</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Dan</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Ed</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Absolute deviation</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Average deviation</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule A</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>0</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>0.00</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule B</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>4</strong> - <em>Bad</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>0.80</strong> - <em>Bad</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule C</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>4</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>0.80</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule D</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>8</strong> - <em>Very bad</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1.60</strong> - <em>Very bad</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule E</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>6</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1.20</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule F</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>10</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>2.00</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule G</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">11</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>16</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>3.20</strong></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>These measurements are terrible. Both claim that schedule B and C are equally fair. They aren&#8217;t.
+Both claim that schedule D is worse than E. It&#8217;s not: just ask Ann.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_variance_and_standard_deviation">Variance and standard deviation</h3>
+<div class="paragraph">
+<p>In statistics, variance and standard deviation are used to penalize outliers more.
+That sounds like exactly what we need:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Variance: \(f(n) = \frac{\sum_{i=1}^{n} (x_i - \overline{x})^2}{n}\)</p>
+</li>
+<li>
+<p>Standard deviation: \(f(n) = \sqrt{\frac{\sum_{i=1}^{n} (x_i - \overline{x})^2}{n}}\)</p>
+</li>
+<li>
+<p>Squared deviation from the mean (= variance * n): \(f(n) = \sum_{i=1}^{n} (x_i - \overline{x})^2\)</p>
+</li>
+<li>
+<p>Root of squared deviation from the mean: \(f(n) = \sqrt{\sum_{i=1}^{n} (x_i - \overline{x})^2}\)</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="2"></td>
+<th class="tableblock halign-left valign-top" colspan="5"><p class="tableblock">Number of tasks per employee</p></th>
+<th class="tableblock halign-left valign-top" colspan="4"><p class="tableblock">Measurement of fairness</p></th>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Ann</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Beth</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Carl</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Dan</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Ed</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Variance</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Standard deviation</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Squared deviation</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Root squared deviation</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule A</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>0.00</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>0.00</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>0</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>0.00</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule B</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>0.80</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>0.89</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>4</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>2.00</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule C</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1.20</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1.10</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>6</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>2.45</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule D</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>2.80</strong> - <em>Bad</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1.67</strong> - <em>Bad</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>14</strong> - <em>Bad</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>3.74</strong> - <em>Bad</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule E</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>2.80</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1.67</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>14</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>3.74</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule F</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>4.40</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>2.10</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>22</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>4.69</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule G</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">11</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>16.00</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>4.00</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>80</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>8.94</strong></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>These measurements are good, but still not ideal. They claim that schedule D and E are equally fair.
+They aren&#8217;t.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_maximum">Maximum</h3>
+<div class="paragraph">
+<p>What if we simply take the maximum of each row?</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Maximum: \(f(n) = \underset{0 &lt; i \leq n}\max x_i\)</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2858%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="2"></td>
+<th class="tableblock halign-left valign-top" colspan="5"><p class="tableblock">Number of tasks per employee</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Measurement of fairness</p></th>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Ann</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Beth</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Carl</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Dan</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Ed</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Maximum</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule A</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>3</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule B</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>4</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule C</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>5</strong> - <em>Bad</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule D</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>5</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule E</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>6</strong> - <em>Bad</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule F</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>6</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule G</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">11</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>11</strong></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>That&#8217;s worse than variance: it only looks at one employee.
+Furthermore, it completely discards fairness between the remaining employees.
+That might be ok if there&#8217;s one employee, but not if there are thousands.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_list_of_maximums">List of maximums</h3>
+<div class="paragraph">
+<p>What if we don&#8217;t use any formula but just store the list of numbers sorted by decreasing size?</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2858%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="2"></td>
+<th class="tableblock halign-left valign-top" colspan="5"><p class="tableblock">Number of tasks per employee</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Measurement of fairness</p></th>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Ann</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Beth</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Carl</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Dan</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Ed</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">List of maximums</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule A</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>[3,3,3,3,3]</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule B</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>[4,4,3,2,2]</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule C</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>[5,3,3,2,2]</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule D</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>[5,5,2,2,1]</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule E</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>[6,3,3,2,1]</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule F</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>[6,5,2,1,1]</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule G</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">11</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>[11,1,1,1,1]</strong></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>That will compare perfectly. In OptaPlanner it can be implemented by adding 5 score levels for this dataset.</p>
+</div>
+<div class="paragraph">
+<p>However, besides obvious memory consumption issues when scaling to thousands of employees,
+this isn&#8217;t compatible with other soft constraints&#8230;&#8203;</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_no_constraint_is_an_island">No constraint is an island</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Fairness is typically a soft constraint.
+But there are other soft constraints that we&#8217;ll need to optimize for too,
+so we&#8217;ll need to weight them against each other.</p>
+</div>
+<div class="sect2">
+<h3 id="_an_example">An example</h3>
+<div class="paragraph">
+<p>For example, presume there&#8217;s a soft constraint on priority violations,
+that&#8217;s 10 times as important as a fairness violation.
+Let&#8217;s also add a schedule with 1500 tasks, to see how it scales out:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"></th>
+<th class="tableblock halign-left valign-top">Number of tasks</th>
+<th class="tableblock halign-left valign-top">Priority violations</th>
+<th class="tableblock halign-left valign-top">Fairness violations</th>
+<th class="tableblock halign-left valign-top">Soft score</th>
+<th class="tableblock halign-left valign-top">Quality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule F</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">15</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">?</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">?</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Best</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule C</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">15</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">?</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">?</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule D</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">15</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">?</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">?</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Worst</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule X</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1500</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">100</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">?</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">?</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Different dataset</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>To calculate the soft score, we sum the fairness violations with 5 times the priority violations and make that negative.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s start the process of elimination&#8230;&#8203;</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_represented_by_a_single_number">Represented by a single number</h3>
+<div class="paragraph">
+<p><em>List of maximums</em> isn&#8217;t represented as single number
+(because it uses multiple score levels),
+so it&#8217;s difficult to mix in priority violations:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="2"></td>
+<th class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Number of tasks</p></th>
+<th class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Priority violations</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Measurement of fairness</p></th>
+<th class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Soft score</p></th>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">List of maximums</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule F</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">15</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[6,5,2,1,1]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ERROR?</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule C</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">15</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[5,3,3,2,2]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ERROR?</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule D</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">15</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[5,5,2,2,1]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ERROR?</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule X</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1500</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">100</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[8,8,7,7,7,7,&#8230;&#8203;]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ERROR?</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_grow_with_the_number_of_violations">Grow with the number of violations</h3>
+<div class="paragraph">
+<p>If we scale out to 1500 employees,
+we notice that <em>maximum</em> gets dwarfed by the priority violations:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="2"></td>
+<th class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Number of tasks</p></th>
+<th class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Priority violations</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Measurement of fairness</p></th>
+<th class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Soft score</p></th>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Maximum</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule F</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">15</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">16</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule C</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">15</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">25</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule D</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">15</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">25</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule X</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1500</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">100</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">8</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1008 - <em>Dwarfed</em></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Similarly, <em>average deviation from the mean</em>, <em>variance</em> and <em>standard deviation</em> get dwarfed
+on bigger datasets too:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="2"></td>
+<th class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Number of tasks</p></th>
+<th class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Priority violations</p></th>
+<th class="tableblock halign-left valign-top" colspan="3"><p class="tableblock">Measurement of fairness</p></th>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Average deviation</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Variance</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Standard deviation</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule F</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">15</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.00</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4.40</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.10</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule C</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">15</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0.80</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.20</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.10</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule D</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">15</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.60</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.80</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.67</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule X</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1500</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">100</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.50 - <em>Dwarfed</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.50 - <em>Dwarfed</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.58 - <em>Dwarfed</em></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>As the number of fairness violations grow, so should the fairness measurement.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_do_not_grow_exponentially_with_the_number_of_violations">Do not grow exponentially with the number of violations</h3>
+<div class="paragraph">
+<p>On the other hand, as the dataset grows, the fairness violations shouldn&#8217;t dwarf the other violations either.
+<em>Squared deviation</em> does that:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="2"></td>
+<th class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Number of tasks</p></th>
+<th class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Priority violations</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Measurement of fairness</p></th>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Squared deviation</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule F</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">15</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">80</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule C</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">15</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule D</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">15</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">14</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule X</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1500</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">100 - <em>Dwarfed</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10201</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_conclusion">Conclusion</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>That just leaves:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>absolute deviation from the mean</em> which compares terribly for fairness</p>
+</li>
+<li>
+<p><em>root squared deviation</em> which isn&#8217;t perfect but works well enough</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>So the recommended approach is:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Root of squared deviation from the mean: \(f(n) = \sqrt{\sum_{i=1}^{n} (x_i - \overline{x})^2}\)</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="2"></td>
+<th class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Number of tasks</p></th>
+<th class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Priority violations</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Measurement of fairness</p></th>
+<th class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Soft score</p></th>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Root squared deviation</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule F</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">15</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4.69</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">14.69</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule C</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">15</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.45</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">22.45</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule D</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">15</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3.74</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">23.74</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule X</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1500</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">100</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">101.00</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1101.00</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_additional_notes">Additional notes</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_part_time_employees">Part-time employees</h3>
+<div class="paragraph">
+<p>To deal with unequal employees,
+for example if some employees work half as many hours as other employees,
+multiply their number of tasks by the inverse of their FTE (full time equivalent)
+before feeding into this formula.</p>
+</div>
+<div class="paragraph">
+<p>Other reasons to treat employees unequally (such as disabilities or talent retention)
+can be handled in a similar fashion or with separate constraints, depending on the requirement.</p>
+</div>
+<!-- Renders Math formula in this page -->
+<script type="text/javascript" async
+    src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_update">Update</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There is a formula that seems to compare perfectly,
+see <a href="http://math.stackexchange.com/a/2144813/86787">this mathexchange answer</a>,
+but it might suffer from numerical instability and overflow.</p>
+</div>
+</div>
+</div>        </div>
+        <hr class="mb-1"/>
+        <div class="mb-4">
+            <div class="float-end">
+                <a href="https://www.optaplanner.org/blog/2017/02/03/FormulaForMeasuringUnfairness.html"><span class="badge bg-dark">Permalink</span></a>
+            </div>
+            <div class="tags">
+                <i class="fas fa-tag"></i>&nbsp;tagged as
+                    <a href="../../../../blog/tags/insight.html"><span class="badge bg-info">insight</span></a>
+                    <a href="../../../../blog/tags/design.html"><span class="badge bg-info">design</span></a>
+                    <a href="../../../../blog/tags/task%20assignment.html"><span class="badge bg-info">task assignment</span></a>
+                    <a href="../../../../blog/tags/employee%20rostering.html"><span class="badge bg-info">employee rostering</span></a>
+                    <a href="../../../../blog/tags/constraint.html"><span class="badge bg-info">constraint</span></a>
+            </div>
+        </div>
+    </div>
+    <div class="comments">
+        <h2>Comments</h2>
+        <a class="btn btn-secondary mb-4" href="https://groups.google.com/g/optaplanner-dev">Visit our forum to comment</a>
+    </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-2 mb-4">
+                <div class="text-center">
+                    <a href="../../../../blog/news.atom">
+                        <img class="me-1" alt="Atom" src="../../../../headerFooter/atomFeedIcon.png">News feed
+                    </a>
+                    <div class="small">
+                        <span>Don’t want to miss a single blog post?</span>
+                        <br>
+                        <span>Follow us on</span>
+                    </div>
+                    <ul class="list-inline mb-2">
+                        <li class="list-inline-item"><a href="https://twitter.com/OptaPlanner" target="_blank" title="News stream via Twitter"><img alt="T" src="../../../../headerFooter/twitterLogo.png"></a></li>
+                        <li class="list-inline-item"><a href="https://www.linkedin.com/showcase/optaplanner" target="_blank" title="News stream via LinkedIn"><img alt="L" src="../../../../headerFooter/linkedInLogo.png"></a></li>
+                        <li class="list-inline-item"><a href="https://www.facebook.com/OptaPlanner" target="_blank" title="News stream via Facebook"><img alt="F" src="../../../../headerFooter/facebookLogo.png"></a></li>
+                    </ul>
+                    <a href="../../../../blog/index.html">Blog archive</a>
+                </div>
+            </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest release</div>
+        <div class="card-body">
+            <ul class="list-unstyled mb-0">
+                <li>
+                    <div class="title">
+                        <a href="../../../../download/releaseNotes/releaseNotes8.html">
+                            8.25.0.Final released
+                        </a>
+                    </div>
+                    <div class="small">
+                        Tue 26 July 2022
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Upcoming events</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <div class="title">
+                                    <a href="https://devoxx.be">Devoxx Belgium</a>
+                            </div>
+                            <span>
+                                Antwerp, Belgium - Mon 10 October 2022
+                            </span>
+                        </li>
+                <div class="small float-end">
+                    <a href="https://github.com/kiegroup/optaplanner-website/blob/main/optaplanner-website-root/data/events.yml">Add event</a>
+                    /
+                    <a href="../../../../community/eventsArchive.html">Archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest blog posts</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2022/06/09/RunOptaPlannerWorkloadOnOpenShift.html">Run OptaPlanner workloads on OpenShift, part I.</a>
+                        </div>
+                        <div class="small">Thu 9 June 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2022/05/26/optaplanner-deprecates-score-drl.html">OptaPlanner deprecates score DRL</a>
+                        </div>
+                        <div class="small">Thu 26 May 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/c950743f532471ac34022e92193563c3?s=20&d=mm"/>
+        <span class="align-middle">Lukáš Petrovický</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2022/03/07/Real-time+planning+meets+the+SolverManager.html">Real-time planning meets SolverManager</a>
+                        </div>
+                        <div class="small">Mon 7 March 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2021/10/26/DocsTurnOverANewLeaf.html">OptaPlanner documentation turns over a new leaf</a>
+                        </div>
+                        <div class="small">Tue 26 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2021/10/14/OrderPickingQuickstart.html">Order picking optimization in warehouses and supermarkets with OptaPlanner</a>
+                        </div>
+                        <div class="small">Thu 14 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/4a8c787544c0b40bc033f631dc2256c2?s=20&d=mm"/>
+        <span class="align-middle">Walter Medvedeo</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2021/10/12/MonitorTheSolver.html">Monitor OptaPlanner solvers through Micrometer</a>
+                        </div>
+                        <div class="small">Tue 12 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/16f228a9f340e2a2ca5b42485a17bc3d?s=20&d=mm"/>
+        <span class="align-middle">Christopher Chianelli</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2021/10/05/ANewAIConstraintSolverForPythonOptaPy.html">A new AI constraint solver for Python: OptaPy</a>
+                        </div>
+                        <div class="small">Tue 5 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/16f228a9f340e2a2ca5b42485a17bc3d?s=20&d=mm"/>
+        <span class="align-middle">Christopher Chianelli</span>
+    </span>
+                    </li>
+                <div class="small float-end">
+                    <a href="../../../../blog/index.html">Blog archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest videos</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="kFoaf696VpA" data-video-title="Host your OptaPlanner app on OpenShift (Kubernetes)">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Host your OptaPlanner app on OpenShift (Kubernetes)</span>
+                        </a>
+                        <div class="small">Mon 7 February 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="bIvt9z-zVHo" data-video-title="OptaPlanner - A fast, easy-to-use, open source AI constraint solver for software developers">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">OptaPlanner - A fast, easy-to-use, open source AI constraint solver for software developers</span>
+                        </a>
+                        <div class="small">Mon 31 January 2022</div>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="784Au4PjTzg" data-video-title="Order picking planning with OptaPlanner">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Order picking planning with OptaPlanner</span>
+                        </a>
+                        <div class="small">Fri 31 December 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/54cd5de3bdaf21a942e8d9d5fe95f647?s=20&d=mm"/>
+        <span class="align-middle">Anna Dupliak</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="HVDPxebpSvg" data-video-title="AI lesson scheduling on Quarkus with OptaPlanner">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">AI lesson scheduling on Quarkus with OptaPlanner</span>
+                        </a>
+                        <div class="small">Thu 18 November 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="dqTrjkVxoPI" data-video-title="Maintenance scheduling">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Maintenance scheduling</span>
+                        </a>
+                        <div class="small">Fri 12 November 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="-RSZbMT_alo" data-video-title="Optimized order picking in warehouses and supermarkets">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Optimized order picking in warehouses and supermarkets</span>
+                        </a>
+                        <div class="small">Tue 26 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/4a8c787544c0b40bc033f631dc2256c2?s=20&d=mm"/>
+        <span class="align-middle">Walter Medvedeo</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="-7ips_GMFmo" data-video-title="A modern OO/FP constraint solver">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">A modern OO/FP constraint solver</span>
+                        </a>
+                        <div class="small">Tue 14 September 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                <div class="small float-end">
+                    <a href="https://www.youtube.com/channel/UCcpkOKpujFlM67D2h0RdaeQ">Video archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+        </div>
+    </div>
+        </div>
+    </div>
+<footer class="py-4 bg-black text-white-50">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <p class="small">OptaPlanner is open.
+                    All dependencies of this project are available under the
+                    <a class="link-light" href="../../../../code/license.html">Apache Software License 2.0</a>
+                    or a compatible license.
+                    OptaPlanner is <a class="link-light" href="../../../../community/branding.html">trademarked</a>.
+                </p>
+                <p class="small">
+                    This <a class="link-light" href="../../../../website/websiteInfo.html">website</a>
+                    was built with <a class="link-light" href="https://jbake.org">JBake</a> and is open source.
+                </p>
+            </div>
+            <div class="col-md-4">
+                <h4>Community</h4>
+                <ul class="ps-2 list-unstyled">
+                    <li><a class="link-light" href="../../../../blog/">Blog</a></li>
+                    <li><a class="link-light" href="../../../../community/getHelp.html">Get Help</a></li>
+                    <li><a class="link-light" href="../../../../community/team.html">Team</a></li>
+                    <li><a class="link-light" href="../../../../community/governance.html">Governance</a></li>
+                    <li><a class="link-light" href="../../../../community/research.html">Academic research</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h4>Code</h4>
+                <ul class="ps-2 list-unstyled">
+                    <li><a class="link-light" href="../../../../code/sourceCode.html">Build from source</a></li>
+                    <li><a class="link-light" href="https://issues.redhat.com/projects/PLANNER">Issue tracker</a></li>
+                    <li><a class="link-light" href="../../../../download/releaseNotes/">Release notes</a></li>
+                    <li><a class="link-light" href="../../../../download/upgradeRecipe/">Upgrade recipes</a></li>
+                    <li><a class="link-light" href="../../../../community/branding.html">Logo and branding</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="d-flex justify-content-evenly align-items-center">
+            <div>
+                <i class="fab fa-creative-commons"></i><i class="fab fa-creative-commons-by"></i>
+                <a class="link-light link-underlined" href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC by 3.0</a> |
+                <a class="link-light link-underlined" href="https://www.redhat.com/en/about/privacy-policy">Privacy Policy</a>
+            </div>
+            <div>
+                <span class="me-2 text-white">Sponsored by</span>
+                <a href="https://www.redhat.com/" target="_blank"><img style="width: 6rem" src="https://www.redhat.com/profiles/rh/themes/redhatdotcom/img/logo.svg" alt="Red Hat"></a>
+            </div>
+        </div>
+    </div>
+</footer>
+    <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="ratio ratio-16x9" id="player-container">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"
+            integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/highlight.min.js"
+            integrity="sha256-mfS2sXKEV8eehy39UH7+7BwaoUaIe2TuLO2DXS+c2mI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/asciidoc.min.js"
+            integrity="sha256-gnB2LPAmHPkrj3czfog5GdIu4aByzcKeTUzC2agNMzM=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/properties.min.js"
+            integrity="sha256-1XSLaVD2dn/eCICDUx1DYprsC4UAEa4weDLYY/458wU=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/gradle.min.js"
+            integrity="sha256-B5HtfGpeJKLSEsoqtAdi6sSJ05K49CTGHZbrBiJ9CwE=" crossorigin="anonymous"></script>
+    <script src="../../../../website/optaplannerWebsite.js"></script>
+    <script>
+        // Ruby syntax highlighting works pretty well for DRL source code.
+        hljs.registerAliases(["drl"], { languageName: "ruby"});
+        hljs.highlightAll();
+    </script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script type="text/javascript">
+      if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+        _satellite.pageBottom();
+      }
+    </script>
+</body>
+</html>
+
+

@@ -1,0 +1,982 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script id="dpal" src="https://www.redhat.com/dtm.js" type="text/javascript"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-39485370-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-39485370-1');
+    </script>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>OptaPlanner - How much faster is Java 17?</title>
+    <meta content="Java 17 (released yesterday) comes with many new features and enhancements. However, most of those require code changes to benefit from. Except for performance. Simply switch your JDK ..." name="description">
+    <meta content="metaheuristic, heuristic, constraint satisfaction, constraint programming, operations research, NP-complete, NP-hard, optimization, planning, scheduling, java, open source, software, library, solver, tabu search, simulated annealing, pareto" name="keywords">
+    <link href="https://www.optaplanner.org/blog/2021/09/15/HowMuchFasterIsJava17.html" rel="canonical">
+
+    <meta content="How much faster is Java 17?" property="og:title">
+    <meta content="Java 17 (released yesterday) comes with many new features and enhancements. However, most of those require code changes to benefit from. Except for performance. Simply switch your JDK ..." property="og:description">
+    <meta content="https://www.optaplanner.org/blog/2021/09/15/HowMuchFasterIsJava17.html" property="og:url">
+    <meta content="OptaPlanner" property="og:site_name">
+    <meta content="article" property="og:type">
+    <meta content="https://www.optaplanner.org/blog/2021/09/15/comparison-G1GC-ParallelGC-java17.png" property="og:image">
+    <meta content="summary" name="twitter:card">
+    <meta content="@OptaPlanner" name="twitter:site">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+          integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css"
+          integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/styles/default.min.css"
+          integrity="sha256-CGf39SzxAmEe09Ojoh16/2xTRNleX9wBZcEXVnNqwSM=" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../../../website/optaplannerWebsite.css">
+    <link href="../../../../favicon.ico" rel="shortcut icon">
+</head>
+
+<body>
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light border-bottom shadow">
+    <div class="container">
+        <a class="navbar-brand" href="../../../../">
+            <img alt="OptaPlanner logo" src="../../../../headerFooter/optaPlannerLogo200px.png">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="../../../../download/download.html">Download</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarLearn" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Learn
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarLearn">
+                        <li><a class="dropdown-item" href="../../../../learn/documentation.html">Documentation</a></li>
+                        <li><a class="dropdown-item" href="../../../../learn/video.html">Videos</a></li>
+                        <li><a class="dropdown-item" href="../../../../learn/slides.html">Slides</a></li>
+                        <li><a class="dropdown-item" href="../../../../learn/training.html">Training</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="../../../../learn/useCases/index.html">Use cases</a></li>
+                        <li><a class="dropdown-item" href="../../../../compatibility/index.html">Compatibility</a></li>
+                        <li><a class="dropdown-item" href="../../../../learn/testimonialsAndCaseStudies.html">Testimonials and case studies</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="../../../../community/getHelp.html">Get help</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../../../blog/">Blog</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../../../code/sourceCode.html">Source</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../../../community/team.html">Team</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../../../product/services.html">Services</a></li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="p-2"><a aria-label="Star OptaPlanner on GitHub" class="github-button" data-show-count="true" href="https://github.com/kiegroup/optaplanner">Star</a></li>
+                <li class="p-1"><a href="https://twitter.com/OptaPlanner" target="_blank" title="Follow OptaPlanner on Twitter"><img alt="T" src="../../../../headerFooter/twitterLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.linkedin.com/showcase/optaplanner" target="_blank" title="Follow OptaPlanner on LinkedIn"><img alt="L" src="../../../../headerFooter/linkedInLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.facebook.com/OptaPlanner" target="_blank" title="Follow OptaPlanner on Facebook"><img alt="F" src="../../../../headerFooter/facebookLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.youtube.com/channel/UCcpkOKpujFlM67D2h0RdaeQ" target="_blank" title="OptaPlanner YouTube channel"><img alt="YT" src="../../../../headerFooter/youtubeLogo.png" style="height: 16px"></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="body-without-header-footer">
+        <div class="forkMeOnGithub">
+            <a href="https://github.com/kiegroup/optaplanner">
+                <img alt="Fork me on GitHub" src="../../../../headerFooter/forkMeOnGithub.png">
+            </a>
+        </div>
+        <div class="container py-4">
+    <div class="row">
+        <div class="col-md-9">
+    <div class="post">
+        <h1 class="title border-bottom">How much faster is Java 17?</h1>
+        <div class="mb-4">
+            <span class="float-end mb-2">Wed 15 September 2021</span>
+    <div class="card bg-light" style="width: 320px;">
+        <div class="row gx-2">
+            <div class="col-auto">
+                <img class="rounded m-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=64&d=mm" width="64" height="64" alt="Avatar Geoffrey De Smet"/>
+            </div>
+            <div class="col">
+                <div class="card-body p-0 me-1">
+                    <h5 class="card-title my-1">Geoffrey De Smet</h5>
+                    <hr class="m-0"/>
+                    <span class="float-end mx-1">
+                            <a href="https://twitter.com/GeoffreyDeSmet"><img src="../../../../headerFooter/twitterLogo.png" alt="Twitter"/></a>
+                            <a href="https://www.linkedin.com/in/ge0ffrey"><img src="../../../../headerFooter/linkedInLogo.png" alt="LinkedIn"/></a>
+                            <a href="https://github.com/ge0ffrey"><img src="../../../../headerFooter/gitHubLogo.png" alt="GitHub"/></a>
+                    </span>
+                    <p class="small mb-1">OptaPlanner lead</p>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+        <div>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Java 17 (released yesterday) comes with many new features and enhancements.
+However, most of those require code changes to benefit from.
+<em>Except for performance.</em>
+Simply switch your JDK installation and you get a free performance boost.
+But how much? Is it worth it?
+Let&#8217;s find out by comparing the benchmarks of JDK 17, JDK 16 and JDK 11.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_benchmark_methodology">Benchmark methodology</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Hardware: A stable machine without any other computational demanding processes running and with
+<code>Intel® Xeon® Silver 4116 @ 2.1 GHz (12 cores total / 24 threads)</code> and <code>128 GiB</code> RAM memory, running <code>RHEL 8 x86_64</code>.</p>
+</li>
+<li>
+<p>JDKs (used to both compile and run):</p>
+<div class="ulist">
+<ul>
+<li>
+<p>JDK 11</p>
+<div class="listingblock">
+<div class="content">
+<pre>openjdk 11.0.12 2021-07-20
+OpenJDK Runtime Environment Temurin-11.0.12+7 (build 11.0.12+7)
+OpenJDK 64-Bit Server VM Temurin-11.0.12+7 (build 11.0.12+7, mixed mode)</pre>
+</div>
+</div>
+</li>
+<li>
+<p>JDK 16</p>
+<div class="listingblock">
+<div class="content">
+<pre>openjdk 16.0.2 2021-07-20
+OpenJDK Runtime Environment (build 16.0.2+7-67)
+OpenJDK 64-Bit Server VM (build 16.0.2+7-67, mixed mode, sharing)</pre>
+</div>
+</div>
+</li>
+<li>
+<p>JDK 17 (downloaded 2021-09-06)</p>
+<div class="listingblock">
+<div class="content">
+<pre>openjdk 17 2021-09-14
+OpenJDK Runtime Environment (build 17+35-2724)
+OpenJDK 64-Bit Server VM (build 17+35-2724, mixed mode, sharing)</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>JVM options: <code>-Xmx3840M</code> and explicitly specify a garbage collector:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>-XX:+UseG1GC</code> for G1GC, the low latency garbage collector (the default in all three JDKs).</p>
+</li>
+<li>
+<p><code>-XX:+UseParallelGC</code> for ParallelGC, the high throughput garbage collector.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Main class: <code>org.optaplanner.examples.app.GeneralOptaPlannerBenchmarkApp</code>
+from the module <code>optaplanner-examples</code> in OptaPlanner <code>8.10.0.Final</code>.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Each run solves 11 planning problems with OptaPlanner, such as
+<a href="https://www.optaplanner.org/learn/useCases/employeeRostering.html">employee rostering</a>,
+<a href="https://www.optaplanner.org/learn/useCases/schoolTimetabling.html">school timetabling</a> and
+<a href="https://www.optaplanner.org/learn/useCases/cloudOptimization.html">cloud optimization</a>.
+Each planning problem runs for 5 minutes. Logging is set to <code>INFO</code>.
+The benchmark starts with a 30 second JVM warm up which is discarded.</p>
+</li>
+<li>
+<p>Solving a planning problem involves <strong>no IO</strong> (except a few milliseconds during startup to load the input). <strong>A single
+CPU is completely saturated.</strong> It constantly creates many short-lived objects, and the GC collects them afterwards.</p>
+</li>
+<li>
+<p>The benchmarks measure the number of scores calculated per second. Higher is better. Calculating
+a score for a proposed planning solution is non-trivial: it involves many calculations, including checking for
+conflicts between every entity and every other entity.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Runs: Each JDK and each garbage collector combination is run 3 times sequentially.
+The results below is the average of those 3 runs.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><a href="runBenchmarkJDKComparison.sh.txt">Here is the shell script to reproduce these results.</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_results">Results</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_java_11_lts_and_java_16_versus_java_17_lts">Java 11 (LTS) and Java 16 versus Java 17 (LTS)</h3>
+<div class="imageblock">
+<div class="content">
+<img src="comparison-java11-java16-java17-G1GC.png" alt="comparison java11 java16 java17 G1GC">
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. Score calculation count per second with G1GC on different JDKs</caption>
+<colgroup>
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6924%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><strong>Average</strong></p></td>
+<td class="tableblock halign-center valign-middle" colspan="2"><p class="tableblock">Cloud balancing</p></td>
+<td class="tableblock halign-center valign-middle" colspan="2"><p class="tableblock">Machine reassignment</p></td>
+<td class="tableblock halign-center valign-middle" colspan="2"><p class="tableblock">Course scheduling</p></td>
+<td class="tableblock halign-center valign-middle" colspan="2"><p class="tableblock">Exam scheduling</p></td>
+<td class="tableblock halign-center valign-middle" colspan="2"><p class="tableblock">Nurse rostering</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">Traveling Tournament</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dataset</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">200c</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">800c</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">B1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">B10</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">c7</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">c8</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">s2</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">s3</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">m1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">mh1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">nl14</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JDK 11</p></td>
+<td class="tableblock halign-right valign-top"></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">103,606</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">96,700</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">274,103</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">37,421</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">11,779</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">13,660</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">14,354</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">8,982</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">3,585</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">3,335</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">5,019</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JDK 16</p></td>
+<td class="tableblock halign-right valign-top"></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">109,203</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">97,567</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">243,096</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">38,031</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">13,950</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">16,251</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">15,218</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">9,528</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">3,817</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">3,508</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">5,472</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JDK 17</p></td>
+<td class="tableblock halign-right valign-top"></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">106,147</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">98,069</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">245,645</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">42,096</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">14,406</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">16,924</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">15,619</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">9,726</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">3,802</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">3,601</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">5,618</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">11 → 17</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>8.66%</strong></p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">2.45%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">1.42%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">-10.38%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">12.49%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">22.30%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">23.90%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">8.81%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">8.28%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">6.05%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">7.98%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">11.95%</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">16 → 17</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>2.41%</strong></p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">-2.80%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">0.51%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">1.05%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">10.69%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">3.27%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">4.14%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">2.63%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">2.08%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">-0.39%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">2.65%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">2.67%</p></td>
+</tr>
+</tbody>
+</table>
+<div class="imageblock">
+<div class="content">
+<img src="comparison-java11-java16-java17-ParallelGC.png" alt="comparison java11 java16 java17 ParallelGC">
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. Score calculation count per second with ParallelGC on different JDKs</caption>
+<colgroup>
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6924%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><strong>Average</strong></p></td>
+<td class="tableblock halign-center valign-middle" colspan="2"><p class="tableblock">Cloud balancing</p></td>
+<td class="tableblock halign-center valign-middle" colspan="2"><p class="tableblock">Machine reassignment</p></td>
+<td class="tableblock halign-center valign-middle" colspan="2"><p class="tableblock">Course scheduling</p></td>
+<td class="tableblock halign-center valign-middle" colspan="2"><p class="tableblock">Exam scheduling</p></td>
+<td class="tableblock halign-center valign-middle" colspan="2"><p class="tableblock">Nurse rostering</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">Traveling Tournament</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dataset</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">200c</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">800c</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">B1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">B10</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">c7</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">c8</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">s2</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">s3</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">m1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">mh1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">nl14</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JDK 11</p></td>
+<td class="tableblock halign-right valign-top"></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">128,553</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">121,974</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">292,761</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">48,339</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">13,397</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">15,540</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">16,392</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">9,887</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">4,409</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">4,148</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">6,097</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JDK 16</p></td>
+<td class="tableblock halign-right valign-top"></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">128,723</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">123,314</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">281,882</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">45,622</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">16,243</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">18,528</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">17,742</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">10,744</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">4,608</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">4,348</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">6,578</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JDK 17</p></td>
+<td class="tableblock halign-right valign-top"></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">130,215</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">124,498</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">262,753</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">45,058</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">16,479</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">18,904</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">18,023</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">10,845</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">4,658</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">4,430</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">6,641</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">11 → 17</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>6.54%</strong></p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">1.29%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">2.07%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">-10.25%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">-6.79%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">23.00%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">21.64%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">9.95%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">9.68%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">5.63%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">6.80%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">8.92%</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">16 → 17</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>0.37%</strong></p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">1.16%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">0.96%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">-6.79%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">-1.24%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">1.45%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">2.03%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">1.59%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">0.94%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">1.08%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">1.89%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">0.96%</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Looking at the raw data of the 3 individual runs (not shown here),
+the Machine Reassignment numbers (B1 and B10) fluctuate a lot between runs on the same JDK and GC.
+Often by more than 10%. The other numbers don&#8217;t suffer from this unreliability.</p>
+</div>
+<div class="paragraph">
+<p><em>It&#8217;s arguably better to ignore the Machine Reassignment numbers</em>.
+But to avoid cherry-picking data concerns, these results and averages do include them.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_g1gc_versus_parallelgc_on_java_17">G1GC versus ParallelGC on Java 17</h3>
+<div class="imageblock">
+<div class="content">
+<img src="comparison-G1GC-ParallelGC-java17.png" alt="comparison G1GC ParallelGC java17">
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 3. Score calculation count per second on JDK 17 with different GCs</caption>
+<colgroup>
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6923%;">
+<col style="width: 7.6924%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><strong>Average</strong></p></td>
+<td class="tableblock halign-center valign-middle" colspan="2"><p class="tableblock">Cloud balancing</p></td>
+<td class="tableblock halign-center valign-middle" colspan="2"><p class="tableblock">Machine reassignment</p></td>
+<td class="tableblock halign-center valign-middle" colspan="2"><p class="tableblock">Course scheduling</p></td>
+<td class="tableblock halign-center valign-middle" colspan="2"><p class="tableblock">Exam scheduling</p></td>
+<td class="tableblock halign-center valign-middle" colspan="2"><p class="tableblock">Nurse rostering<sup>.</sup></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Traveling Tournament</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dataset</p></td>
+<td class="tableblock halign-center valign-top"></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">200c</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">800c</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">B1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">B10</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">c7</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">c8</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">s2</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">s3</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">m1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">mh1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">nl14</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">G1GC</p></td>
+<td class="tableblock halign-right valign-top"></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">106,147</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">98,069</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">245,645</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">42,096</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">14,406</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">16,924</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">15,619</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">9,726</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">3,802</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">3,601</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">5,618</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ParallelGC</p></td>
+<td class="tableblock halign-right valign-top"></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">130,215</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">124,498</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">262,753</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">45,058</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">16,479</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">18,904</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">18,023</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">10,845</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">4,658</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">4,430</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">6,641</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">G1 → ParallelGC</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock"><strong>16.39%</strong></p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">22.67%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">26.95%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">6.96%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">7.04%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">14.39%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">11.69%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">15.39%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">11.50%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">22.50%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">23.01%</p></td>
+<td class="tableblock halign-right valign-top"><p class="tableblock">18.20%</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_executive_summary">Executive summary</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>On average, for OptaPlanner use cases, these benchmarks indicate that:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Java 17 is 8.66% faster than Java 11</strong> and 2.41% faster than Java 16 for G1GC (default).</p>
+</li>
+<li>
+<p>Java 17 is 6.54% faster than Java 11 and 0.37% faster than Java 16 for ParallelGC.</p>
+</li>
+<li>
+<p>The Parallel Garbage Collector is 16.39% faster than the G1 Garbage Collector.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>No big surprises here: the latest JDK is faster
+and the high throughput garbage collector is faster than the low latency garbage collector.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_wait_a_minute_here">Wait a minute here&#8230;&#8203;</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When <a href="https://www.optaplanner.org/blog/2021/01/26/HowMuchFasterIsJava15.html">we benchmarked JDK 15</a>,
+we saw that Java 15 was 11.24% faster than Java 11. Now, the gain of Java 17 over Java 11 is less.
+Does that mean that Java 17 is slower than Java 15?</p>
+</div>
+<div class="paragraph">
+<p>Well, no. <em>Java 17 is faster than Java 15 too.</em>
+Those previous benchmarks were run on a different codebase (OptaPlanner 7.44 instead of 8.10).
+Don&#8217;t compare apples and oranges.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_conclusion">Conclusion</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In conclusion, the performance gained in the JDK17 version is well worth the upgrade - at least for <a href="https://www.optaplanner.org/">OptaPlanner</a> use cases.</p>
+</div>
+<div class="paragraph">
+<p>In addition, the fastest garbage collector for these use cases is still <code>ParallelGC</code>, instead of <code>G1GC</code> (the default).</p>
+</div>
+</div>
+</div>        </div>
+        <hr class="mb-1"/>
+        <div class="mb-4">
+            <div class="float-end">
+                <a href="https://www.optaplanner.org/blog/2021/09/15/HowMuchFasterIsJava17.html"><span class="badge bg-dark">Permalink</span></a>
+            </div>
+            <div class="tags">
+                <i class="fas fa-tag"></i>&nbsp;tagged as
+                    <a href="../../../../blog/tags/production.html"><span class="badge bg-info">production</span></a>
+                    <a href="../../../../blog/tags/benchmark.html"><span class="badge bg-info">benchmark</span></a>
+            </div>
+        </div>
+    </div>
+    <div class="comments">
+        <h2>Comments</h2>
+        <a class="btn btn-secondary mb-4" href="https://groups.google.com/g/optaplanner-dev">Visit our forum to comment</a>
+    </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-2 mb-4">
+                <div class="text-center">
+                    <a href="../../../../blog/news.atom">
+                        <img class="me-1" alt="Atom" src="../../../../headerFooter/atomFeedIcon.png">News feed
+                    </a>
+                    <div class="small">
+                        <span>Don’t want to miss a single blog post?</span>
+                        <br>
+                        <span>Follow us on</span>
+                    </div>
+                    <ul class="list-inline mb-2">
+                        <li class="list-inline-item"><a href="https://twitter.com/OptaPlanner" target="_blank" title="News stream via Twitter"><img alt="T" src="../../../../headerFooter/twitterLogo.png"></a></li>
+                        <li class="list-inline-item"><a href="https://www.linkedin.com/showcase/optaplanner" target="_blank" title="News stream via LinkedIn"><img alt="L" src="../../../../headerFooter/linkedInLogo.png"></a></li>
+                        <li class="list-inline-item"><a href="https://www.facebook.com/OptaPlanner" target="_blank" title="News stream via Facebook"><img alt="F" src="../../../../headerFooter/facebookLogo.png"></a></li>
+                    </ul>
+                    <a href="../../../../blog/index.html">Blog archive</a>
+                </div>
+            </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest release</div>
+        <div class="card-body">
+            <ul class="list-unstyled mb-0">
+                <li>
+                    <div class="title">
+                        <a href="../../../../download/releaseNotes/releaseNotes8.html">
+                            8.25.0.Final released
+                        </a>
+                    </div>
+                    <div class="small">
+                        Tue 26 July 2022
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Upcoming events</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <div class="title">
+                                    <a href="https://devoxx.be">Devoxx Belgium</a>
+                            </div>
+                            <span>
+                                Antwerp, Belgium - Mon 10 October 2022
+                            </span>
+                        </li>
+                <div class="small float-end">
+                    <a href="https://github.com/kiegroup/optaplanner-website/blob/main/optaplanner-website-root/data/events.yml">Add event</a>
+                    /
+                    <a href="../../../../community/eventsArchive.html">Archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest blog posts</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2022/06/09/RunOptaPlannerWorkloadOnOpenShift.html">Run OptaPlanner workloads on OpenShift, part I.</a>
+                        </div>
+                        <div class="small">Thu 9 June 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2022/05/26/optaplanner-deprecates-score-drl.html">OptaPlanner deprecates score DRL</a>
+                        </div>
+                        <div class="small">Thu 26 May 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/c950743f532471ac34022e92193563c3?s=20&d=mm"/>
+        <span class="align-middle">Lukáš Petrovický</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2022/03/07/Real-time+planning+meets+the+SolverManager.html">Real-time planning meets SolverManager</a>
+                        </div>
+                        <div class="small">Mon 7 March 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2021/10/26/DocsTurnOverANewLeaf.html">OptaPlanner documentation turns over a new leaf</a>
+                        </div>
+                        <div class="small">Tue 26 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2021/10/14/OrderPickingQuickstart.html">Order picking optimization in warehouses and supermarkets with OptaPlanner</a>
+                        </div>
+                        <div class="small">Thu 14 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/4a8c787544c0b40bc033f631dc2256c2?s=20&d=mm"/>
+        <span class="align-middle">Walter Medvedeo</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2021/10/12/MonitorTheSolver.html">Monitor OptaPlanner solvers through Micrometer</a>
+                        </div>
+                        <div class="small">Tue 12 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/16f228a9f340e2a2ca5b42485a17bc3d?s=20&d=mm"/>
+        <span class="align-middle">Christopher Chianelli</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../../../blog/2021/10/05/ANewAIConstraintSolverForPythonOptaPy.html">A new AI constraint solver for Python: OptaPy</a>
+                        </div>
+                        <div class="small">Tue 5 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/16f228a9f340e2a2ca5b42485a17bc3d?s=20&d=mm"/>
+        <span class="align-middle">Christopher Chianelli</span>
+    </span>
+                    </li>
+                <div class="small float-end">
+                    <a href="../../../../blog/index.html">Blog archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest videos</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="kFoaf696VpA" data-video-title="Host your OptaPlanner app on OpenShift (Kubernetes)">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Host your OptaPlanner app on OpenShift (Kubernetes)</span>
+                        </a>
+                        <div class="small">Mon 7 February 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="bIvt9z-zVHo" data-video-title="OptaPlanner - A fast, easy-to-use, open source AI constraint solver for software developers">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">OptaPlanner - A fast, easy-to-use, open source AI constraint solver for software developers</span>
+                        </a>
+                        <div class="small">Mon 31 January 2022</div>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="784Au4PjTzg" data-video-title="Order picking planning with OptaPlanner">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Order picking planning with OptaPlanner</span>
+                        </a>
+                        <div class="small">Fri 31 December 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/54cd5de3bdaf21a942e8d9d5fe95f647?s=20&d=mm"/>
+        <span class="align-middle">Anna Dupliak</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="HVDPxebpSvg" data-video-title="AI lesson scheduling on Quarkus with OptaPlanner">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">AI lesson scheduling on Quarkus with OptaPlanner</span>
+                        </a>
+                        <div class="small">Thu 18 November 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="dqTrjkVxoPI" data-video-title="Maintenance scheduling">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Maintenance scheduling</span>
+                        </a>
+                        <div class="small">Fri 12 November 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="-RSZbMT_alo" data-video-title="Optimized order picking in warehouses and supermarkets">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Optimized order picking in warehouses and supermarkets</span>
+                        </a>
+                        <div class="small">Tue 26 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/4a8c787544c0b40bc033f631dc2256c2?s=20&d=mm"/>
+        <span class="align-middle">Walter Medvedeo</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="-7ips_GMFmo" data-video-title="A modern OO/FP constraint solver">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">A modern OO/FP constraint solver</span>
+                        </a>
+                        <div class="small">Tue 14 September 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                <div class="small float-end">
+                    <a href="https://www.youtube.com/channel/UCcpkOKpujFlM67D2h0RdaeQ">Video archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+        </div>
+    </div>
+        </div>
+    </div>
+<footer class="py-4 bg-black text-white-50">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <p class="small">OptaPlanner is open.
+                    All dependencies of this project are available under the
+                    <a class="link-light" href="../../../../code/license.html">Apache Software License 2.0</a>
+                    or a compatible license.
+                    OptaPlanner is <a class="link-light" href="../../../../community/branding.html">trademarked</a>.
+                </p>
+                <p class="small">
+                    This <a class="link-light" href="../../../../website/websiteInfo.html">website</a>
+                    was built with <a class="link-light" href="https://jbake.org">JBake</a> and is open source.
+                </p>
+            </div>
+            <div class="col-md-4">
+                <h4>Community</h4>
+                <ul class="ps-2 list-unstyled">
+                    <li><a class="link-light" href="../../../../blog/">Blog</a></li>
+                    <li><a class="link-light" href="../../../../community/getHelp.html">Get Help</a></li>
+                    <li><a class="link-light" href="../../../../community/team.html">Team</a></li>
+                    <li><a class="link-light" href="../../../../community/governance.html">Governance</a></li>
+                    <li><a class="link-light" href="../../../../community/research.html">Academic research</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h4>Code</h4>
+                <ul class="ps-2 list-unstyled">
+                    <li><a class="link-light" href="../../../../code/sourceCode.html">Build from source</a></li>
+                    <li><a class="link-light" href="https://issues.redhat.com/projects/PLANNER">Issue tracker</a></li>
+                    <li><a class="link-light" href="../../../../download/releaseNotes/">Release notes</a></li>
+                    <li><a class="link-light" href="../../../../download/upgradeRecipe/">Upgrade recipes</a></li>
+                    <li><a class="link-light" href="../../../../community/branding.html">Logo and branding</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="d-flex justify-content-evenly align-items-center">
+            <div>
+                <i class="fab fa-creative-commons"></i><i class="fab fa-creative-commons-by"></i>
+                <a class="link-light link-underlined" href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC by 3.0</a> |
+                <a class="link-light link-underlined" href="https://www.redhat.com/en/about/privacy-policy">Privacy Policy</a>
+            </div>
+            <div>
+                <span class="me-2 text-white">Sponsored by</span>
+                <a href="https://www.redhat.com/" target="_blank"><img style="width: 6rem" src="https://www.redhat.com/profiles/rh/themes/redhatdotcom/img/logo.svg" alt="Red Hat"></a>
+            </div>
+        </div>
+    </div>
+</footer>
+    <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="ratio ratio-16x9" id="player-container">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"
+            integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/highlight.min.js"
+            integrity="sha256-mfS2sXKEV8eehy39UH7+7BwaoUaIe2TuLO2DXS+c2mI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/asciidoc.min.js"
+            integrity="sha256-gnB2LPAmHPkrj3czfog5GdIu4aByzcKeTUzC2agNMzM=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/properties.min.js"
+            integrity="sha256-1XSLaVD2dn/eCICDUx1DYprsC4UAEa4weDLYY/458wU=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/gradle.min.js"
+            integrity="sha256-B5HtfGpeJKLSEsoqtAdi6sSJ05K49CTGHZbrBiJ9CwE=" crossorigin="anonymous"></script>
+    <script src="../../../../website/optaplannerWebsite.js"></script>
+    <script>
+        // Ruby syntax highlighting works pretty well for DRL source code.
+        hljs.registerAliases(["drl"], { languageName: "ruby"});
+        hljs.highlightAll();
+    </script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script type="text/javascript">
+      if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+        _satellite.pageBottom();
+      }
+    </script>
+</body>
+</html>
+
+

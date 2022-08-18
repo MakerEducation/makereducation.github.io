@@ -1,0 +1,1114 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script id="dpal" src="https://www.redhat.com/dtm.js" type="text/javascript"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-39485370-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-39485370-1');
+    </script>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>OptaPlanner - Upgrade recipe 6.3</title>
+    <meta content="Upgrade to OptaPlanner 6.3 from a previous version." name="description">
+    <meta content="metaheuristic, heuristic, constraint satisfaction, constraint programming, operations research, NP-complete, NP-hard, optimization, planning, scheduling, java, open source, software, library, solver, tabu search, simulated annealing, pareto" name="keywords">
+    <link href="https://www.optaplanner.org/download/upgradeRecipe/upgradeRecipe6.3.html" rel="canonical">
+
+    <meta content="Upgrade recipe 6.3" property="og:title">
+    <meta content="Upgrade to OptaPlanner 6.3 from a previous version." property="og:description">
+    <meta content="https://www.optaplanner.org/download/upgradeRecipe/upgradeRecipe6.3.html" property="og:url">
+    <meta content="OptaPlanner" property="og:site_name">
+    <meta content="website" property="og:type">
+    <meta content="https://www.optaplanner.org/headerFooter/optaPlannerIcon.png" property="og:image">
+    <meta content="summary" name="twitter:card">
+    <meta content="@OptaPlanner" name="twitter:site">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+          integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css"
+          integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/styles/default.min.css"
+          integrity="sha256-CGf39SzxAmEe09Ojoh16/2xTRNleX9wBZcEXVnNqwSM=" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../website/optaplannerWebsite.css">
+    <link href="../../favicon.ico" rel="shortcut icon">
+</head>
+
+<body>
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light border-bottom shadow">
+    <div class="container">
+        <a class="navbar-brand" href="../../">
+            <img alt="OptaPlanner logo" src="../../headerFooter/optaPlannerLogo200px.png">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="../../download/download.html">Download</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarLearn" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Learn
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarLearn">
+                        <li><a class="dropdown-item" href="../../learn/documentation.html">Documentation</a></li>
+                        <li><a class="dropdown-item" href="../../learn/video.html">Videos</a></li>
+                        <li><a class="dropdown-item" href="../../learn/slides.html">Slides</a></li>
+                        <li><a class="dropdown-item" href="../../learn/training.html">Training</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="../../learn/useCases/index.html">Use cases</a></li>
+                        <li><a class="dropdown-item" href="../../compatibility/index.html">Compatibility</a></li>
+                        <li><a class="dropdown-item" href="../../learn/testimonialsAndCaseStudies.html">Testimonials and case studies</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="../../community/getHelp.html">Get help</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../blog/">Blog</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../code/sourceCode.html">Source</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../community/team.html">Team</a></li>
+                <li class="nav-item"><a class="nav-link" href="../../product/services.html">Services</a></li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="p-2"><a aria-label="Star OptaPlanner on GitHub" class="github-button" data-show-count="true" href="https://github.com/kiegroup/optaplanner">Star</a></li>
+                <li class="p-1"><a href="https://twitter.com/OptaPlanner" target="_blank" title="Follow OptaPlanner on Twitter"><img alt="T" src="../../headerFooter/twitterLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.linkedin.com/showcase/optaplanner" target="_blank" title="Follow OptaPlanner on LinkedIn"><img alt="L" src="../../headerFooter/linkedInLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.facebook.com/OptaPlanner" target="_blank" title="Follow OptaPlanner on Facebook"><img alt="F" src="../../headerFooter/facebookLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.youtube.com/channel/UCcpkOKpujFlM67D2h0RdaeQ" target="_blank" title="OptaPlanner YouTube channel"><img alt="YT" src="../../headerFooter/youtubeLogo.png" style="height: 16px"></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="body-without-header-footer">
+        <div class="forkMeOnGithub">
+            <a href="https://github.com/kiegroup/optaplanner">
+                <img alt="Fork me on GitHub" src="../../headerFooter/forkMeOnGithub.png">
+            </a>
+        </div>
+        <div class="container py-4">
+    <div class="row">
+        <div class="col-md-9">
+    <h1>Upgrade recipe 6.3</h1>
+    <div class="paragraph summaryParagraph">
+        <p><strong>OptaPlanner’s public API classes are backwards compatible</strong> (per series),
+            but users often also use impl classes (which are documented in the reference manual too).
+            This upgrade recipe <em>minimizes the pain</em> to upgrade your code
+            and to take advantage of <a href="../../download/releaseNotes/releaseNotes8.html">the newest features in OptaPlanner 8</a>.</p>
+    </div>
+    <div class="row">
+        <div class="col-md-7">
+            <h2 class="mt-0">Legend</h2>
+            <p>Every upgrade note has an indication how likely your code will be affected by that change:</p>
+            <ul class="upgrade-recipe-label-list">
+                <li>
+                    <span class="badge bg-danger label-as-badge">Major</span>
+                    Likely to affect your code.
+                </li>
+                <li>
+                    <span class="badge bg-warning label-as-badge">Minor</span>
+                    Unlikely to affect your code (especially if you followed the examples), unless you have hacks.
+                </li>
+                <li>
+                    <span class="badge bg-info label-as-badge">Impl detail</span>
+                    Will not affect your code, unless you have very deep hacks.
+                </li>
+                <li>
+                    <span class="badge bg-primary label-as-badge">Recommended</span>
+                    Not a backward incompatible change, but you probably want to do this.
+                </li>
+                <li>
+                    <span class="badge bg-success label-as-badge">Readme</span>
+                    Read this to better understand why the subsequent major changes were made.
+                </li>
+            </ul>
+            <div class="sect1">
+                <h2>Upgrade from an older version</h2>
+                <p>To upgrade from an older version, first apply <a href="./">the previous upgrade recipes</a>.</p>
+            </div>
+        </div>
+        <div class="col-md-5 mb-4">
+<div class="card mb-4">
+    <div class="card-header">Note for Red Hat Decision Manager customers</div>
+    <div class="card-body">
+        <p>The RHDM version differs from the OptaPlanner version:</p>
+        <table class="tableblock frame-all grid-all spread">
+            <colgroup>
+                <col style="width: 50%;">
+                <col style="width: 50%;">
+            </colgroup>
+            <thead>
+            <tr>
+                <th>RHDM version</th>
+                <th>OptaPlanner version</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>7.8</td>
+                    <td>7.39</td>
+                </tr>
+                <tr>
+                    <td>7.9</td>
+                    <td>7.44</td>
+                </tr>
+                <tr>
+                    <td>7.1</td>
+                    <td>7.48</td>
+                </tr>
+                <tr>
+                    <td>7.11</td>
+                    <td>8.5 (and 7.52)</td>
+                </tr>
+                <tr>
+                    <td>7.12</td>
+                    <td>8.11 (and 7.59)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+        </div>
+    </div>
+<div class="sect1">
+<h2 id="_from_6_2_0_final_to_6_3_0_beta1">From 6.2.0.Final to 6.3.0.Beta1</h2>
+<div class="sectionbody">
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_inverserelationshadowvariable_for_non_chained_planning_variables"><code>@InverseRelationShadowVariable</code> for non-chained planning variables</h3>
+<div class="paragraph">
+<p><code>@InverseRelationShadowVariable</code> is now also supported for non-chained planning variables,
+in which case the inverse property must be <code>Collection</code> (<code>Set</code> or <code>List</code>).
+So it&#8217;s no longer needed to use a <code>CustomShadowVariable</code> to implement the bi-directional relationship behaviour.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class CloudComputer {
+    ...
+    @CustomShadowVariable(variableListenerClass = MyCustomInverseVariableListener.class,
+            sources = {@CustomShadowVariable.Source(entityClass = CloudProcess.class, variableName = "computer")})
+    public List&lt;CloudProcess&gt; getProcessList() {
+        return processList;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@PlanningEntity // Shadow variable only
+public class CloudComputer {
+    ...
+    @InverseRelationShadowVariable(sourceVariableName = "computer")
+    public List&lt;CloudProcess&gt; getProcessList() {
+        return processList;
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-major">
+<h3 id="_move_tostring_changed"><code>Move.toString()</code> changed</h3>
+<div class="paragraph">
+<p>To adhere to Java best practices,
+which state that an <code>Object.toString()</code> should identify an instance and be short
+(instead of trying to verbalize its entire state),
+the <code>Move.toString()</code> methods have been modified to mention the old value too (as well as the entity and the new value).
+Their notations have also been made consistent:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>ChangeMove</code>:         <code>a {v1 -&gt; v2}</code></p>
+</li>
+<li>
+<p><code>SwapMove</code>:           <code>a {v1} &lt;-&gt; b {v2}</code></p>
+</li>
+<li>
+<p><code>PillarChangeMove</code>:   <code>[a, b] {v1 -&gt; v2}</code></p>
+</li>
+<li>
+<p><code>PillarSwapMove</code>:     <code>[a, b] {v1} &lt;-&gt; [c, d, e] {v2}</code></p>
+</li>
+<li>
+<p><code>TailChainSwapMove</code>:  <code>a3 {a2} &lt;-tailChainSwap-&gt; b1 {b0}</code></p>
+</li>
+<li>
+<p><code>SubChainChangeMove</code>: <code>[a2..a5] {a1 -&gt; b0}</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Reversing: <code>[a2..a5] {a1 -reversing-&gt; b0}</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>SubChainSwapMove</code>:   <code>[a2..a5] {a1} &lt;-&gt; [b1..b3] {b0}</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Reversing: <code>[a2..a5] {a1} &lt;-reversing-&gt; [b1..b3] {b0}</code></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This mainly affects the logging output.
+In the examples, the <code>toString()</code> method of planning entities and planning values has been modified accordingly
+to avoid mentioning the old value twice:</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class CloudProcess {
+    ...
+
+    public String toString() {
+        return processName + "@" + computer.getName();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class CloudProcess {
+    ...
+
+    public String toString() {
+        return processName;
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_empty_constructionheuristic_default_algorithm_changed">Empty <code>&lt;constructionHeuristic&gt;</code>: default algorithm changed</h3>
+<div class="paragraph">
+<p>Default parameter tweaked: an empty <code>&lt;constructionHeuristic&gt;</code> changes its default algorithm from <code>FIRST_FIT</code> to <code>ALLOCATE_ENTITY_FROM_QUEUE</code>.
+If no entity difficulty comparison and no planning value strength comparison is defined, the behavior is exactly the same.
+Otherwise, the behaviour is <code>FIRST_FIT_DECREASING</code> or <code>WEAKEST_FIT(_DECREASING)</code>.</p>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_solverbenchmarkblueprinttype_all_construction_heuristic_types_renamed"><code>&lt;solverBenchmarkBluePrintType&gt;</code>: <code>ALL_CONSTRUCTION_HEURISTIC_TYPES</code> renamed</h3>
+<div class="paragraph">
+<p>The <code>&lt;solverBenchmarkBluePrintType&gt;</code> <code>ALL_CONSTRUCTION_HEURISTIC_TYPES</code> has been renamed to <code>EVERY_CONSTRUCTION_HEURISTIC_TYPE</code>.
+The old name <code>ALL_CONSTRUCTION_HEURISTIC_TYPES</code> is deprecated and will be removed in 7.0.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*BenchmarkConfig.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;solverBenchmarkBluePrintType&gt;ALL_CONSTRUCTION_HEURISTIC_TYPES&lt;/solverBenchmarkBluePrintType&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*BenchmarkConfig.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;solverBenchmarkBluePrintType&gt;EVERY_CONSTRUCTION_HEURISTIC_TYPE&lt;/solverBenchmarkBluePrintType&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_real_time_planning_addproblemfactchange_resets_time_spent_terminations">Real-time planning: <code>addProblemFactChange()</code> resets time spent terminations</h3>
+<div class="paragraph">
+<p>In real-time planning, calling <code>addProblemFactChange()</code> now resets the time spent terminations too.
+It did already reset all other terminations (despite that the docs claimed otherwise).
+The docs have also been fixed to reflect reality, which is also the desired behaviour by users.</p>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_real_time_planning_addproblemfactchange_keeps_the_scoredirector">Real-time planning: <code>addProblemFactChange()</code> keeps the <code>ScoreDirector</code></h3>
+<div class="paragraph">
+<p>In real-time planning, <code>addProblemFactChange()</code> no longer causes the <code>ScoreDirector</code> to be replaced
+(so it no longer creates a new <code>KieSession</code>) upon solver restart.
+This might expose a hidden bug in your <code>ProblemFactChange</code> implementation.
+Enable <code>environmentMode</code> <code>FULL_ASSERT</code> and do a few <code>addProblemFactChange()</code> calls to validate that there are no such bugs.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_from_6_3_0_beta1_to_6_3_0_beta2">From 6.3.0.Beta1 to 6.3.0.Beta2</h2>
+<div class="sectionbody">
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_custom_valuerange_new_method_isempty">Custom <code>ValueRange</code>: new method <code>isEmpty()</code></h3>
+<div class="paragraph">
+<p>If you implemented a custom <code>ValueRange</code>, also implement the method <code>isEmpty()</code>.
+Normally, you should not have any need for a custom <code>ValueRange</code>, because <code>ValueRangeFactory</code> supports all sensible ranges.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class MyDoubleValueRange extends AbstractUncountableValueRange&lt;Double&gt; {
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class MyDoubleValueRange extends AbstractUncountableValueRange&lt;Double&gt; {
+    ...
+    @Override
+    public boolean isEmpty() {
+        return from == to;
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-recommended">
+<h3 id="_multiple_planning_variables_use_new_folded_configuration">Multiple planning variables: use new folded configuration</h3>
+<div class="paragraph">
+<p>If you use multiple planning variables, consider switching to the folded configuration.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*SolverConfig.xml</code> and <code>*BenchmarkConfig.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">  &lt;changeMoveSelector&gt;
+    &lt;valueSelector&gt;
+      &lt;variableName&gt;period&lt;/variableName&gt;
+    &lt;/valueSelector&gt;
+  &lt;/changeMoveSelector&gt;
+  &lt;changeMoveSelector&gt;
+    &lt;valueSelector&gt;
+      &lt;variableName&gt;room&lt;/variableName&gt;
+    &lt;/valueSelector&gt;
+  &lt;/changeMoveSelector&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*SolverConfig.xml</code> and <code>*BenchmarkConfig.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">  &lt;changeMoveSelector/&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-recommended">
+<h3 id="_multiple_entity_classes_use_new_folded_configuration">Multiple entity classes: use new folded configuration</h3>
+<div class="paragraph">
+<p>If you use multiple entity classes, consider switching to the folded configuration.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*SolverConfig.xml</code> and <code>*BenchmarkConfig.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">  &lt;changeMoveSelector&gt;
+    &lt;entitySelector&gt;
+      &lt;entityClass&gt;...CoachEntity&lt;/entityClass&gt;
+    &lt;/entitySelector&gt;
+  &lt;/changeMoveSelector&gt;
+  &lt;changeMoveSelector&gt;
+    &lt;entitySelector&gt;
+      &lt;entityClass&gt;...ShuttleEntity&lt;/entityClass&gt;
+    &lt;/entitySelector&gt;
+  &lt;/changeMoveSelector&gt;
+  &lt;swapMoveSelector&gt;
+    &lt;entitySelector&gt;
+      &lt;entityClass&gt;...CoachEntity&lt;/entityClass&gt;
+    &lt;/entitySelector&gt;
+  &lt;/swapMoveSelector&gt;
+  &lt;swapMoveSelector&gt;
+    &lt;entitySelector&gt;
+      &lt;entityClass&gt;...ShuttleEntity&lt;/entityClass&gt;
+    &lt;/entitySelector&gt;
+  &lt;/swapMoveSelector&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*SolverConfig.xml</code> and <code>*BenchmarkConfig.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">  &lt;changeMoveSelector/&gt;
+  &lt;swapMoveSelector/&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_planning_solution_with_a_superclass_with_planner_annotations_behaviour_change">Planning solution with a superclass with planner annotations: behaviour change</h3>
+<div class="paragraph">
+<p>If your planning solution has a superclass with planner annotations,
+those will now be ignored (just like solution subclass annotations are ignored
+and just like entity superclass or subclass annotations are ignored unless they are a declared planning entity class too).
+Declare the <code>@PlanningSolution</code> on the superclass instead, the solver will handle subclass instances gracefully
+(presuming there are no planner annotations in the subclass).</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public abstract class ParentSolution {
+    @ValueRangeProvider(...)
+    public List&lt;Computer&gt; getComputers() {...}
+}
+@PlanningSolution
+public class ChildSolution extends ParentSolution {...}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Before in <code>*SolverConfig.xml</code> and <code>*BenchmarkConfig.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;solutionClass&gt;...ChildSolution&lt;/solutionClass&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@PlanningSolution
+public abstract class ParentSolution {
+    @ValueRangeProvider(...)
+    public List&lt;Computer&gt; getComputers() {...}
+}
+public class ChildSolution extends ParentSolution {...}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*SolverConfig.xml</code> and <code>*BenchmarkConfig.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;solutionClass&gt;...ParentSolution&lt;/solutionClass&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_from_6_3_0_beta2_to_6_3_0_cr1">From 6.3.0.Beta2 to 6.3.0.CR1</h2>
+<div class="sectionbody">
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_custom_variablelistener_that_changes_2_shadow_variables_use_variablelistenerref">Custom <code>VariableListener</code> that changes 2 shadow variables: use <code>variableListenerRef</code></h3>
+<div class="paragraph">
+<p>If a custom <code>VariableListener</code> changes 2 shadow variables, use the new <code>variableListenerRef</code> property accordingly
+to indicate that the <code>VariableListener</code> class of another shadow variable also updates this shadow variable:</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@PlanningVariable(...)
+public Standstill getPreviousStandstill() {
+    return previousStandstill;
+}
+@CustomShadowVariable(variableListenerClass = TransportTimeAndCapacityUpdatingVariableListener.class,
+        sources = {@CustomShadowVariable.Source(variableName = "previousStandstill")})
+public Integer getTransportTime() {
+    return transportTime;
+}
+@CustomShadowVariable(variableListenerClass = DummyListener.class, sources = ...)
+public Integer getCapacity() {
+    return capacity;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@PlanningVariable(...)
+public Standstill getPreviousStandstill() {
+    return previousStandstill;
+}
+@CustomShadowVariable(variableListenerClass = TransportTimeAndCapacityUpdatingVariableListener.class,
+        sources = {@CustomShadowVariable.Source(variableName = "previousStandstill")})
+public Integer getTransportTime() {
+    return transportTime;
+}
+@CustomShadowVariable(variableListenerRef = @PlanningVariableReference(variableName = "transportTime"))
+public Integer getCapacity() {
+    return capacity;
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_from_6_3_0_cr1_to_6_3_0_cr2">From 6.3.0.CR1 to 6.3.0.CR2</h2>
+<div class="sectionbody">
+<div class="sect2 upgrade-recipe-readme">
+<h3 id="_variablelisteners_no_longer_trigger_chaotically"><code>VariableListeners</code> no longer trigger chaotically</h3>
+<div class="paragraph">
+<p><code>VariableListeners</code> no longer trigger chaotically. This applies to both out of the box shadow variables and custom shadow variables.
+Planner now guarantees that the first <code>VariableListener</code>’s <code>after*()</code> method triggers <strong>AFTER</strong> the last genuine variable has been modified.
+This means a <code>VariableListener</code> is no longer exposed to intermediate state.
+The <code>before*()</code> methods still trigger immediately (otherwise they would not be able to capture the source variable&#8217;s original state).
+Furthermore, Planner guarantees this triggering in stages also for <code>VariableListener</code> for a shadow variable that depend on earlier shadow variables.</p>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-major">
+<h3 id="_custom_move_domove_must_call_triggervariablelisteners">Custom <code>Move</code>: <code>doMove()</code> must call <code>triggerVariableListeners()</code></h3>
+<div class="paragraph">
+<p>If you have a custom <code>Move</code>, its <code>doMove()</code> method must now call <code>scoreDirector.triggerVariableListeners()</code> at the end.
+In practice, you should have extended <code>AbstractMove</code> - which does the <code>triggerVariableListeners()</code> call for you -
+but you&#8217;ll need to rename your <code>doMove()</code> method to <code>doMoveOnGenuineVariables()</code>.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class CloudComputerChangeMove extends AbstractMove {
+    ...
+    public void doMove(ScoreDirector scoreDirector) {
+        CloudBalancingMoveHelper.moveCloudComputer(scoreDirector, cloudProcess, toCloudComputer);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class CloudComputerChangeMove extends AbstractMove {
+    ...
+    protected void doMoveOnGenuineVariables(ScoreDirector scoreDirector) {
+        CloudBalancingMoveHelper.moveCloudComputer(scoreDirector, cloudProcess, toCloudComputer);
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-major">
+<h3 id="_real_time_planning_problemfactchange_dochange_must_call_triggervariablelisteners">Real-time planning <code>ProblemFactChange</code>: <code>doChange()</code> must  call <code>triggerVariableListeners()</code></h3>
+<div class="paragraph">
+<p>If you have a <code>ProblemFactChange</code>, its <code>doChange()</code> method must now call <code>scoreDirector.triggerVariableListeners()</code>
+after every set of changes (before calling <code>calculateScore()</code> or relying on shadow variables).</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public void deleteComputer(final CloudComputer computer) {
+    doProblemFactChange(new ProblemFactChange() {
+        public void doChange(ScoreDirector scoreDirector) {
+            CloudBalance cloudBalance = (CloudBalance) scoreDirector.getWorkingSolution();
+            // First remove the problem fact from all planning entities that use it
+            for (CloudProcess process : cloudBalance.getProcessList()) {
+                if (Objects.equals(process.getComputer(), computer)) {
+                    scoreDirector.beforeVariableChanged(process, "computer");
+                    process.setComputer(null);
+                    scoreDirector.afterVariableChanged(process, "computer");
+                }
+            }
+            ...
+        }
+    });
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public void deleteComputer(final CloudComputer computer) {
+    doProblemFactChange(new ProblemFactChange() {
+        public void doChange(ScoreDirector scoreDirector) {
+            CloudBalance cloudBalance = (CloudBalance) scoreDirector.getWorkingSolution();
+            // First remove the problem fact from all planning entities that use it
+            for (CloudProcess process : cloudBalance.getProcessList()) {
+                if (Objects.equals(process.getComputer(), computer)) {
+                    scoreDirector.beforeVariableChanged(process, "computer");
+                    process.setComputer(null);
+                    scoreDirector.afterVariableChanged(process, "computer");
+                }
+            }
+            scoreDirector.triggerVariableListeners();
+            ...
+        }
+    });
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-major">
+<h3 id="_custom_phase_customphasecommand_changeworkingsolution_must_call_triggervariablelisteners">Custom phase <code>CustomPhaseCommand</code>: <code>changeWorkingSolution()</code> must  call <code>triggerVariableListeners()</code></h3>
+<div class="paragraph">
+<p>If you have a <code>CustomPhaseCommand</code>, its <code>changeWorkingSolution()</code> method must now call <code>scoreDirector.triggerVariableListeners()</code>
+after every set of changes (before calling <code>calculateScore()</code> or relying on shadow variables).</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class MyCustomPhase implements CustomPhaseCommand {
+    public void changeWorkingSolution(ScoreDirector scoreDirector) {
+        scoreDirector.beforeVariableChanged(processAssignment, "machine");
+        processAssignment.setMachine(machine);
+        scoreDirector.afterVariableChanged(processAssignment, "machine");
+        Score score = scoreDirector.calculateScore();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class MyCustomPhase implements CustomPhaseCommand {
+    public void changeWorkingSolution(ScoreDirector scoreDirector) {
+        scoreDirector.beforeVariableChanged(processAssignment, "machine");
+        processAssignment.setMachine(machine);
+        scoreDirector.afterVariableChanged(processAssignment, "machine");
+        scoreDirector.triggerVariableListeners();
+        Score score = scoreDirector.calculateScore();
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_custom_move_read_shadow_variables_first">Custom <code>Move</code>: read shadow variables first</h3>
+<div class="paragraph">
+<p>A custom <code>Move</code> must now read any shadow variables it needs before its first <code>beforeVariableChanged()</code> call.
+It no longer needs to assign genuine variables to intermediate values to avoid errors in the <code>VariableListeners</code> that update shadow variables.</p>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-impl-detail">
+<h3 id="_all_built_in_chained_moves_simplified">All built-in chained moves simplified</h3>
+<div class="paragraph">
+<p>All built-in moves that affect chained variables have been greatly simplified due to the new <code>VariableListener</code> guarantee.</p>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-impl-detail">
+<h3 id="_chained_moves_constructors_changed">Chained moves: constructors changed</h3>
+<div class="paragraph">
+<p>The constructor of <code>ChainedChangeMove</code>, <code>ChainedSwapMove</code>, <code>SubChainChangeMove</code> and <code>SubChainSwapMove</code> now require the <code>SingletonInverseVariableSupply</code> parameter.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">return new ChainedChangeMove(entity, variableDescriptor, toValue);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">SingletonInverseVariableSupply inverseVariableSupply = ((InnerScoreDirector) scoreDirector).getSupplyManager()
+        .demand(new SingletonInverseVariableDemand(variableDescriptor));
+return new ChainedChangeMove(entity, variableDescriptor, inverseVariableSupply, toValue);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Furthermore, a <code>ChainedSwapMove</code>’s constructor now requires a <code>List</code> instead of <code>Collection</code> of <code>VariableDescriptor</code>s.</p>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-impl-detail">
+<h3 id="_innerscoredirector_gettrailingentity_removed"><code>InnerScoreDirector</code>: <code>getTrailingEntity()</code> removed</h3>
+<div class="paragraph">
+<p>The method <code>InnerScoreDirector.getTrailingEntity()</code> has been removed. Use <code>SingletonInverseVariableSupply</code> instead.</p>
+</div>
+</div>
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_one_score_rule_that_affects_2_score_levels">One score rule that affects 2 score levels</h3>
+<div class="paragraph">
+<p>One score rule can now change 2 score levels in its RHS.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.drl</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-drl hljs" data-lang="drl">rule "Costly and unfair: part 1"
+when
+    // Complex pattern
+then
+    scoreHolder.addMediumConstraintMatch(kcontext, -1); // Financial cost
+end
+rule "Costly and unfair: part 2"
+when
+    // Complex pattern (duplication)
+then
+    scoreHolder.addSoftConstraintMatch(kcontext, -1); // Employee happiness cost
+end</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.drl</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-drl hljs" data-lang="drl">rule "Costly and unfair"
+when
+    // Complex pattern
+then
+    scoreHolder.addMediumConstraintMatch(kcontext, -1); // Financial cost
+    scoreHolder.addSoftConstraintMatch(kcontext, -1); // Employee happiness cost
+end</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_from_6_3_0_cr2_to_6_3_0_cr3">From 6.3.0.CR2 to 6.3.0.CR3</h2>
+<div class="sectionbody">
+<div class="sect2 upgrade-recipe-minor">
+<h3 id="_build_a_solver_from_api_use_solverfactory_createempty">Build a <code>Solver</code> from API: use <code>SolverFactory.createEmpty()</code></h3>
+<div class="paragraph">
+<p>If you build a <code>Solver</code> entirely from API (not recommended - it&#8217;s better to load it partially from XML),
+use <code>SolverFactory.createEmpty()</code> and <code>solverFactory.getSolverConfig()</code> accordingly.</p>
+</div>
+<div class="paragraph">
+<p>Before in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    SolverConfig solverConfig = new SolverConfig();
+    ...
+    return solverConfig.buildSolver();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After in <code>*.java</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    SolverFactory solverFactory = SolverFactory.createEmpty();
+    SolverConfig solverConfig = solverFactory.getSolverConfig();
+    ...
+    return solverFactory.buildSolver();</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>        </div>
+        <div class="col-md-3">
+    <div class="card mb-4">
+        <div class="card-header">Latest release</div>
+        <div class="card-body">
+            <ul class="list-unstyled mb-0">
+                <li>
+                    <div class="title">
+                        <a href="../../download/releaseNotes/releaseNotes8.html">
+                            8.25.0.Final released
+                        </a>
+                    </div>
+                    <div class="small">
+                        Tue 26 July 2022
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Upcoming events</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <div class="title">
+                                    <a href="https://devoxx.be">Devoxx Belgium</a>
+                            </div>
+                            <span>
+                                Antwerp, Belgium - Mon 10 October 2022
+                            </span>
+                        </li>
+                <div class="small float-end">
+                    <a href="https://github.com/kiegroup/optaplanner-website/blob/main/optaplanner-website-root/data/events.yml">Add event</a>
+                    /
+                    <a href="../../community/eventsArchive.html">Archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest blog posts</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../blog/2022/06/09/RunOptaPlannerWorkloadOnOpenShift.html">Run OptaPlanner workloads on OpenShift, part I.</a>
+                        </div>
+                        <div class="small">Thu 9 June 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../blog/2022/05/26/optaplanner-deprecates-score-drl.html">OptaPlanner deprecates score DRL</a>
+                        </div>
+                        <div class="small">Thu 26 May 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/c950743f532471ac34022e92193563c3?s=20&d=mm"/>
+        <span class="align-middle">Lukáš Petrovický</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../blog/2022/03/07/Real-time+planning+meets+the+SolverManager.html">Real-time planning meets SolverManager</a>
+                        </div>
+                        <div class="small">Mon 7 March 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../blog/2021/10/26/DocsTurnOverANewLeaf.html">OptaPlanner documentation turns over a new leaf</a>
+                        </div>
+                        <div class="small">Tue 26 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../blog/2021/10/14/OrderPickingQuickstart.html">Order picking optimization in warehouses and supermarkets with OptaPlanner</a>
+                        </div>
+                        <div class="small">Thu 14 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/4a8c787544c0b40bc033f631dc2256c2?s=20&d=mm"/>
+        <span class="align-middle">Walter Medvedeo</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../blog/2021/10/12/MonitorTheSolver.html">Monitor OptaPlanner solvers through Micrometer</a>
+                        </div>
+                        <div class="small">Tue 12 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/16f228a9f340e2a2ca5b42485a17bc3d?s=20&d=mm"/>
+        <span class="align-middle">Christopher Chianelli</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../../blog/2021/10/05/ANewAIConstraintSolverForPythonOptaPy.html">A new AI constraint solver for Python: OptaPy</a>
+                        </div>
+                        <div class="small">Tue 5 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/16f228a9f340e2a2ca5b42485a17bc3d?s=20&d=mm"/>
+        <span class="align-middle">Christopher Chianelli</span>
+    </span>
+                    </li>
+                <div class="small float-end">
+                    <a href="../../blog/index.html">Blog archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest videos</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="kFoaf696VpA" data-video-title="Host your OptaPlanner app on OpenShift (Kubernetes)">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Host your OptaPlanner app on OpenShift (Kubernetes)</span>
+                        </a>
+                        <div class="small">Mon 7 February 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="bIvt9z-zVHo" data-video-title="OptaPlanner - A fast, easy-to-use, open source AI constraint solver for software developers">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">OptaPlanner - A fast, easy-to-use, open source AI constraint solver for software developers</span>
+                        </a>
+                        <div class="small">Mon 31 January 2022</div>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="784Au4PjTzg" data-video-title="Order picking planning with OptaPlanner">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Order picking planning with OptaPlanner</span>
+                        </a>
+                        <div class="small">Fri 31 December 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/54cd5de3bdaf21a942e8d9d5fe95f647?s=20&d=mm"/>
+        <span class="align-middle">Anna Dupliak</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="HVDPxebpSvg" data-video-title="AI lesson scheduling on Quarkus with OptaPlanner">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">AI lesson scheduling on Quarkus with OptaPlanner</span>
+                        </a>
+                        <div class="small">Thu 18 November 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="dqTrjkVxoPI" data-video-title="Maintenance scheduling">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Maintenance scheduling</span>
+                        </a>
+                        <div class="small">Fri 12 November 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="-RSZbMT_alo" data-video-title="Optimized order picking in warehouses and supermarkets">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Optimized order picking in warehouses and supermarkets</span>
+                        </a>
+                        <div class="small">Tue 26 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/4a8c787544c0b40bc033f631dc2256c2?s=20&d=mm"/>
+        <span class="align-middle">Walter Medvedeo</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="-7ips_GMFmo" data-video-title="A modern OO/FP constraint solver">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">A modern OO/FP constraint solver</span>
+                        </a>
+                        <div class="small">Tue 14 September 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                <div class="small float-end">
+                    <a href="https://www.youtube.com/channel/UCcpkOKpujFlM67D2h0RdaeQ">Video archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+        </div>
+    </div>
+        </div>
+    </div>
+<footer class="py-4 bg-black text-white-50">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <p class="small">OptaPlanner is open.
+                    All dependencies of this project are available under the
+                    <a class="link-light" href="../../code/license.html">Apache Software License 2.0</a>
+                    or a compatible license.
+                    OptaPlanner is <a class="link-light" href="../../community/branding.html">trademarked</a>.
+                </p>
+                <p class="small">
+                    This <a class="link-light" href="../../website/websiteInfo.html">website</a>
+                    was built with <a class="link-light" href="https://jbake.org">JBake</a> and is open source.
+                </p>
+            </div>
+            <div class="col-md-4">
+                <h4>Community</h4>
+                <ul class="ps-2 list-unstyled">
+                    <li><a class="link-light" href="../../blog/">Blog</a></li>
+                    <li><a class="link-light" href="../../community/getHelp.html">Get Help</a></li>
+                    <li><a class="link-light" href="../../community/team.html">Team</a></li>
+                    <li><a class="link-light" href="../../community/governance.html">Governance</a></li>
+                    <li><a class="link-light" href="../../community/research.html">Academic research</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h4>Code</h4>
+                <ul class="ps-2 list-unstyled">
+                    <li><a class="link-light" href="../../code/sourceCode.html">Build from source</a></li>
+                    <li><a class="link-light" href="https://issues.redhat.com/projects/PLANNER">Issue tracker</a></li>
+                    <li><a class="link-light" href="../../download/releaseNotes/">Release notes</a></li>
+                    <li><a class="link-light" href="../../download/upgradeRecipe/">Upgrade recipes</a></li>
+                    <li><a class="link-light" href="../../community/branding.html">Logo and branding</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="d-flex justify-content-evenly align-items-center">
+            <div>
+                <i class="fab fa-creative-commons"></i><i class="fab fa-creative-commons-by"></i>
+                <a class="link-light link-underlined" href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC by 3.0</a> |
+                <a class="link-light link-underlined" href="https://www.redhat.com/en/about/privacy-policy">Privacy Policy</a>
+            </div>
+            <div>
+                <span class="me-2 text-white">Sponsored by</span>
+                <a href="https://www.redhat.com/" target="_blank"><img style="width: 6rem" src="https://www.redhat.com/profiles/rh/themes/redhatdotcom/img/logo.svg" alt="Red Hat"></a>
+            </div>
+        </div>
+    </div>
+</footer>
+    <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="ratio ratio-16x9" id="player-container">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"
+            integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/highlight.min.js"
+            integrity="sha256-mfS2sXKEV8eehy39UH7+7BwaoUaIe2TuLO2DXS+c2mI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/asciidoc.min.js"
+            integrity="sha256-gnB2LPAmHPkrj3czfog5GdIu4aByzcKeTUzC2agNMzM=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/properties.min.js"
+            integrity="sha256-1XSLaVD2dn/eCICDUx1DYprsC4UAEa4weDLYY/458wU=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/gradle.min.js"
+            integrity="sha256-B5HtfGpeJKLSEsoqtAdi6sSJ05K49CTGHZbrBiJ9CwE=" crossorigin="anonymous"></script>
+    <script src="../../website/optaplannerWebsite.js"></script>
+    <script>
+        // Ruby syntax highlighting works pretty well for DRL source code.
+        hljs.registerAliases(["drl"], { languageName: "ruby"});
+        hljs.highlightAll();
+    </script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script type="text/javascript">
+      if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+        _satellite.pageBottom();
+      }
+    </script>
+</body>
+</html>
+
+

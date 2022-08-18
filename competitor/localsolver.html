@@ -1,0 +1,802 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script id="dpal" src="https://www.redhat.com/dtm.js" type="text/javascript"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-39485370-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-39485370-1');
+    </script>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>OptaPlanner - LocalSolver versus OptaPlanner comparison</title>
+    <meta content="OptaPlanner is a fast, open source alternative to LocalSolver for mathematical optimization." name="description">
+    <meta content="metaheuristic, heuristic, constraint satisfaction, constraint programming, operations research, NP-complete, NP-hard, optimization, planning, scheduling, java, open source, software, library, solver, tabu search, simulated annealing, pareto" name="keywords">
+    <link href="https://www.optaplanner.org/competitor/localsolver.html" rel="canonical">
+
+    <meta content="LocalSolver versus OptaPlanner comparison" property="og:title">
+    <meta content="OptaPlanner is a fast, open source alternative to LocalSolver for mathematical optimization." property="og:description">
+    <meta content="https://www.optaplanner.org/competitor/localsolver.html" property="og:url">
+    <meta content="OptaPlanner" property="og:site_name">
+    <meta content="website" property="og:type">
+    <meta content="https://www.optaplanner.org/headerFooter/optaPlannerIcon.png" property="og:image">
+    <meta content="summary" name="twitter:card">
+    <meta content="@OptaPlanner" name="twitter:site">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+          integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css"
+          integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/styles/default.min.css"
+          integrity="sha256-CGf39SzxAmEe09Ojoh16/2xTRNleX9wBZcEXVnNqwSM=" crossorigin="anonymous">
+    <link rel="stylesheet" href="../website/optaplannerWebsite.css">
+    <link href="../favicon.ico" rel="shortcut icon">
+</head>
+
+<body>
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light border-bottom shadow">
+    <div class="container">
+        <a class="navbar-brand" href="../">
+            <img alt="OptaPlanner logo" src="../headerFooter/optaPlannerLogo200px.png">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="../download/download.html">Download</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarLearn" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Learn
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarLearn">
+                        <li><a class="dropdown-item" href="../learn/documentation.html">Documentation</a></li>
+                        <li><a class="dropdown-item" href="../learn/video.html">Videos</a></li>
+                        <li><a class="dropdown-item" href="../learn/slides.html">Slides</a></li>
+                        <li><a class="dropdown-item" href="../learn/training.html">Training</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="../learn/useCases/index.html">Use cases</a></li>
+                        <li><a class="dropdown-item" href="../compatibility/index.html">Compatibility</a></li>
+                        <li><a class="dropdown-item" href="../learn/testimonialsAndCaseStudies.html">Testimonials and case studies</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="../community/getHelp.html">Get help</a></li>
+                <li class="nav-item"><a class="nav-link" href="../blog/">Blog</a></li>
+                <li class="nav-item"><a class="nav-link" href="../code/sourceCode.html">Source</a></li>
+                <li class="nav-item"><a class="nav-link" href="../community/team.html">Team</a></li>
+                <li class="nav-item"><a class="nav-link" href="../product/services.html">Services</a></li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="p-2"><a aria-label="Star OptaPlanner on GitHub" class="github-button" data-show-count="true" href="https://github.com/kiegroup/optaplanner">Star</a></li>
+                <li class="p-1"><a href="https://twitter.com/OptaPlanner" target="_blank" title="Follow OptaPlanner on Twitter"><img alt="T" src="../headerFooter/twitterLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.linkedin.com/showcase/optaplanner" target="_blank" title="Follow OptaPlanner on LinkedIn"><img alt="L" src="../headerFooter/linkedInLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.facebook.com/OptaPlanner" target="_blank" title="Follow OptaPlanner on Facebook"><img alt="F" src="../headerFooter/facebookLogo.png"></a></li>
+                <li class="p-1"><a href="https://www.youtube.com/channel/UCcpkOKpujFlM67D2h0RdaeQ" target="_blank" title="OptaPlanner YouTube channel"><img alt="YT" src="../headerFooter/youtubeLogo.png" style="height: 16px"></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="body-without-header-footer">
+        <div class="forkMeOnGithub">
+            <a href="https://github.com/kiegroup/optaplanner">
+                <img alt="Fork me on GitHub" src="../headerFooter/forkMeOnGithub.png">
+            </a>
+        </div>
+        <div class="container py-4">
+        <div class="row">
+            <div class="col-md-9">
+                <h1>LocalSolver versus OptaPlanner comparison</h1>
+    <div class="float-start me-4 mb-4">
+    <div class="card" style="cursor: pointer">
+            <a data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="-7ips_GMFmo" data-video-title="A modern OO/FP constraint solver">
+                <img class="card-img-top ratio ratio-16x9" src="https://img.youtube.com/vi/-7ips_GMFmo/mqdefault.jpg" alt="Video thumbnail">
+                <div class="card-img-overlay d-flex justify-content-center align-items-center">
+                    <i class="fas fa-play-circle fa-3x text-white bg-dark bg-opacity-25 rounded-pill p-1"></i>
+                </div>
+            </a>
+    </div>
+    </div>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph lead">
+<p>LocalSolver and OptaPlanner are mathematical optimization solvers.
+They are both used across the globe in production.
+But there are notable differences between OptaPlanner and LocalSolver.</p>
+</div>
+<div class="paragraph lead">
+<p>OptaPlanner is <a href="#openSource">open source</a>,
+<a href="#fasterAndMoreScalable">fast</a>, <a href="#fasterAndMoreScalable">scalable</a> and
+<a href="#easyToUse">easy to use</a> because of
+<a href="#objectOrientedProgrammingModel">OO models</a> and
+<a href="#codeConstraint">constraints as code</a>.
+OptaPlanner is also <a href="#easyToIntegrate">integration friendly</a> (including REST)
+and <a href="#cloudReady">cloud ready</a>. It runs on <a href="#operationSystemIndependent">all operating systems</a>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Try it yourself.</strong> No license needed.<br>
+<strong><a href="https://www.optaplanner.org/docs/optaplanner/latest/quickstart/quickstart.html">Get started with OptaPlanner today</a></strong>
+for Java, Kotlin or Scala.
+Or <a href="https://www.optapy.org">try OptaPy</a> for Python.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="openSource">OptaPlanner is Open Source</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>LocalSolver is closed source software.</p>
+</div>
+<div class="paragraph">
+<p>OptaPlanner is enterprise open source software under the <a href="../code/license.html">Apache License</a>,
+which allows free reuse for commercial purposes.
+<em>All</em> of OptaPlanner&#8217;s source code is available on <a href="https://github.com/kiegroup/optaplanner">GitHub</a>.
+Its community is <em>open</em>. its decision making is <em>open</em>.</p>
+</div>
+<div class="paragraph">
+<p>A dedicated <a href="../community/team.html">core team</a> of optimization experts
+(employed by <a href="https://www.redhat.com">Red Hat</a>) works full-time on OptaPlanner.
+Also hundreds of external developers have contributed to OptaPlanner.
+Regardless of who wrote the code, an(other) OptaPlanner core developer has reviewed it
+before it is merged into the main repository.</p>
+</div>
+<div class="paragraph">
+<p>Red Hat also offers <a href="../product/services.html">support and consulting services</a>
+for customers who want to take their OptaPlanner implementation to the next level.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="fasterAndMoreScalable">OptaPlanner is fast and scalable</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>OptaPlanner is both fast and scalable
+for planning and scheduling use cases, such as the <a href="../learn/useCases/vehicleRoutingProblem.html">Vehicle Routing Problem</a>,
+<a href="../learn/useCases/employeeRostering.html">Employee Rostering</a> and <a href="../learn/useCases/maintenanceScheduling.html">Maintenance scheduling</a>.</p>
+</div>
+<div class="paragraph">
+<p>OptaPlanner delivers better results, in the same amount of CPU time.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="easyToUse">OptaPlanner is easy to use</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Any software developer can implement an optimization use case with OptaPlanner.
+<strong>There&#8217;s no need to hire expensive consultants to write complex mathematical equations.</strong>
+It&#8217;s OOP friendly.</p>
+</div>
+<div class="paragraph">
+<p>Later, when your business reality changes, you can quickly adjust the OptaPlanner constraints.
+It is maintenance friendly.</p>
+</div>
+<div class="paragraph">
+<p>OptaPlanner supports both Object-Oriented Programming and Functional Programming:</p>
+</div>
+<div class="sect2">
+<h3 id="objectOrientedProgrammingModel">An OptaPlanner model is Object-Oriented Programming (OOP) friendly</h3>
+<div class="paragraph">
+<p>Both LocalSolver and OptaPlanner require you to define your model, with <em>optimization variables</em>,
+so the mathematical optimization software knows which decisions it needs to make.</p>
+</div>
+<div class="paragraph">
+<p>LocalSolver supports 5 types of optimization variables: booleans, integers, floating point numbers and sets and lists.
+You must transform your domain model into those types.
+For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Input
+LSModel model = ...
+LSExpression[][] assignments = new LSExpression[shifts.size()][employees.size()];
+for (int s = 0; s &lt; shifts.size(); s++) {
+    for (int e = 0; e &lt; employees.size(); e++) {
+        assignments[s][e] = model.boolVar();
+    }
+}
+... // Add constraints to enforce no shift is assigned to multiple employees
+
+// Solve
+model.minimize(...);
+
+// Output
+for (int s = 0; s &lt; shifts.size(); s++) {
+    for (int e = 0; e &lt; employees.size(); e++) {
+        if (assignments[s][e].getValue() == 1) {
+            print(shifts[s] + " is assigned to " + employees[e]);
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>OptaPlanner supports any type of optimization variables,
+including your custom classes (<code>Employee</code>, <code>Vehicle</code>, &#8230;&#8203;) or standard classes (<code>Boolean</code>, <code>Integer</code>, <code>BigDecimal</code>, <code>LocalDate</code>, &#8230;&#8203;).
+You can reuse your existing domain model, to avoid costly data transformations.
+For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@PlanningEntity
+class Shift { // User defined class
+    ... // Shift id, date, start time, required skills, ...
+
+    @PlanningVariable
+    Employee employee;
+}
+@PlanningSolution
+class TimeTable { // User defined class
+    List&lt;Employee&gt; employees;
+    List&lt;Shift&gt; shifts;
+}
+
+// Input
+Timetable timetable = new Timetable(shifts, employees);
+
+// Solve
+timetable = Solver.solve(timetable);
+
+// Output
+for (Shift shift : timetable.shifts) {
+    print(shift + " is assigned to " + shift.employee);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Neither of these 2 classes (<code>Shift</code> and <code>Timetable</code>) exist in OptaPlanner itself: you define and shape them.
+Your code doesn&#8217;t deal with booleans and numbers, but uses <code>Employee</code>, <code>Shift</code> and <code>DayOfRequest</code> instances.
+Your code reads naturally.</p>
+</div>
+<div class="paragraph">
+<p>OptaPlanner even supports polymorphism.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="codeConstraint">OptaPlanner constraints are code, not equations</h3>
+<div class="paragraph">
+<p>LocalSolver constraints are implemented as <strong>mathematical equations</strong>.
+For example, to assign <em>at most one shift per day</em>,
+you add an equation <code>s1 + s2 + s3 &lt;= 1</code> for all shifts on day 1,
+an equation <code>s4 + s5 &lt;= 1</code> for all shifts on day 2, and so forth:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">for (int e = 0; e &lt; employees.size(); e++) {
+    for (int d = 0; d &lt; dates.size(); d++) {
+        LSExpression expr = ...
+        for (int s = 0; s &lt; shifts.size(); s++) {
+            // If the shift is on the date
+            if (shifts[s].date == dates[d])) {
+                expr.addOperand(assignments[s][e]);
+            }
+        }
+        model.constraint(model.lq(expr, 1));
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>OptaPlanner constraints are implemented as <strong>programming code</strong>.
+If you use <em>ConstraintStreams</em>, a Functional Programming (FP) approach,
+OptaPlanner automatically applies incremental score calculation with deltas
+for maximum scalability and performance.</p>
+</div>
+<div class="paragraph">
+<p>For example, to assign <em>at most one shift per day</em>,
+select every pair of <code>Shift</code> instances
+that have the same <code>date</code> and the same <code>employee</code>,
+to penalize matching pairs as a hard constraint:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// For every shift ...
+constraintFactory.forEach(Shift.class)
+    // ... combined with any other shift ...
+    .join(Shift.class,
+        // ... on the same date ...
+        equal(shift -&gt; shift.date),
+        // ... assigned to the same employee ...
+        equal(shift -&gt; shift.employee))
+    // ... penalize one broken hard constraint per pair.
+    .penalize("One shift per day", HardSoftScore.ONE_HARD);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>That <code>equal()</code> method accepts <em>any</em> code as a parameter to return <em>any</em> type (not just booleans and numbers).</p>
+</div>
+<div class="paragraph">
+<p>For example, because <code>date</code> is an instance of <code>LocalDate</code> (an advanced Date and Time API),
+use <code>LocalDate.isDayOfWeek()</code> to select 2 shifts on the same day of week:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">        // ... on the same day of week ...
+        equal(shift -&gt; shift.date.getDayOfWeek())</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><a href="https://www.youtube.com/watch?v=-5wpm-gesOY">Date and times arithmetic is notoriously difficult,</a>
+because of Daylight Saving Time (DST), timezones, leap years and other semantics that only a few programmers on this planet actually understand.
+OptaPlanner empowers you to directly use their APIs (such as <code>LocalDate</code>) in your constraints.</p>
+</div>
+<div class="paragraph">
+<p>Besides the <code>equal()</code> joiner, OptaPlanner supplies <code>lessThan()</code>, <code>greaterThan()</code>, <code>lessThanOrEqual()</code>, <code>greaterThanOrEqual()</code>,
+<code>overlapping()</code>, etc.
+OptaPlanner automatically applies indexing (hashtable techniques) on joiners for performance.</p>
+</div>
+<div class="paragraph">
+<p>For example, select two overlapping shifts with the <code>overlapping()</code> joiner
+(even if they start or end at different times):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">        // ... that overlap ...
+        overlapping(shift -&gt; shift.startDateTime, shift -&gt; shift.endDateTime)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Besides the <code>join()</code> construct, OptaPlanner supports <code>filter()</code>, <code>groupBy()</code>, <code>ifExists()</code>, <code>ifNotExists()</code>, <code>map()</code>, etc.
+This rich API empowers you to implement any constraint.</p>
+</div>
+<div class="paragraph">
+<p>For example, allow employees that can work double shifts to work double shifts
+by filtering out all employees that work double shifts with a <code>filter()</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// For every shift ...
+constraintFactory.forEach(Shift.class)
+    // ... assigned to an employee that does not work double shifts ...
+    .filter(shift -&gt; !shift.employee.worksDoubleShifts)
+    // ... combined with any other shift ...
+    .join(Shift.class,
+        equal(shift -&gt; shift.date),
+        // ... assigned to that same employee that does not work double shifts ...
+        equal(shift -&gt; shift.employee))
+    .penalize("One shift per day", HardSoftScore.ONE_HARD);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>groupBy()</code> construct supports <code>count()</code>, <code>sum()</code>, <code>average()</code>, <code>min()</code>, <code>max()</code>, <code>toList()</code>, <code>toSet()</code>, <code>toMap()</code>, etc.
+You can also plug in custom collectors.</p>
+</div>
+<div class="paragraph">
+<p>For example, don&#8217;t assign more than 10 shifts to any employee by counting their shifts with <code>count()</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">constraintFactory.forEach(Shift.class)
+    // Group shifts by employee and count the number of shifts per employee ...
+    .groupBy(shift -&gt; shift.employee, count())
+    // ... if more than 10 shifts for one employee ...
+    .filter((employee, shiftCount) -&gt; shiftCount &gt; 10)
+    // ... penalize as a hard constraint ...
+    .penalize("Too many shifts", HardSoftScore.ONE_HARD,
+            // ... multiplied by the number of excessive shifts.
+            (employee, shiftCount) -&gt; shiftCount - 10);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>OptaPlanner allows weighting constraints dynamically.
+It has <strong>no linear limitations</strong>.</p>
+</div>
+<div class="paragraph">
+<p>For example, avoid overtime and distribute it <strong>fairly</strong> by penalizing the number of excessive hours <strong>squared</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">constraintFactory.forEach(Shift.class)
+    // Group shifts by employee and sum the shift duration per employee ...
+    .groupBy(shift -&gt; shift.employee, sum(shift -&gt; shift.getDurationInHours()))
+    // ... if an employee is working more hours than his/her contract ...
+    .filter((employee, hoursTotal) -&gt; hoursTotal &gt; employee.contract.maxHours)
+    // ... penalize as a soft constraint of weight 1000 ...
+    .penalize("Too many shifts", HardSoftScore.ofSoft(1000),
+            // ... multiplied by the number of excessive hours squared.
+            (employee, hoursTotal) -&gt; {
+                    int excessiveHours = hoursTotal - employee.contract.maxHours;
+                    return excessiveHours * excessiveHours;
+            });</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This penalizes outliers more.
+It automatically load balances overtime in fair manner across the employees,
+whenever possible. <a href="https://www.optaplanner.org/blog/2017/02/03/FormulaForMeasuringUnfairness.html">Learn more.</a></p>
+</div>
+<div class="paragraph">
+<p>OptaPlanner also supports positive constraints: use <code>reward()</code> instead of <code>penalize()</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="easyToIntegrate">OptaPlanner is easy to integrate with the REST, databases, etc</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <a href="https://github.com/kiegroup/optaplanner-quickstarts">OptaPlanner Quickstarts</a>
+show how to integrate OptaPlanner with various technologies to quickly:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Expose a REST service and JSON data with <a href="../compatibility/quarkus.html">Quarkus</a> or <a href="../compatibility/springBoot.html">Spring</a>.</p>
+</li>
+<li>
+<p>Connect to a relational database with <a href="../compatibility/quarkus.html">Quarkus</a> or <a href="../compatibility/springBoot.html">Spring</a>.</p>
+</li>
+<li>
+<p>Load balance solvers across multiple nodes with ActiveMQ.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="cloudReady">OptaPlanner is cloud ready</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>OptaPlanner runs on all major clouds, such as Amazon AWS, Microsoft Azure, Google Compute Engine and IBM Cloud.
+It works on all major cloud technologies, such as Kubernetes, OpenShift, Docker and Virtual Machines.</p>
+</div>
+<div class="paragraph">
+<p>But it just runs as fine on your local development machine without internet access,
+or embedded in a process on-premise.</p>
+</div>
+<div class="paragraph">
+<p>With <a href="../compatibility/quarkus.html">Quarkus</a> it can compile Java and Kotlin code natively for serverless use cases
+that need to start up in milliseconds.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="operationSystemIndependent">OptaPlanner runs on all major operating systems</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>OptaPlanner runs on all major operating systems, such as Linux, Windows and macOS.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_get_started">Get started</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To get started with OptaPlanner, read the <a href="https://www.optaplanner.org/docs/optaplanner/latest/quickstart/quickstart.html">quick start guide</a>
+or copy-paste the source code of one of the <a href="https://github.com/kiegroup/optaplanner-quickstarts">OptaPlanner Quickstarts</a>.</p>
+</div>
+</div>
+</div>            </div>
+            <div class="col-md-3">
+    <div class="card bg-light mb-4">
+        <div class="text-center mt-2"><a class="btn btn-lg btn-success versionedButton" href="https://download.jboss.org/optaplanner/release/8.25.0.Final/optaplanner-distribution-8.25.0.Final.zip"><img alt="Download" src="../download/download.png">
+            <div>
+                <span>Try OptaPlanner</span><br/>
+                <span class="small">Download 8.25.0.Final</span>
+            </div>
+        </a></div>
+        <div class="card-body">
+            <ol class="mb-1">
+                <li>Download and unzip.</li>
+                <li>
+                    Run <code>runQuickstarts.sh</code> (Linux/macOS)<br/>
+                    or <code>runQuickstarts.bat</code> (Windows).
+                </li>
+            </ol>
+            <div class="text-center small">
+                Requires <a href="https://adoptium.net">JDK 11 or higher</a> to run.
+            </div>
+        </div>
+    </div>
+    <div class="card bg-light mb-4">
+        <div class="text-center mt-2"><a class="btn btn-lg btn-primary versionedButton" href="https://www.optaplanner.org/docs/optaplanner/latest/quickstart/quickstart.html"><img alt="Documentation" src="../learn/documentation.png">
+            <div>
+                <span>Get started</span><br/>
+                <span class="small">User guide 8.25.0.Final</span>
+            </div>
+        </a></div>
+        <div class="card-body">
+            <div class="text-center">
+                <a href="https://github.com/kiegroup/optaplanner-quickstarts"><i class="fab fa-github me-1 text-black"></i>Clone the Quickstarts code.</a>
+            </div>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest release</div>
+        <div class="card-body">
+            <ul class="list-unstyled mb-0">
+                <li>
+                    <div class="title">
+                        <a href="../download/releaseNotes/releaseNotes8.html">
+                            8.25.0.Final released
+                        </a>
+                    </div>
+                    <div class="small">
+                        Tue 26 July 2022
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Upcoming events</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <div class="title">
+                                    <a href="https://devoxx.be">Devoxx Belgium</a>
+                            </div>
+                            <span>
+                                Antwerp, Belgium - Mon 10 October 2022
+                            </span>
+                        </li>
+                <div class="small float-end">
+                    <a href="https://github.com/kiegroup/optaplanner-website/blob/main/optaplanner-website-root/data/events.yml">Add event</a>
+                    /
+                    <a href="../community/eventsArchive.html">Archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest blog posts</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../blog/2022/06/09/RunOptaPlannerWorkloadOnOpenShift.html">Run OptaPlanner workloads on OpenShift, part I.</a>
+                        </div>
+                        <div class="small">Thu 9 June 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../blog/2022/05/26/optaplanner-deprecates-score-drl.html">OptaPlanner deprecates score DRL</a>
+                        </div>
+                        <div class="small">Thu 26 May 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/c950743f532471ac34022e92193563c3?s=20&d=mm"/>
+        <span class="align-middle">Lukáš Petrovický</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../blog/2022/03/07/Real-time+planning+meets+the+SolverManager.html">Real-time planning meets SolverManager</a>
+                        </div>
+                        <div class="small">Mon 7 March 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../blog/2021/10/26/DocsTurnOverANewLeaf.html">OptaPlanner documentation turns over a new leaf</a>
+                        </div>
+                        <div class="small">Tue 26 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/f1b0cd1c06b5697dbc91f02ea00f3090?s=20&d=mm"/>
+        <span class="align-middle">Radovan Synek</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../blog/2021/10/14/OrderPickingQuickstart.html">Order picking optimization in warehouses and supermarkets with OptaPlanner</a>
+                        </div>
+                        <div class="small">Thu 14 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/4a8c787544c0b40bc033f631dc2256c2?s=20&d=mm"/>
+        <span class="align-middle">Walter Medvedeo</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../blog/2021/10/12/MonitorTheSolver.html">Monitor OptaPlanner solvers through Micrometer</a>
+                        </div>
+                        <div class="small">Tue 12 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/16f228a9f340e2a2ca5b42485a17bc3d?s=20&d=mm"/>
+        <span class="align-middle">Christopher Chianelli</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <div class="title">
+                            <a href="../blog/2021/10/05/ANewAIConstraintSolverForPythonOptaPy.html">A new AI constraint solver for Python: OptaPy</a>
+                        </div>
+                        <div class="small">Tue 5 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/16f228a9f340e2a2ca5b42485a17bc3d?s=20&d=mm"/>
+        <span class="align-middle">Christopher Chianelli</span>
+    </span>
+                    </li>
+                <div class="small float-end">
+                    <a href="../blog/index.html">Blog archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Latest videos</div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="kFoaf696VpA" data-video-title="Host your OptaPlanner app on OpenShift (Kubernetes)">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Host your OptaPlanner app on OpenShift (Kubernetes)</span>
+                        </a>
+                        <div class="small">Mon 7 February 2022</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="bIvt9z-zVHo" data-video-title="OptaPlanner - A fast, easy-to-use, open source AI constraint solver for software developers">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">OptaPlanner - A fast, easy-to-use, open source AI constraint solver for software developers</span>
+                        </a>
+                        <div class="small">Mon 31 January 2022</div>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="784Au4PjTzg" data-video-title="Order picking planning with OptaPlanner">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Order picking planning with OptaPlanner</span>
+                        </a>
+                        <div class="small">Fri 31 December 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/54cd5de3bdaf21a942e8d9d5fe95f647?s=20&d=mm"/>
+        <span class="align-middle">Anna Dupliak</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="HVDPxebpSvg" data-video-title="AI lesson scheduling on Quarkus with OptaPlanner">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">AI lesson scheduling on Quarkus with OptaPlanner</span>
+                        </a>
+                        <div class="small">Thu 18 November 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="dqTrjkVxoPI" data-video-title="Maintenance scheduling">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Maintenance scheduling</span>
+                        </a>
+                        <div class="small">Fri 12 November 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="-RSZbMT_alo" data-video-title="Optimized order picking in warehouses and supermarkets">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">Optimized order picking in warehouses and supermarkets</span>
+                        </a>
+                        <div class="small">Tue 26 October 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/4a8c787544c0b40bc033f631dc2256c2?s=20&d=mm"/>
+        <span class="align-middle">Walter Medvedeo</span>
+    </span>
+                    </li>
+                    <li class="mb-2">
+                        <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#videoModal" data-youtube-id="-7ips_GMFmo" data-video-title="A modern OO/FP constraint solver">
+                            <span><i class="fas fa-play-circle"></i></span>
+                            <span class="align-text-middle link-primary">A modern OO/FP constraint solver</span>
+                        </a>
+                        <div class="small">Tue 14 September 2021</div>
+    <span>
+        <img class="rounded me-1" src="https://www.gravatar.com/avatar/27147a6679a4bfb6461ff1c0ae10473e?s=20&d=mm"/>
+        <span class="align-middle">Geoffrey De Smet</span>
+    </span>
+                    </li>
+                <div class="small float-end">
+                    <a href="https://www.youtube.com/channel/UCcpkOKpujFlM67D2h0RdaeQ">Video archive</a>
+                </div>
+            </ul>
+        </div>
+    </div>
+            </div>
+        </div>
+        </div>
+    </div>
+<footer class="py-4 bg-black text-white-50">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <p class="small">OptaPlanner is open.
+                    All dependencies of this project are available under the
+                    <a class="link-light" href="../code/license.html">Apache Software License 2.0</a>
+                    or a compatible license.
+                    OptaPlanner is <a class="link-light" href="../community/branding.html">trademarked</a>.
+                </p>
+                <p class="small">
+                    This <a class="link-light" href="../website/websiteInfo.html">website</a>
+                    was built with <a class="link-light" href="https://jbake.org">JBake</a> and is open source.
+                </p>
+            </div>
+            <div class="col-md-4">
+                <h4>Community</h4>
+                <ul class="ps-2 list-unstyled">
+                    <li><a class="link-light" href="../blog/">Blog</a></li>
+                    <li><a class="link-light" href="../community/getHelp.html">Get Help</a></li>
+                    <li><a class="link-light" href="../community/team.html">Team</a></li>
+                    <li><a class="link-light" href="../community/governance.html">Governance</a></li>
+                    <li><a class="link-light" href="../community/research.html">Academic research</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h4>Code</h4>
+                <ul class="ps-2 list-unstyled">
+                    <li><a class="link-light" href="../code/sourceCode.html">Build from source</a></li>
+                    <li><a class="link-light" href="https://issues.redhat.com/projects/PLANNER">Issue tracker</a></li>
+                    <li><a class="link-light" href="../download/releaseNotes/">Release notes</a></li>
+                    <li><a class="link-light" href="../download/upgradeRecipe/">Upgrade recipes</a></li>
+                    <li><a class="link-light" href="../community/branding.html">Logo and branding</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="d-flex justify-content-evenly align-items-center">
+            <div>
+                <i class="fab fa-creative-commons"></i><i class="fab fa-creative-commons-by"></i>
+                <a class="link-light link-underlined" href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC by 3.0</a> |
+                <a class="link-light link-underlined" href="https://www.redhat.com/en/about/privacy-policy">Privacy Policy</a>
+            </div>
+            <div>
+                <span class="me-2 text-white">Sponsored by</span>
+                <a href="https://www.redhat.com/" target="_blank"><img style="width: 6rem" src="https://www.redhat.com/profiles/rh/themes/redhatdotcom/img/logo.svg" alt="Red Hat"></a>
+            </div>
+        </div>
+    </div>
+</footer>
+    <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="ratio ratio-16x9" id="player-container">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"
+            integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/highlight.min.js"
+            integrity="sha256-mfS2sXKEV8eehy39UH7+7BwaoUaIe2TuLO2DXS+c2mI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/asciidoc.min.js"
+            integrity="sha256-gnB2LPAmHPkrj3czfog5GdIu4aByzcKeTUzC2agNMzM=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/properties.min.js"
+            integrity="sha256-1XSLaVD2dn/eCICDUx1DYprsC4UAEa4weDLYY/458wU=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/gradle.min.js"
+            integrity="sha256-B5HtfGpeJKLSEsoqtAdi6sSJ05K49CTGHZbrBiJ9CwE=" crossorigin="anonymous"></script>
+    <script src="../website/optaplannerWebsite.js"></script>
+    <script>
+        // Ruby syntax highlighting works pretty well for DRL source code.
+        hljs.registerAliases(["drl"], { languageName: "ruby"});
+        hljs.highlightAll();
+    </script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script type="text/javascript">
+      if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+        _satellite.pageBottom();
+      }
+    </script>
+</body>
+</html>
+
+
