@@ -31,5 +31,23 @@
         <h2>Comments</h2>
         <a class="btn btn-secondary mb-4" href="${config.googleGroupURL}">Visit our forum to comment</a>
     </div>
+	<div class="giscus">
+        <h2>Giscus Comments</h2>
+    </div>
 </@parent.layout>
+<script src="https://giscus.app/client.js"
+        data-repo="MakerEducation/makereducation.github.io"
+        data-repo-id="R_kgDOHxqyog"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOHxqyos4CQ5Qn"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script>
 </#macro>
