@@ -13,7 +13,7 @@ defaults:
     shell: bash
 
 jobs:
-  website-windows:
+  winBuild:
     runs-on: windows-latest
     steps:
       - name: Check out repository code
@@ -45,9 +45,22 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: site
+          
+  winDeploy:
+    concurrency: ci-${{ github.ref }}
+    needs: [winBuild] # The second job must depend on the first one to complete before running and uses ubuntu-latest instead of windows.
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download Artifacts # The built project is downloaded into the 'site' folder.
+        uses: actions/download-artifact@v1
+        with:
+          name: site
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages # The branch the action should deploy to.
-          folder: optaplanner-website-assembly/target/website-complete # The folder the action should deploy.
+          folder: site # The folder the action should deploy.  
