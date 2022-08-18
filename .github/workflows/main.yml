@@ -13,11 +13,8 @@ defaults:
     shell: bash
 
 jobs:
-  website:
-    strategy:
-      matrix:
-        os: [ ubuntu-latest, windows-latest ]
-    runs-on: ${{ matrix.os }}
+  website-windows:
+    runs-on: windows-latest
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
