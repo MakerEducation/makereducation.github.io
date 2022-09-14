@@ -2,7 +2,7 @@
 <feed xml:lang="en-US" xmlns="http://www.w3.org/2005/Atom">
     <id>https://www.optaplanner.org/</id>
     <title>OptaPlanner</title>
-    <updated>2022-08-18T00:00:00+00:00</updated>
+    <updated>2022-09-14T00:00:00+00:00</updated>
     <link href="https://www.optaplanner.org/blog/news.atom" rel="self" type="application/atom+xml" />
     <link href="https://www.optaplanner.org/" rel="alternate" type="text/html" />
     <icon>https://www.optaplanner.org/favicon.ico</icon>
